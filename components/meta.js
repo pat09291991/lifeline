@@ -4,7 +4,7 @@ const Meta = ({ props = { title: "", description: "", image: "", url: "", keywor
   <div>
     <Head>
       <title>{props.title || "Lifeline 16911"}</title>
-      <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico" />
+      <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico" />
       <meta name="description" content={props.description || "Lifeline 16911"} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta charSet="utf-8" />

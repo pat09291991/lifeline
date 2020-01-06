@@ -2,9 +2,17 @@ import React from 'react'
 import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card } from 'react-bootstrap'
 
 import Default from '../layouts/default'
-// import MainVideoMP4 from '../static/home/video.mp4'
-// import MainVideoWEBM from '../static/home/video.webm'
-import AmbulanceCutImage from '../static/home/ambcut.jpg'
+// import MainVideoMP4 from '../public/home/video.mp4'
+// import MainVideoWEBM from '../public/home/video.webm'
+import AmbulanceCutImage from '../public/home/ambcut.jpg'
+import ServicesEQRImage from '../public/home/eqr.png'
+import JumboImage from '../public/home/jumbo.jpg'
+import VideoMP4 from '../public/home/video.mp4'
+import VideoWEBM from '../public/home/video.webm'
+import SagisagImage from '../public/home/sagisag.jpg'
+import PotusImage from '../public/home/potus.png'
+import PopeImage from '../public/home/pope.png'
+import ApecImage from '../public/home/apec.png'
 
 const ClinicCard = ({ name, number, address, imgUrl }) => (
   <Card>
@@ -23,39 +31,137 @@ const ClinicCard = ({ name, number, address, imgUrl }) => (
   </Card>
 )
 
+const jumboStyle = {
+  background: `url(${JumboImage}) rgba(0, 0, 0, 0.4)`,
+  backgroundSize: 'cover',
+  backgroundBlendMode: 'multiply'
+}
+
+const trustedStyle = {
+  background: `url(${SagisagImage}) rgba(0, 0, 0, 0.5)`,
+  backgroundSize: 'cover',
+  backgroundBlendMode: 'multiply',
+  color: 'white'
+}
+
 const Home = () => (
   <Default>
-    <Jumbotron className="vh-100 text-center d-flex align-items-center justify-content-center">
+    <Jumbotron className="vh-100 text-center d-flex align-items-center justify-content-center" style={jumboStyle}>
       <div>
-        <h1> Emergency Quick Response</h1>
-        <p className="pb-5">24/7 EMERGENCY QUICK RESPONSE.</p>
-        <div className="play-button large"></div>
-        <p className="mt-5">
-          <Button className="mr-2">BE A MEMBER</Button>
-          <Button>PAY FOR SERVICES</Button>
+        <h1 className="jumbo-title"> Emergency Quick Response</h1>
+        <p className="jumbo-subtitle">24/7 EMERGENCY QUICK RESPONSE.</p>
+        <div className="pb-container"><div className="play-button large"></div></div>
+        <div className="mt-5">
+          <Button className="mr-2" variant="warning">Be a Member</Button>
+          <Button variant="warning">Pay for Services</Button>
+        </div>
+        <p>
+          We are constantly striving to improve so as to better serve our client communities
         </p>
       </div>
-      <video className="background-video">
-        <source src="../static/home/video.mp4" type="video/mp4" />
-        <source src="../static/home/video.webm" type="video/webm" />
+      <video className="jumbo-video" controls hidden>
+        <source src={VideoMP4} type="video/mp4" />
+        <source src={VideoWEBM} type="video/webm" />
       </video>
+
     </Jumbotron>
     <Container fluid>
       <Row>
-        <Col className="text-right p-5 d-flex align-items-center">
-          <div>
-            <h2>WHY LIFELINE?</h2>
-            <p>Accidents happen in a split second. With more than 200,000 lives saved, in the course of 21 years, Lifeline has become a trusted and premiere medical provider in the Philippines.</p>
-          </div>
+        <Col sm={8} className="p-5">
+          <Row className="text-center d-flex align-items-center">
+            <Col>
+              <h1><strong>WHY <span className="text-red">LIFELINE</span>?</strong></h1>
+              <p>Accidents happen in a split second. With more than 200,000 lives saved, in the course of 21 years, Lifeline has become a trusted and premiere medical provider in the Philippines.</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={6}>
+              <ul>
+                <li>12 mins average response time</li>
+                <li>Access to a fleet of helicopters &amp; jets</li>
+              </ul>
+            </Col>
+            <Col sm={6}>
+              <ul>
+                <li>Over 250 staff members</li>
+                <li>Over 100 ready doctors-on-call</li>
+              </ul>
+            </Col>
+            <Col sm={12}>
+              <ul>
+                <li>Over 200,000 members covering 3,400,000 people in Metro Manila</li>
+              </ul>
+            </Col>
+          </Row>
+          <Row className="text-center">
+            <Col><a href="https://www.dropbox.com/s/i3rim7g9ujtwve1/Company%20Profile%202017%20final%20LAM%20April%2028%2717.pdf?dl=0">To
+                                    know more about our company, download our company profile.</a></Col>
+          </Row>
         </Col>
-        <Col className="second">
+        <Col sm={4} className="second">
           <Image className="second" src={AmbulanceCutImage} fluid />
         </Col>
       </Row>
     </Container>
-    <Container>
-      <Row><Col>
-        <h2>OUR CLINICS</h2>
+    <Container fluid className="bg-second p-5">
+      <Row><Col className="text-center">
+        <h1>Our Services</h1>
+        <p>We provide 24/7</p>
+      </Col></Row>
+      <Row className="text-center">
+        <Col sm={6}>
+          <Image className="m-5" src={ServicesEQRImage} width={48} height={48} />
+          <h3>Emergency Quick Response</h3>
+          <p>We provide 24/7 quick & reliable response and transportation while providing the finest medical care when transporting patients. "Virtual Emergency Room On Wheels". </p>
+        </Col>
+        <Col sm={6}>
+          <Image className="m-5" src={ServicesEQRImage} width={48} height={48} />
+          <h3>Interfacility Transfer</h3>
+          <p>We provide transportation of ill and injured patients between hospitals to hospitals or from hospitals to home or home to any treatment facilities. (Booking is required.) </p>
+        </Col>
+        <Col sm={6}>
+          <Image className="m-5" src={ServicesEQRImage} width={48} height={48} />
+          <h3>Standby and Medical Airlifts</h3>
+          <p>We provide standby ambulances for events for all sporting, social, entertainment or corporate events. We provide medical airlifts of fixed wing and helicopter evacuation anywhere in the country. </p>
+        </Col>
+        <Col sm={6}>
+          <Image className="m-5" src={ServicesEQRImage} width={48} height={48} />
+          <h3>D.O.C. Programs</h3>
+          <p>D.O.C. programs consists of doctor on call, diagnostics on call, and driver on call. This is 24 hours service at your convenience. </p>
+        </Col>
+      </Row>
+    </Container>
+    <Container className="p-5" fluid style={trustedStyle}>
+      <Row><Col className="text-center">
+        <h1>Trusted Internationally</h1>
+        <p>Provided close in medical support for the following VIPs</p>
+      </Col></Row>
+      <Row className="text-center my-3">
+        <Col sm={6}>
+          <Image src={PotusImage} />
+          <h3>George W. Bush</h3>
+          <h4>2003</h4>
+        </Col>
+        <Col sm={6}>
+          <Image src={PopeImage} />
+          <h3>Pope Francis</h3>
+          <h4>2015</h4>
+        </Col>
+        <Col sm={6}>
+          <Image src={ApecImage} />
+          <h3>APEC</h3>
+          <h4>2016</h4>
+        </Col>
+        <Col sm={6}>
+          <Image src={ApecImage} />
+          <h3>APEC</h3>
+          <h4>2017</h4>
+        </Col>
+      </Row>
+    </Container>
+    <Container className="py-5">
+      <Row><Col className="text-center">
+        <h1>Our Clinics</h1>
         <p>We specialize in tailor-making clinics to suit our clients' needs. Majority of the Lifeline Clinics are advanced first aid clinics.</p>
       </Col></Row>
       <Row><Col>
@@ -69,13 +175,29 @@ const Home = () => (
     </Container>
 
     <style jsx global>{`
+
+      div.bg-second {
+        background: #f6f8fa;
+      }
+
       div.jumbotron {
-        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url("static/home/eqr.jpg");
-        background-size: cover;
-        background-attachment: fixed;
-        background-position: center;
-        background-repeat: no-repeat;
+        min-height: 100%;
         color: white;
+      }
+
+      .jumbo-title {
+        font-size: 3rem;
+      }
+      .jumbo-subtitle {
+        font-size: 1.5rem;
+      }
+      .jumbo-video {
+        position: absolute;
+        z-index: 0;
+        top: 0px;
+        min-height: 100%;
+        width: auto;
+        height: auto;
       }
 
       .background-video {
@@ -93,12 +215,16 @@ const Home = () => (
         padding: 0;
       }
 
+      .pb-container {
+        margin: 200px 0 auto;
+      }
+
       .play-button {
         width: 80px;
         height: 80px;
         background: #ffffff91;
         text-align: center;
-        margin: 0 auto;
+        margin: 100px 0 auto;
         position: absolute;
         top: 50%;
         left: 50%;

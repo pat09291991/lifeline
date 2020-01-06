@@ -1,11 +1,17 @@
 import React from 'react'
-import { Navbar, Nav } from 'react-bootstrap'
+import { Navbar, Nav, Form, Button, Image } from 'react-bootstrap'
 import ActiveLink from './activeLink'
+import LogoImage from '../../public/logo512.png'
 
 export default () => {
   return (
     <Navbar bg="light" expand="xl" fixed="top">
-      <Navbar.Brand>Lifeline 16911</Navbar.Brand>
+      <Navbar.Brand>
+        <div className="d-flex align-items-center">
+          <Image src={LogoImage} height={48} />
+          <strong className="pl-2 nav-title"><span className="text-red">LIFELINE</span> 16-911</strong>
+        </div>
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
@@ -15,13 +21,21 @@ export default () => {
           <ActiveLink href="/blog"><a className="nav-link">Blog</a></ActiveLink>
           <ActiveLink href="/academy"><a className="nav-link">Academy</a></ActiveLink>
         </Nav>
-        <Nav>
-          <Nav.Link href="#deets">More deets</Nav.Link>
-          <Nav.Link eventKey={2} href="#memes">
-            Dank memes
-      </Nav.Link>
-        </Nav>
+        <Form inline>
+          <Button className="mx-1" variant="warning">Be a Member</Button>
+          <Button className="mx-1" variant="warning">Pay for Services</Button>
+          <Button className="mx-1" variant="outline-primary">Login</Button>
+        </Form>
       </Navbar.Collapse>
+      <style jsx>{`
+        .nav-title {
+          font-size: 1.65rem;
+        }
+
+        .nav-link {
+          font-weight: 600;
+        }
+        `}</style>
     </Navbar>
   )
 }

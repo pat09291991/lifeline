@@ -2,15 +2,19 @@ import React from 'react'
 import { Navbar, Nav, Form, Button, Image } from 'react-bootstrap'
 import ActiveLink from './activeLink'
 import LogoImage from '../../public/logo512.png'
+import Link from 'next/link'
 
 export default () => {
   return (
     <Navbar bg="light" expand="xl" fixed="top">
       <Navbar.Brand>
-        <div className="d-flex align-items-center">
-          <Image src={LogoImage} height={48} />
-          <strong className="pl-2 nav-title"><span className="text-red">LIFELINE</span> 16-911</strong>
-        </div>
+        <Link href="/">
+          <a style={{ textDecoration: 'none', color: 'black' }}>
+            <div className="d-flex align-items-center">
+              <Image src={LogoImage} height={48} />
+              <strong className="pl-2 nav-title"><span className="text-red">LIFELINE</span> 16-911</strong>
+            </div>
+          </a></Link>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
@@ -24,7 +28,7 @@ export default () => {
         <Form inline>
           <Button className="mx-1" variant="warning">Be a Member</Button>
           <Button className="mx-1" variant="warning">Pay for Services</Button>
-          <Button className="mx-1" variant="outline-primary">Login</Button>
+          <Link href="/login"><Button className="mx-1" variant="outline-primary">Login</Button></Link>
         </Form>
       </Navbar.Collapse>
       <style jsx>{`

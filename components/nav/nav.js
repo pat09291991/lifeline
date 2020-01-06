@@ -19,11 +19,11 @@ export default () => {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <ActiveLink href="/"><a className="nav-link">Home</a></ActiveLink>
-          <ActiveLink href="/services"><a className="nav-link">Services</a></ActiveLink>
-          <ActiveLink href="/clinics"><a className="nav-link">Clinics / Pods</a></ActiveLink>
-          <ActiveLink href="/blog"><a className="nav-link">Blog</a></ActiveLink>
-          <ActiveLink href="/academy"><a className="nav-link">Academy</a></ActiveLink>
+          <ActiveLink href="/" activeClassName="active"><a className="nav-link">Home</a></ActiveLink>
+          <ActiveLink href="/services" activeClassName="active"><a className="nav-link">Services</a></ActiveLink>
+          <ActiveLink href="/clinics" activeClassName="active"><a className="nav-link">Clinics / Pods</a></ActiveLink>
+          <ActiveLink href="/blog" activeClassName="active"><a className="nav-link">Blog</a></ActiveLink>
+          <ActiveLink href="/academy" activeClassName="active"><a className="nav-link">Academy</a></ActiveLink>
         </Nav>
         <Form inline>
           <Button className="mx-1" variant="warning">Be a Member</Button>

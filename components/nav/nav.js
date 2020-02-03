@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default () => {
   return (
-    <Navbar bg="light" expand="xl" fixed="top">
+    <Navbar bg="light" expand="xl" fixed="top" style={{ borderBottom: '1px solid #0366B1' }}>
       <Navbar.Brand>
         <Link href="/">
           <a style={{ textDecoration: 'none', color: 'black' }}>
@@ -28,7 +28,8 @@ export default () => {
         <Form inline>
           <Button className="mx-1" variant="warning">Be a Member</Button>
           <Button className="mx-1" variant="warning">Pay for Services</Button>
-          <Link href="/login"><Button className="mx-1" variant="outline-primary">Login</Button></Link>
+          <Link href="/sign-up"><Button className="mx-1" variant="outline-primary">Sign Up</Button></Link>
+          <Link href="/login"><Button className="mx-1" variant="primary">Login</Button></Link>
         </Form>
       </Navbar.Collapse>
       <style jsx>{`

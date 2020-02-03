@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default () => {
   return (
-    <Navbar bg="light" expand="xl" fixed="top">
+    <Navbar bg="light" expand="xl" fixed="top" style={{ borderBottom: '1px solid #0366B1' }}>
       <Navbar.Brand>
         <Link href="/">
           <a style={{ textDecoration: 'none', color: 'black' }}>

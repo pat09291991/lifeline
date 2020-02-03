@@ -1,4 +1,3 @@
-import React from 'react'
 import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card } from 'react-bootstrap'
 
 import Default from '../layouts/default'
@@ -6,6 +5,9 @@ import Default from '../layouts/default'
 // import MainVideoWEBM from '../public/home/video.webm'
 import AmbulanceCutImage from '../public/home/ambcut.jpg'
 import ServicesEQRImage from '../public/home/eqr.png'
+import ServicesTransferImage from '../public/home/b2b.png'
+import ServicesAirliftsImage from '../public/home/helicopter.png'
+import ServicesDOCImage from '../public/home/doctor.png'
 import JumboImage from '../public/home/jumbo.jpg'
 import VideoMP4 from '../public/home/video.mp4'
 import VideoWEBM from '../public/home/video.webm'
@@ -13,6 +15,18 @@ import SagisagImage from '../public/home/sagisag.jpg'
 import PotusImage from '../public/home/potus.png'
 import PopeImage from '../public/home/pope.png'
 import ApecImage from '../public/home/apec.png'
+import TwentyFourSevenImage from '../public/home/24.png'
+import AmbulanceAboutImage from '../public/home/ambulance.png'
+import MobileAppImage from '../public/home/mobileapp.png'
+
+import AwardNCCAA06Image from '../public/home/awards/2006_national_customer_choice_annual_awards.jpg'
+import AwardABMQAImage from '../public/home/awards/asian_bussiness_marketing_quality_award.png'
+import AwardCEAImage from '../public/home/awards/ceo_excel_awards.jpg'
+import AwardMVPBAImage from '../public/home/awards/mvp_bossing_award.jpg'
+import AwardsNCCAA14Image from '../public/home/awards/national_customer_choice_annual_awards.jpg'
+import AwardNPQEAImage from '../public/home/awards/national_product_quality_excellence_award.png'
+import AwardNSCAAImage from '../public/home/awards/national_shoppers_choice_annual_awards.png'
+import AwardPHQABEImage from '../public/home/awards/ph_quality_awards_for_business_excellence.jpg'
 
 const ClinicCard = ({ name, number, address, imgUrl }) => (
   <Card>
@@ -67,14 +81,14 @@ const Home = () => (
     </Jumbotron>
     <Container fluid>
       <Row>
-        <Col sm={8} className="p-5">
+        <Col md={12} lg={8} className="p-5">
           <Row className="text-center d-flex align-items-center">
             <Col>
               <h1><strong>WHY <span className="text-red">LIFELINE</span>?</strong></h1>
-              <p>Accidents happen in a split second. With more than 200,000 lives saved, in the course of 21 years, Lifeline has become a trusted and premiere medical provider in the Philippines.</p>
+              <h4 className="text-muted">Accidents happen in a split second. With more than 200,000 lives saved, in the course of 21 years, Lifeline has become a trusted and premiere medical provider in the Philippines.</h4>
             </Col>
           </Row>
-          <Row>
+          <Row className="mt-3">
             <Col sm={6}>
               <ul>
                 <li>12 mins average response time</li>
@@ -97,8 +111,31 @@ const Home = () => (
             <Col><a href="https://www.dropbox.com/s/i3rim7g9ujtwve1/Company%20Profile%202017%20final%20LAM%20April%2028%2717.pdf?dl=0">To
                                     know more about our company, download our company profile.</a></Col>
           </Row>
+
+          <Row className="text-center mt-3">
+            <Col md={12} lg={6} className="about-box-wrapper d-flex justify-content-center align-items-stretch">
+              <Row className="about-box d-flex justify-content-center align-items-center">
+                <Col className="about-box-image">
+                  <Image src={TwentyFourSevenImage} fluid />
+                </Col>
+                <Col>
+                  <p className="about-box-16911">16-911</p>
+                </Col>
+              </Row>
+            </Col>
+            <Col md={12} lg={6} className="about-box-wrapper d-flex justify-content-center align-items-stretch mt-3 mt-lg-0">
+              <Row className="about-box d-flex justify-content-center align-items-center">
+                <Col className="about-box-image">
+                  <Image src={AmbulanceAboutImage} fluid />
+                </Col>
+                <Col>
+                  <p>Over 40 ambulances with multiple points of dispatch</p>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </Col>
-        <Col sm={4} className="second">
+        <Col lg={4} className="second d-none d-lg-block">
           <Image className="second" src={AmbulanceCutImage} fluid />
         </Col>
       </Row>
@@ -106,7 +143,7 @@ const Home = () => (
     <Container fluid className="bg-second p-5">
       <Row><Col className="text-center">
         <h1>Our Services</h1>
-        <p>We provide 24/7</p>
+        <h4 className="text-muted">We provide 24/7</h4>
       </Col></Row>
       <Row className="text-center">
         <Col sm={6}>
@@ -115,17 +152,17 @@ const Home = () => (
           <p>We provide 24/7 quick & reliable response and transportation while providing the finest medical care when transporting patients. "Virtual Emergency Room On Wheels". </p>
         </Col>
         <Col sm={6}>
-          <Image className="m-5" src={ServicesEQRImage} width={48} height={48} />
+          <Image className="m-5" src={ServicesTransferImage} width={48} height={48} />
           <h3>Interfacility Transfer</h3>
           <p>We provide transportation of ill and injured patients between hospitals to hospitals or from hospitals to home or home to any treatment facilities. (Booking is required.) </p>
         </Col>
         <Col sm={6}>
-          <Image className="m-5" src={ServicesEQRImage} width={48} height={48} />
+          <Image className="m-5" src={ServicesAirliftsImage} width={48} height={48} />
           <h3>Standby and Medical Airlifts</h3>
           <p>We provide standby ambulances for events for all sporting, social, entertainment or corporate events. We provide medical airlifts of fixed wing and helicopter evacuation anywhere in the country. </p>
         </Col>
         <Col sm={6}>
-          <Image className="m-5" src={ServicesEQRImage} width={48} height={48} />
+          <Image className="m-5" src={ServicesDOCImage} width={48} height={48} />
           <h3>D.O.C. Programs</h3>
           <p>D.O.C. programs consists of doctor on call, diagnostics on call, and driver on call. This is 24 hours service at your convenience. </p>
         </Col>
@@ -134,7 +171,7 @@ const Home = () => (
     <Container className="p-5" fluid style={trustedStyle}>
       <Row><Col className="text-center">
         <h1>Trusted Internationally</h1>
-        <p>Provided close in medical support for the following VIPs</p>
+        <h4>Provided close in medical support for the following VIPs</h4>
       </Col></Row>
       <Row className="text-center my-3">
         <Col sm={6}>
@@ -159,10 +196,10 @@ const Home = () => (
         </Col>
       </Row>
     </Container>
-    <Container className="py-5">
+    <Container className="my-5">
       <Row><Col className="text-center">
         <h1>Our Clinics</h1>
-        <p>We specialize in tailor-making clinics to suit our clients' needs. Majority of the Lifeline Clinics are advanced first aid clinics.</p>
+        <h4 className="text-muted">We specialize in tailor-making clinics to suit our clients' needs. Majority of the Lifeline Clinics are advanced first aid clinics.</h4>
       </Col></Row>
       <Row><Col>
         <CardGroup>
@@ -172,6 +209,83 @@ const Home = () => (
           <ClinicCard name="Rockwell Makati Club" number="+63(2) 798-1700 local 1748 / +63(2) 798-1748" address="Basement 2 of Amorsolo East Tower, Rockwell Center, Makati City, Philippines" imgUrl="https://picsum.photos/500/650?random=4" />
         </CardGroup>
       </Col></Row>
+    </Container>
+    <Container className="p-5 bg-second" fluid>
+      <Row><Col className="text-center">
+        <h1>Our Mobile App</h1>
+        <h4 className="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec iaculis lacinia vulputate.</h4>
+      </Col></Row>
+      <Row className="mt-3 d-flex align-items-center">
+        <Col lg={4} className="text-center">
+          <Image src={MobileAppImage} fluid />
+        </Col>
+        <Col lg={8}>
+          <Row>
+            <Col>
+              <h3 className="text-red">GPS Tracking</h3>
+              <p>GPS tracking of your location anywhere in the Philippines. Just open the application, press the button and Lifeline will do the rest.</p>
+            </Col>
+            <Col>
+              <h3 className="text-red">Payment For Services</h3>
+              <p>You can pay the service you availed through the application, again, just like in our Lifeline Membership web page.</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <h3 className="text-red">Apply for Membership</h3>
+              <p>You can apply for individual or household membership just like in our Lifeline Membership web page.</p>
+            </Col>
+            <Col>
+              <h3 className="text-red">Status and Transactions</h3>
+              <p>You can check the status of your membership and the details of your previous transactions.</p>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Container>
+    <Container className="py-5 text-center">
+      <Row className="text-center">
+        <Col>
+          <h1>Awards</h1>
+          <h4 className="text-muted">Join our satisfied customers locally and globally, and get secured by award winning service</h4>
+        </Col>
+      </Row>
+      <Row className="py-5">
+        <Col>
+          <Image src={AwardNCCAA06Image} />
+          <p>2006 National Customers Choice Annual Awards “Most Outstanding Ambulance Service Product”</p>
+        </Col>
+        <Col>
+          <Image src={AwardABMQAImage} />
+          <p>2005 Asian Business & Marketing Quality Award “Most Outstanding World Class Ambulance Service”</p>
+        </Col>
+        <Col>
+          <Image src={AwardCEAImage} />
+          <p>CEO Excel Awards 2016</p>
+        </Col>
+        <Col>
+          <Image src={AwardMVPBAImage} />
+          <p>MVP Bossing Award Winner 2014</p>
+        </Col>
+      </Row>
+      <Row className="py-5">
+        <Col>
+          <Image src={AwardsNCCAA14Image} />
+          <p>2014 National Customers Choice Annual Awards “Most Outstanding Ambulance Services"</p>
+        </Col>
+        <Col>
+          <Image src={AwardNPQEAImage} />
+          <p>2006 National Product Quality Excellence Award “Best On Time Ambulance Provider” – National Award</p>
+        </Col>
+        <Col>
+          <Image src={AwardNSCAAImage} />
+          <p>2006 National Shoppers Choice Annual Awards “#1 Ambulance Service”</p>
+        </Col>
+        <Col>
+          <Image src={AwardPHQABEImage} />
+          <p>2005 Philippine Quality Awards For Business Excellence “Philippine Business World-Class”</p>
+        </Col>
+      </Row>
     </Container>
 
     <style jsx global>{`
@@ -333,7 +447,31 @@ const Home = () => (
           border-width: 15px 0 15px 25.0px;
           border-color: transparent transparent transparent #222222;
         }
+
+        
       }
+
+      .about-box-wrapper {
+          height:200px;
+          color: white;
+          font-size: 1.4rem;
+        }
+
+        .about-box {
+          background: #0366B1;
+          height: 100%;
+          width: 100%;
+          color: white;
+          
+        }
+
+        .about-box-16911 {
+          font-size: 4rem;
+        }
+
+        .about-box-image {
+          border-right: 1px solid #FFF;
+        }
       `}</style>
   </Default>
   // <div>

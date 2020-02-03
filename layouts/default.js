@@ -1,6 +1,7 @@
 import React from 'react'
 import Meta from '../components/meta'
 import Nav from '../components/nav'
+import Footer from '../components/footer'
 
 export const Default = ({ children, meta, hideNav }) => {
   return (
@@ -8,6 +9,7 @@ export const Default = ({ children, meta, hideNav }) => {
       <Meta props={meta} />
       {!hideNav && <Nav />}
       {children}
+      <Footer />
       <script
         src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" />
       <style jsx global>{`
@@ -18,6 +20,7 @@ export const Default = ({ children, meta, hideNav }) => {
           .text-red {
             color: red;
           }
+         
           `}</style>
     </div>
   )

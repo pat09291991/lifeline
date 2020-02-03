@@ -3,76 +3,86 @@ import Link from 'next/link'
 
 export const Footer = () => {
   return (
-    <div class="footer">
-      <div class="footer__addr">
-        <h1 class="footer__logo"><span className="text-red">Lifeline</span> 16-911</h1>
+    <div className="footer-wrapper">
 
-        <h2>Contact</h2>
+      <footer className="footer">
+        <div className="footer__addr">
+          <h1 className="footer__logo"><span className="text-red">Lifeline</span> 16-911</h1>
 
-        <address>
-          Valgosons Building, East Service Road, Sucat, Parañaque City, Philippines <br />
-          <p>+63(02) 8839-2520 up to 30</p>
-          <p>customercare@lifeline.com.ph </p>
-          <a class="footer__btn" href="mailto:customercare@lifeline.com.ph">Email Us</a>
-        </address>
-      </div>
+          <h2>Contact</h2>
 
-      <ul class="footer__nav">
+          <address>
+            Valgosons Building, East Service Road, Sucat, Parañaque City, Philippines <br />
+            <p>+63(02) 8839-2520 up to 30</p>
+            <p>customercare@lifeline.com.ph </p>
+            <a className="footer__btn" href="mailto:customercare@lifeline.com.ph">Email Us</a>
+          </address>
+        </div>
 
-        <li class="nav__item nav__item--extra">
-          <h2 class="nav__title">Links</h2>
+        <ul className="footer__nav">
 
-          <ul class="nav__ul nav__ul--extra">
-            <li>
-              <Link href="/"><a href="#">Home</a></Link>
-            </li>
-            <li>
-              <Link href="/services"><a href="#">Services</a></Link>
-            </li>
-            <li>
-              <Link href="/clinics"><a href="#">Clinics / Pods</a></Link>
-            </li>
-            <li>
-              <Link href="/blog"><a href="#">Blog</a></Link>
-            </li>
-            <li>
-              <Link href="/academy"><a href="#">Academy</a></Link>
-            </li>
-            <li>
-              <Link href="/login"><a href="#">Log In</a></Link>
-            </li>
-            <li>
-              <Link href="/sign-up"><a href="#">Sign Up</a></Link>
-            </li>
-          </ul>
-        </li>
+          <li className="nav__item nav__item--extra">
+            <h2 className="nav__title">Links</h2>
 
-        <li class="nav__item">
-          <h2 class="nav__title">
-            <a>Help</a>
-          </h2>
+            <ul className="nav__ul nav__ul--extra">
+              <li>
+                <Link href="/"><a>Home</a></Link>
+              </li>
+              <li>
+                <Link href="/services"><a>Services</a></Link>
+              </li>
+              <li>
+                <Link href="/clinics"><a>Clinics / Pods</a></Link>
+              </li>
+              <li>
+                <Link href="/blog"><a>Blog</a></Link>
+              </li>
+              <li>
+                <Link href="/academy"><a>Academy</a></Link>
+              </li>
+              <li>
+                <Link href="/login"><a>Log In</a></Link>
+              </li>
+              <li>
+                <Link href="/sign-up"><a>Sign Up</a></Link>
+              </li>
+            </ul>
+          </li>
 
-          <ul class="nav__ul">
-            <li>
-              <a href="#">Privacy Policy</a>
-            </li>
+          <li className="nav__item">
+            <h2 className="nav__title">
+              <a>Help</a>
+            </h2>
 
-            <li>
-              <a href="#">Terms of Use</a>
-            </li>
+            <ul className="nav__ul">
+              <li>
+                <Link href="/"><a>Privacy Policy</a></Link>
+              </li>
 
-            <li>
-              <a href="#">Sitemap</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
+              <li>
+                <Link href="/"><a>Terms of Use</a></Link>
+              </li>
 
-      <div class="legal">
-        <p>&copy; 2020 Lifeline 16-911. All rights reserved.</p>
-      </div>
-      <style jsx global>
+              <li>
+                <Link href="/"><a>Sitemap</a></Link>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <div className="legal">
+          <p>&copy; 2020 Lifeline 16-911. All rights reserved.</p>
+        </div>
+
+      </footer>
+      <style jsx>
         {`
+        .footer-wrapper {
+          display: grid;
+          grid-template-rows: auto 1fr auto;
+          align-items: start;
+        }
+
         .footer {
           display: flex;
           flex-flow: row wrap;
@@ -197,11 +207,11 @@ export const Footer = () => {
           }
           
           .footer__addr {
-            flex: 1 0px;
+            flex: 1 0px !important;
           }
           
           .footer__nav {
-            flex: 2 0px;
+            flex: 2 0px !important;
           }
         }
         `}

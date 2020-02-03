@@ -219,7 +219,7 @@ const Home = () => (
         <Col lg={4} className="text-center">
           <Image src={MobileAppImage} fluid />
         </Col>
-        <Col lg={8}>
+        <Col lg={8} className="mt-5 mt-lg-0">
           <Row>
             <Col>
               <h3 className="text-red">GPS Tracking</h3>
@@ -250,38 +250,38 @@ const Home = () => (
           <h4 className="text-muted">Join our satisfied customers locally and globally, and get secured by award winning service</h4>
         </Col>
       </Row>
-      <Row className="py-5">
-        <Col>
+      <Row className="mt-5">
+        <Col md={6} lg={3}>
           <Image src={AwardNCCAA06Image} />
           <p>2006 National Customers Choice Annual Awards “Most Outstanding Ambulance Service Product”</p>
         </Col>
-        <Col>
+        <Col md={6} lg={3}>
           <Image src={AwardABMQAImage} />
           <p>2005 Asian Business & Marketing Quality Award “Most Outstanding World Class Ambulance Service”</p>
         </Col>
-        <Col>
+        <Col md={6} lg={3}>
           <Image src={AwardCEAImage} />
           <p>CEO Excel Awards 2016</p>
         </Col>
-        <Col>
+        <Col md={6} lg={3}>
           <Image src={AwardMVPBAImage} />
           <p>MVP Bossing Award Winner 2014</p>
         </Col>
       </Row>
-      <Row className="py-5">
-        <Col>
+      <Row>
+        <Col md={6} lg={3}>
           <Image src={AwardsNCCAA14Image} />
           <p>2014 National Customers Choice Annual Awards “Most Outstanding Ambulance Services"</p>
         </Col>
-        <Col>
+        <Col md={6} lg={3}>
           <Image src={AwardNPQEAImage} />
           <p>2006 National Product Quality Excellence Award “Best On Time Ambulance Provider” – National Award</p>
         </Col>
-        <Col>
+        <Col md={6} lg={3}>
           <Image src={AwardNSCAAImage} />
           <p>2006 National Shoppers Choice Annual Awards “#1 Ambulance Service”</p>
         </Col>
-        <Col>
+        <Col md={6} lg={3}>
           <Image src={AwardPHQABEImage} />
           <p>2005 Philippine Quality Awards For Business Excellence “Philippine Business World-Class”</p>
         </Col>

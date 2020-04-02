@@ -3,6 +3,7 @@ import Default from '../layouts/default'
 import { Container, Row, Col, Form } from 'react-bootstrap'
 import Link from 'next/link'
 import axios from 'axios'
+import { useForm } from "react-hook-form";
 
 import apiUrl from '../api'
 
@@ -11,19 +12,48 @@ export const SignUp = () => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState({})
+  const [error, setError] = useState([]);
+  const [successMessage, setSuccessMessage] = useState("")
 
-  const submitRegistration = () => {
-    axios.post(`${apiUrl}/accounts/register/`,
-      { username: email, email: email, password: password, first_name: firstName, last_name: lastName }
+  const { handleSubmit, register, errors, watch } = useForm();
+
+  console.log(error)
+  // const submitRegistration = () => {
+  //   axios.post(`${apiUrl}/accounts/register/`,
+  //     { username: email, email: email, password: password, first_name: firstName, last_name: lastName }
+  //   )
+  //     .then((response) => {
+  //       console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.response);
+  //     })
+  // }
+
+  const onSubmit = (values) => {
+    setError("")
+    //console.log(values)
+  if(Object.keys(errors).length === 0){
+       axios.post(`${apiUrl}/accounts/register/`,
+      { username: values.email, email: values.email, password: values.password, first_name: values.firstname, last_name: values.lastname }
     )
       .then((response) => {
-        console.log(response);
+        console.log(response.data)
+        if(response.data){
+          setSuccessMessage("Thank you for registration");
+        }
       })
       .catch((error) => {
-        setErrors(error.response.data)
+        console.log(error.response.data)
+        if(error.response.data.username){
+          setError(error.response.data.username[0]);
+        }else{
+          setError(error.response.data.password[0]);
+        }
       })
+   
   }
+}
 
   return (
     <Default hideNav={true}>
@@ -46,55 +76,80 @@ export const SignUp = () => {
             <p className="pHelloSub">
               Create your account in less than a minute
             </p>
-            <div className="divEmail" style={{ marginTop: "15px" }}>
+            <h5 className="text-success font-weight-bold">{successMessage}</h5>
+            <h5 className="text-danger font-weight-bold">{error}</h5>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              
+              <div className="divEmail" style={{ marginTop: "15px" }}>
               <p className="pEmail">First Name</p>
               <input
-                type="text"
-                className="txtEmail"
-                placeholder="Enter firstname here.."
-                onChange={e => setFirstName(e.target.value)}
-              />
+              name="firstname"
+              className="form-control txtEmail"
+              ref={register({
+                required: 'First name is required',
+              })}
+              placeholder="Enter first name here.."
+            />
+            <small className="text-danger">{errors.firstname && errors.firstname.message}</small>
             </div>
+
+           
             <div className="divEmail" style={{ marginTop: "15px" }}>
               <p className="pEmail">Last Name</p>
               <input
-                type="text"
-                className="txtEmail"
-                placeholder="Enter lastname here.."
-                onChange={e => setLastName(e.target.value)}
-              />
+              name="lastname"
+              className="form-control txtEmail"
+              ref={register({
+                required: 'Last name is required',
+              })}
+              placeholder="Enter last name here.."
+            />
+            <small className="text-danger">{errors.lastname && errors.lastname.message}</small>
             </div>
+            
             <div className="divEmail" style={{ marginTop: "15px" }}>
               <p className="pEmail">Email Address</p>
               <input
-                type="text"
-                className="txtEmail"
-                placeholder="Enter email address here.."
-                onChange={e => setEmail(e.target.value)}
-              />
-              {errors.username && <span className="text-danger">{errors.username.toString().replace('username', 'email')}</span>}
-              {errors.email && <span className="text-danger">{errors.email}</span>}
+              name="email"
+              className="form-control txtEmail"
+              ref={register({
+                required: 'Email is required',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: "Invalid email address"
+                }
+              })}
+              placeholder="Enter email address here.."
+            />
+            <small className="text-danger">{errors.email && errors.email.message}</small>
             </div>
-            <div className="divPassword">
+           <div className="divPassword">
               <p className="pPassword">Password</p>
+              
               <input
-                type="password"
-                className="txtPassword"
-                placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
-                onChange={e => setPassword(e.target.value)}
-              />
-              {errors.password && <span className="text-danger">{errors.password}</span>}
+              name="password"
+              type="password"
+              className="txtPassword form-control"
+              ref={register({
+                required: 'Password is required',
+                minLength: {value: 8, message: "Minimum length is 8 characters"}
+              })}
+              placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+            />
+            <small className="text-danger">{errors.password && errors.password.message}</small>
             </div>
             <div className="divFooter">
-              <button className="btnSignUp" onClick={() => submitRegistration()}>
+              <button className="btnSignUp" type="submit">
                 Submit
               </button>
+
               <Link href="/login"><a>
                 <p className="pDont">
                   Already have an account?&nbsp;<span>Log In</span>
                 </p>
               </a></Link>
             </div>
+            </form>
           </Col>
           <Col lg={8} className="colright">
             <div className="banner">

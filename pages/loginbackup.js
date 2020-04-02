@@ -11,8 +11,8 @@ import apiUrl from '../api'
 const Login = () => {
 
   const { handleSubmit, register, errors, watch } = useForm();
-  //const [email, setEmail] = useState('')
-  //const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [userInput, setUserInput] = useState({
     email: "",
     password: ""
@@ -37,7 +37,7 @@ const Login = () => {
         localStorage.setItem("refreshToken", JSON.stringify(response.data.refresh))
         const accessToken = localStorage.getItem("accessToken");
         const refreshToken = localStorage.getItem("refreshToken");
-        window.location.replace("http://localhost:3000/")
+        window.redirect('/')
       })
       .catch((error) => {
         if(error.response){
@@ -79,7 +79,7 @@ const Login = () => {
               name="email"
               className="form-control txtEmail"
               ref={register({
-                required: 'Email is required',
+                required: 'Required',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                   message: "Invalid email address"
@@ -98,7 +98,7 @@ const Login = () => {
               type="password"
               className="txtPassword form-control"
               ref={register({
-                required: 'Password is required',
+                required: 'Required',
               })}
               placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
             />

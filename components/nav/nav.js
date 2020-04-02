@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navbar, Nav, Form, Button, Image } from 'react-bootstrap'
 import ActiveLink from './activeLink'
 import LogoImage from '../../public/logo512.png'
 import Link from 'next/link'
 
+
 export default () => {
-  return (
+
+return (
     <Navbar bg="light" expand="xl" fixed="top" style={{ borderBottom: '1px solid #0366B1' }}>
       <Navbar.Brand>
         <Link href="/">

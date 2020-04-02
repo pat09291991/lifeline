@@ -85,7 +85,7 @@ const Home = () => (
           <Row className="text-center d-flex align-items-center">
             <Col>
               <h1><strong>WHY <span className="text-red">LIFELINE</span>?</strong></h1>
-              <h4 className="text-muted">Accidents happen in a split second. With more than 200,000 lives saved, in the course of 21 years, Lifeline has become a trusted and premiere medical provider in the Philippines.</h4>
+              <h4 className="text-muted">Accidents happen in a split second. With more than 300,000 lives saved, in the course of 25 years, Lifeline has become a trusted and premiere medical provider in the Philippines.</h4>
             </Col>
           </Row>
           <Row className="mt-3">
@@ -97,13 +97,15 @@ const Home = () => (
             </Col>
             <Col sm={6}>
               <ul>
-                <li>Over 250 staff members</li>
+                <li>Over 350 staff members</li>
                 <li>Over 100 ready doctors-on-call</li>
               </ul>
             </Col>
             <Col sm={12}>
               <ul>
-                <li>Over 200,000 members covering 3,400,000 people in Metro Manila</li>
+                <li>Over 300,000 members covering 5,400,000 people in Metro Manila</li>
+                <li>First ambulance company to be given the license to operate by the Department of Health</li>
+                <li>ISO, JCI & DOLE Accredited</li>
               </ul>
             </Col>
           </Row>
@@ -119,7 +121,7 @@ const Home = () => (
                   <Image src={TwentyFourSevenImage} fluid />
                 </Col>
                 <Col>
-                  <p className="about-box-16911">16-911</p>
+                  <p className="about-box-16911 text-warning">Call<br/>16-911</p>
                 </Col>
               </Row>
             </Col>
@@ -129,7 +131,7 @@ const Home = () => (
                   <Image src={AmbulanceAboutImage} fluid />
                 </Col>
                 <Col>
-                  <p>Over 40 ambulances with multiple points of dispatch</p>
+                  <p>Over 60 ambulances with multiple points of dispatch</p>
                 </Col>
               </Row>
             </Col>
@@ -153,7 +155,7 @@ const Home = () => (
         </Col>
         <Col sm={6}>
           <Image className="m-5" src={ServicesTransferImage} width={48} height={48} />
-          <h3>Interfacility Transfer</h3>
+          <h3>Patient Transfer</h3>
           <p>We provide transportation of ill and injured patients between hospitals to hospitals or from hospitals to home or home to any treatment facilities. (Booking is required.) </p>
         </Col>
         <Col sm={6}>
@@ -203,9 +205,10 @@ const Home = () => (
       </Col></Row>
       <Row><Col>
         <CardGroup>
-          <ClinicCard name="Alabang Hills Vilage" number="+63(2) 551-1807" address="Don Jesus Blvd., Alabang Hills Village, Muntinlupa City, Philippines" imgUrl="https://picsum.photos/500/650?random=1" />
+          {/* TODO: Get details from Tita Candy */}
+          <ClinicCard name="Alabang Greenfields" number="+63(2) 551-1807" address="Don Jesus Blvd., Alabang Hills Village, Muntinlupa City, Philippines" imgUrl="https://picsum.photos/500/650?random=1" />
           <ClinicCard name="Ayala Alabang Village" number="+63(2) 772-3898 / +63(2) 772-2387" address="Narra Street, Ayala Alabang Village, Muntinlupa City, Philippines" imgUrl="https://picsum.photos/500/650?random=2" />
-          <ClinicCard name="Loyola Grand Villas" number="+63(2) 709-4355" address="Guatemala Space, Soliven II, Loyola Grand Villas, Quezon City, Philippines" imgUrl="https://picsum.photos/500/650?random=3" />
+          <ClinicCard name="Menarco Tower" number="+63(2) 709-4355" address="Guatemala Space, Soliven II, Loyola Grand Villas, Quezon City, Philippines" imgUrl="https://picsum.photos/500/650?random=3" />
           <ClinicCard name="Rockwell Makati Club" number="+63(2) 798-1700 local 1748 / +63(2) 798-1748" address="Basement 2 of Amorsolo East Tower, Rockwell Center, Makati City, Philippines" imgUrl="https://picsum.photos/500/650?random=4" />
         </CardGroup>
       </Col></Row>
@@ -219,6 +222,7 @@ const Home = () => (
         <Col lg={4} className="text-center">
           <Image src={MobileAppImage} fluid />
         </Col>
+        {/* TODO: Add download links */}
         <Col lg={8} className="mt-5 mt-lg-0">
           <Row>
             <Col>
@@ -257,7 +261,8 @@ const Home = () => (
         </Col>
         <Col md={6} lg={3}>
           <Image src={AwardABMQAImage} />
-          <p>2005 Asian Business & Marketing Quality Award “Most Outstanding World Class Ambulance Service”</p>
+          <p>APEA</p>
+          {/* TODO: Get the image from Lifeline */}
         </Col>
         <Col md={6} lg={3}>
           <Image src={AwardCEAImage} />
@@ -286,6 +291,7 @@ const Home = () => (
           <p>2005 Philippine Quality Awards For Business Excellence “Philippine Business World-Class”</p>
         </Col>
       </Row>
+      {/* TODO: Add APEA */}
     </Container>
 
     <style jsx global>{`
@@ -466,7 +472,7 @@ const Home = () => (
         }
 
         .about-box-16911 {
-          font-size: 4rem;
+          font-size: 3rem;
         }
 
         .about-box-image {

@@ -1,10 +1,25 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Navbar, Nav, Form, Button, Image } from 'react-bootstrap'
 import ActiveLink from './activeLink'
 import LogoImage from '../../public/logo512.png'
 import Link from 'next/link'
+import cookie from 'js-cookie'
+import jwt from 'jwt-decode';
 
 export default () => {
+
+const [token, setToken] = useState({})
+
+useEffect(()=>{
+
+  const token = cookie.get("token");
+  const accessToken = JSON.parse(token);
+  setToken(accessToken)
+  
+}, [])
+  
+  
+  
   return (
     <Navbar bg="light" expand="xl" fixed="top" style={{ borderBottom: '1px solid #0366B1' }}>
       <Navbar.Brand>

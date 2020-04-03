@@ -17,7 +17,6 @@ export const SignUp = () => {
 
   const { handleSubmit, register, errors, watch } = useForm();
 
-  console.log(error)
   // const submitRegistration = () => {
   //   axios.post(`${apiUrl}/accounts/register/`,
   //     { username: email, email: email, password: password, first_name: firstName, last_name: lastName }
@@ -32,7 +31,6 @@ export const SignUp = () => {
 
   const onSubmit = (values) => {
     setError("")
-    //console.log(values)
   if(Object.keys(errors).length === 0){
        axios.post(`${apiUrl}/accounts/register/`,
       { username: values.email, email: values.email, password: values.password, first_name: values.firstname, last_name: values.lastname }
@@ -44,7 +42,6 @@ export const SignUp = () => {
         }
       })
       .catch((error) => {
-        console.log(error.response.data)
         if(error.response.data.username){
           setError(error.response.data.username[0]);
         }else{

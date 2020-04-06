@@ -1,4 +1,5 @@
-import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card } from 'react-bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card, Modal } from 'react-bootstrap'
 
 import Default from '../layouts/default'
 // import MainVideoMP4 from '../public/home/video.mp4'
@@ -29,6 +30,7 @@ import AwardNSCAAImage from '../public/home/awards/national_shoppers_choice_annu
 import AwardPHQABEImage from '../public/home/awards/ph_quality_awards_for_business_excellence.jpg'
 
 const ClinicCard = ({ name, number, address, imgUrl }) => (
+
   <Card>
     <Card.Img variant="top" src={imgUrl} />
     <Card.Body>
@@ -58,7 +60,9 @@ const trustedStyle = {
   color: 'white'
 }
 
-const Home = () => (
+const Home = () => {
+  
+  return(
   <Default>
     <Jumbotron className="vh-100 text-center d-flex align-items-center justify-content-center" style={jumboStyle}>
       <div>
@@ -554,6 +558,10 @@ const Home = () => (
   //     }
   //   `}</style>
   // </div>
-)
+  )
+}
+
+
+
 
 export default Home

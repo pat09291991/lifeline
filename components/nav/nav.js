@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import { Navbar, Nav, Form, Button, Image } from 'react-bootstrap'
+import { Navbar, Nav, Form, Button, Image, Modal, } from 'react-bootstrap'
 import ActiveLink from './activeLink'
 import LogoImage from '../../public/logo512.png'
 import Link from 'next/link'
 import cookie from 'js-cookie'
 import jwt from 'jwt-decode';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default () => {
 
+const [modalShow, setModalShow] = React.useState(true);
+
 const [token, setToken] = useState({})
+const [loggedUser, setLoggedUser] = useState({});
 
 useEffect(()=>{
-
   const token = cookie.get("token");
   const accessToken = JSON.parse(token);
   setToken(accessToken)
   
+  const payload = jwt(accessToken.access);
+  setLoggedUser(payload);
+  
+  if(!payload.address){
+    setModalShow(true);
+  } 
 }, [])
   
   
@@ -58,4 +67,30 @@ useEffect(()=>{
         `}</style>
     </Navbar>
   )
+}
+
+function MyVerticallyCenteredModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Missing Information:
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+           Please complete your profile details.
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide} className="pr-5 mr-2 text-center">Later</Button>
+        <Link href="/profile"><Button className="text-center btn-danger">GO</Button></Link>
+      </Modal.Footer>
+    </Modal>
+  );
 }

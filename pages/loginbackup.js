@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 import { useForm } from "react-hook-form";
-import Router from 'next/router'
-import cookie from 'js-cookie'
+
 
 import Default from '../layouts/default'
 import apiUrl from '../api'
@@ -12,19 +11,15 @@ import apiUrl from '../api'
 const Login = () => {
 
   const { handleSubmit, register, errors, watch } = useForm();
-  const [token, setToken] = useState({}); 
-  //const [email, setEmail] = useState('')
-  //const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [userInput, setUserInput] = useState({
     email: "",
     password: ""
   })
   const [error, setError] = useState("")
 
-  useEffect(()=>{
-    cookie.set("token", JSON.stringify(token))
-    //cookie.set("refreshToken", JSON.stringify(token.refresh))
-  }, [token])
+  
 
   const onSubmit = (values) => {
     setError("")
@@ -37,9 +32,12 @@ const Login = () => {
       { username: values.email, password: values.password }
     )
       .then(response => {
-        setToken(response.data)
-
-        Router.push('/')
+        //console.log(response)
+        localStorage.setItem("accessToken", JSON.stringify(response.data.access))
+        localStorage.setItem("refreshToken", JSON.stringify(response.data.refresh))
+        const accessToken = localStorage.getItem("accessToken");
+        const refreshToken = localStorage.getItem("refreshToken");
+        window.redirect('/')
       })
       .catch((error) => {
         if(error.response){
@@ -73,7 +71,7 @@ const Login = () => {
             <p className="pHelloSub">
               Sign in by entering the information below
             </p>
-            {error && <p className="text-danger font-weight-bolder" style={{ marginTop: "25px" }}>{error}</p>}
+            {error && <p className="text-danger" style={{ marginTop: "25px" }}>{error}</p>}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="divEmail" style={{ marginTop: "15px" }}>
               <p className="pEmail">Email Address</p>
@@ -81,7 +79,7 @@ const Login = () => {
               name="email"
               className="form-control txtEmail"
               ref={register({
-                required: 'Email is required',
+                required: 'Required',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                   message: "Invalid email address"
@@ -100,7 +98,7 @@ const Login = () => {
               type="password"
               className="txtPassword form-control"
               ref={register({
-                required: 'Password is required',
+                required: 'Required',
               })}
               placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
             />

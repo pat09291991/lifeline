@@ -29,18 +29,16 @@ const [loggedUser, setLoggedUser] = useState({});
 
 useEffect(()=>{
   const token = cookie.get("token");
-  const accessToken = JSON.parse(token);
-  setToken(accessToken)
-  
-  const payload = jwt(accessToken.access);
-  console.log(payload)
-  setLoggedUser(payload);
-  
-  if(!payload.address){
-    setModalShow(true);
-  } 
-}, [])
+  if(token){
+    const accessToken = JSON.parse(token);
+    const payload = jwt(accessToken.access);
+    console.log(payload)
+    setToken(accessToken)
+    setLoggedUser(payload);
+  }
 
+
+}, [])
 
   return (
     <div>

@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { Container, Row, Col, OverlayTrigger } from "react-bootstrap";
 import Tooltip from "react-bootstrap/Tooltip";
+import Router from 'next/Router'
 
 const Sidebar = () => {
 
+const handleExit = () =>{
+  Router.push("/")
+}
   function eventHandler() {
     if ($('.colSideMenu').width() >= 65) {
       $('.colSideMenu').css('width', '65px');
@@ -50,11 +54,14 @@ const Sidebar = () => {
     }
   }
 
+const handleBackToHome = () => {
+  Router.push("/")
+}
   return (
     <Container fluid={true} className="h100 colSideMenu float-right">
       <Row className="h100 align-items-center rowSide justify-content-center">
         <Col lg={12} className="text-center" style={{ position: "relative" }}>
-          <img src="Image/logo.png" className="imgLogoLifeline"></img>
+          <img src="Image/logo.png" className="imgLogoLifeline" onClick={handleBackToHome}></img>
 
           <OverlayTrigger placement="right" overlay={<Tooltip id="tooltip">Dashboard</Tooltip>}>
             <Link href="/dashboard">
@@ -111,7 +118,7 @@ const Sidebar = () => {
           </OverlayTrigger>
 
           <OverlayTrigger placement="right" overlay={<Tooltip id="tooltip">Exit</Tooltip>}>
-            <button className="btn btnExit">
+            <button className="btn btnExit" onClick={handleExit}>
               <img src="Image/logout.png" className="imgLogo" />
               <span>Exit</span>
             </button>

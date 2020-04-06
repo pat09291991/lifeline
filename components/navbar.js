@@ -1,8 +1,10 @@
 import Link from "next/link";
-import React, { useState } from 'react';
-import { Container, Row, Col, OverlayTrigger, Tooltip, Dropdown, Modal, Button } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, OverlayTrigger, Image, Tooltip, Dropdown, Modal, Button } from "react-bootstrap";
 import Router from 'next/router'
+import jwt from 'jwt-decode';
 import cookie from 'js-cookie'
+import LogoImage from '../public/logo512.png'
 
 const Navbar = () => {
 
@@ -10,21 +12,46 @@ const Navbar = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleLogout = () => {
-    cookie.remove("token");
+   const handleLogout = () =>{
+    setShow(false)
+    setIsLogged(false)
     Router.push("/")
+    cookie.remove("token")
   }
+const [modalShow, setModalShow] = React.useState(true);
 
+const [token, setToken] = useState({})
+const [loggedUser, setLoggedUser] = useState({});
+const [isLogged, setIsLogged] = useState(false);
+
+useEffect(()=>{
+  const token = cookie.get("token");
+  if(token){
+    const accessToken = JSON.parse(token);
+    const payload = jwt(accessToken.access);
+    console.log(payload)
+    setToken(accessToken)
+    setLoggedUser(payload);
+    setIsLogged(true)
+  } 
+}, [])
+
+const handleBackToHome = () => {
+  Router.push("/")
+}
   return (
     <Container fluid={true} className="divNav">
       <Row>
         <Col lg={6} md={6} sm={6} xs={6}>
-          <p className="pTitle">My Dashboard</p>
+          <div className="d-flex align-items-center h-100" onClick={handleBackToHome}>
+              <Image src={LogoImage} height={48} />
+              <strong className="pl-2 nav-title"><span className="text-red">LIFELINE</span><br /> 16-911</strong>
+            </div>
         </Col>
         <Col lg={6} md={6} sm={6} xs={6}>
           <div className="float-right form-inline">
-            <img src="Image/dp.jpeg" className="imgProfile" />
-            <span className="lblName">Alfon Labadan</span>
+            <img src="Image/dp.jpeg" className="imgProfile"  style={{ width: "40px", borderRadius: "50%" }}/>
+            <span className="lblName mx-2">{loggedUser.first_name + " " + loggedUser.last_name}</span>
             <Dropdown>
               <Dropdown.Toggle
                 className="dropdown-profile"
@@ -32,9 +59,10 @@ const Navbar = () => {
               ></Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item href="#/action-1" onClick={handleShow}>Logout</Dropdown.Item>
+                <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
                 <Dropdown.Item href="/profile">Edit Profile</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Settings</Dropdown.Item>
+                <Dropdown.Item href="/profile">Settings</Dropdown.Item>
+                <Dropdown.Item onClick={handleShow}>Logout</Dropdown.Item>
               </Dropdown.Menu>
 
             </Dropdown>

@@ -98,7 +98,7 @@ const [modalShow, setModalShow] = React.useState(false);
   if(token){
     const accessToken = JSON.parse(token);
     const payload = jwt(accessToken.access);
-
+    console.log(payload)
     if(!payload.address){
     setModalShow(true);
   } 

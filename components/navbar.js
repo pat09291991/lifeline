@@ -29,7 +29,6 @@ useEffect(()=>{
   if(token){
     const accessToken = JSON.parse(token);
     const payload = jwt(accessToken.access);
-    console.log(payload)
     setToken(accessToken)
     setLoggedUser(payload);
     setIsLogged(true)
@@ -55,6 +54,7 @@ const handleBackToHome = () => {
             <Dropdown>
               <Dropdown.Toggle
                 className="dropdown-profile"
+                title=""
                 id="dropdown-basic"
               ></Dropdown.Toggle>
 

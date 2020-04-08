@@ -17,12 +17,12 @@ const dashboard = (props) => {
 
 const [modalShow, setModalShow] = React.useState(false);
 
-  function loadwindows() {
-    const element = document.querySelector('#load')
-    element.classList.add('animated', 'fadeOut')
-    $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
+  // function loadwindows() {
+  //   const element = document.querySelector('#load')
+  //   element.classList.add('animated', 'fadeOut')
+  //   $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
     
-  }
+  // }
 
 const [token, setToken] = useState({})
 const [loggedUser, setLoggedUser] = useState({});
@@ -83,7 +83,7 @@ useEffect(()=>{
         />
 
       </head>
-      <body onLoad={loadwindows}>
+      <body>
         <Loader></Loader>
         <Navbar></Navbar>
         <Sidebar></Sidebar>

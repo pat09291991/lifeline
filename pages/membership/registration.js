@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card, Modal, Form } from 'react-bootstrap'
 import Link from 'next/link';
 import { useForm } from "react-hook-form";
+import cookie from 'js-cookie'
 
 import Default from '../../layouts/default';
 
@@ -10,8 +11,9 @@ const Registration = () => {
 
 const { handleSubmit, register, errors, watch } = useForm();
 
-const [selectedIndi, setSelectedIndi] = useState(true);
+const [selectedIndi, setSelectedIndi] = useState(false);
 const [selectedGroup, setSelectedGroup] = useState(false);
+const [membershipType, setMembershipType] = useState(null);
 
 const styleIndi = {
 	border: "1px solid lightgray",
@@ -29,6 +31,17 @@ const styleGroup = {
 	color: selectedGroup ? "#d1604e" : "white"
 }
 
+useEffect(()=>{
+  const plan = cookie.get("plan");
+  if(plan==="individual"){
+    setSelectedIndi(true);
+    setMembershipType(1);
+  }else{
+    setSelectedGroup(true);
+    setMembershipType(3);
+  }
+}, [])
+
 const handleActivateIndi = () => {
 	setSelectedGroup(false)
 	setSelectedIndi(true)
@@ -37,6 +50,7 @@ const handleActivateGroup = () => {
 	setSelectedIndi(false)
 	setSelectedGroup(true)
 }
+
 
 const onSubmit = (values) => {
 	console.log(values)
@@ -64,8 +78,8 @@ const onSubmit = (values) => {
 			</Container>
 
 			<Container style={{minHeight: "80vh"}}>
-              {selectedIndi ? <Individual /> : ""}
-              {selectedGroup ? <Group /> : ""}
+              {selectedIndi ? <Individual selectedIndi={selectedIndi}/> : ""}
+              {selectedGroup ? <Group selectedGroup={selectedGroup} /> : ""}
 			</Container>
 		</Default>
 
@@ -78,7 +92,13 @@ function Individual(){
 const { handleSubmit, register, errors, watch } = useForm();
 
 const onSubmit = (values) => {
-	console.log(values)
+	if(values.year == 1 ){
+    console.log(values)
+    console.log("membershipType is 1")
+  }else{
+    console.log(values)
+    console.log("membershipType is 2")
+  }
 }
 
 return(
@@ -86,9 +106,9 @@ return(
 		<form onSubmit={handleSubmit(onSubmit)}>     
               <div style={{ marginTop: "15px" }} className="w-100">
               <Form.Control as="select" name="year" custom ref={register}>
-			      <option value="1">1</option>
-			      <option value="2">2</option>
-			    </Form.Control>
+                <option value="1">1 Year Individual Plan</option>
+			          <option value="2">2 Years Individual Plan</option>
+			        </Form.Control>
 			  </div>
 			<Col lg={12} md={12} sm={12} xs={12} className="mx-0 px-0 d-flex align-items-center">
               <div style={{ marginTop: "15px" }} className="w-100 mr-2">
@@ -225,7 +245,13 @@ const handleAddMember = () => {
   };
 
 const onSubmit = (values) => {
-	console.log(values)
+	if(values.year == 1 ){
+    console.log(values)
+    console.log("membershipType is 3")
+  }else{
+    console.log(values)
+    console.log("membershipType is 4")
+  }
 }
 
 
@@ -234,11 +260,12 @@ return(
 	<Col lg={12} md={12} sm={12} xs={12} className="mx-0 px-0 mb-4 d-flex flex-column align-items-center">
 		<form onSubmit={handleSubmit(onSubmit)}>     
               <div style={{border: "1px solid black", padding: "15px 10px"}}> 
+              <h2>Primary Member</h2>
               <div style={{ marginTop: "15px" }} className="w-100">
               <Form.Control as="select" name="year" custom ref={register}>
-			      <option value="1">1</option>
-			      <option value="2">2</option>
-			    </Form.Control>
+			          <option value="1">1 Year Group Plan</option>
+                <option value="2">2 Years Group Plan</option>
+			        </Form.Control>
 			  </div>
 			
 			<Col lg={12} md={12} sm={12} xs={12} className="mx-0 px-0 d-flex align-items-center">
@@ -349,10 +376,9 @@ return(
            <AddMember 
            	indexes={indexes}
            	counter={counter}
-            handleSubmit={handleSubmit}
-            register={register}
-            errors={errors}
             removeFriend={removeFriend}
+            errors={errors}
+            register={register}
            />
 
 
@@ -372,8 +398,8 @@ return(
 )
 }
 
-function AddMember({counter, indexes, handleSubmit, register, errors, removeFriend}){
-console.log(indexes)
+function AddMember({counter, indexes, removeFriend, errors, register }){
+
 
 	return(
 		<Fragment>
@@ -382,8 +408,8 @@ console.log(indexes)
         return (
           <Fragment key={index}>
 
-          <div style={{border: "1px solid black", padding: "15px 10px"}}> 
-
+          <div style={{border: "1px solid black", padding: "15px 10px", marginTop: "15px"}}> 
+          <h3>Member {index + 1}</h3>
           <Col lg={12} md={12} sm={12} xs={12} className="mx-0 px-0 d-flex align-items-center">
               <div style={{ marginTop: "15px" }} className="w-100 mr-2">
               <input

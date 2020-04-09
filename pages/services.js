@@ -70,7 +70,7 @@ const selectedStyle = {
 	cursor: "pointer"
 }
 
-const Membership = () => {
+const Services = () => {
 
 const [selectedServices, setSelectedServices] = useState("ecr");
 
@@ -84,7 +84,7 @@ const handleSelected = (e) => {
 		<Default>
 			<Jumbotron className="h-100 d-flex mt-5 flex-column mb-0" style={jumboStyle}>
 		        <Container>
-		        	<h1 className="jumbo-title text-white pt-3">Services</h1>
+		        	<h1 className="jumbo-title text-white pt-3">SERVICES</h1>
 			        <h5><button onClick={()=>Router.push('/')} className="text-white btn btn-link px-0"><h5>HOME</h5></button><span className="text-white"> / </span><span className="text-info">SERVICES</span></h5>
 		        </Container>
     		</Jumbotron>
@@ -327,4 +327,4 @@ function DocPrograms(){
 	)
 }
 
-export default Membership;
+export default Services;

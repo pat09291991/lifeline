@@ -74,21 +74,14 @@ useEffect(()=>{
           <ActiveLink href="/academy" activeClassName="active"><a className="nav-link">Academy</a></ActiveLink>
         </Nav>
         <Form inline>
-          <Button className="mx-1" variant="warning">Be a Member</Button>
+          <Button onClick={()=>Router.push('/membership')} className="mx-1" variant="warning">Be a Member</Button>
           <Button className="mx-1" variant="warning">Pay for Services</Button>
           {isLogged ? 
             <div className="float-right form-inline">
-            <img src="Image/dp.jpeg" className="imgProfile"  style={{ width: "40px", borderRadius: "50%" }}/>
-            <span className="lblName mx-2">{loggedUser.first_name + " " + loggedUser.last_name}</span>
-            <DropdownButton
-            alignRight
-            id="dropdown-menu-align-right"
-            >
-              <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-              <Dropdown.Item href="/profile">Edit Profile</Dropdown.Item>
-              <Dropdown.Item href="/profile">Settings</Dropdown.Item>
-              <Dropdown.Item onClick={handleShow}>Logout</Dropdown.Item>
-            </DropdownButton>
+            
+            <Button onClick={()=>Router.push('/dashboard')} className="mx-1" variant="danger">Go to Dashboard</Button>
+            <Button onClick={handleLogout} className="mx-1" variant="secondary">Logout</Button>
+
           </div>
           :
           <div>

@@ -29,7 +29,6 @@ useEffect(()=>{
   if(token){
     const accessToken = JSON.parse(token);
     const payload = jwt(accessToken.access);
-    console.log(payload)
     setToken(accessToken)
     setLoggedUser(payload);
     setIsLogged(true)
@@ -40,35 +39,17 @@ const handleBackToHome = () => {
   Router.push("/")
 }
   return (
-    <Container fluid={true} className="divNav">
-      <Row>
+    <Container fluid={true} className="divNav d-flex align-items-center justify-content-between">
         <Col lg={6} md={6} sm={6} xs={6}>
-          <div className="d-flex align-items-center h-100" onClick={handleBackToHome}>
+          <div className="d-flex align-items-center ml-5" onClick={handleBackToHome}>
               <Image src={LogoImage} height={48} />
               <strong className="pl-2 nav-title"><span className="text-red">LIFELINE</span><br /> 16-911</strong>
             </div>
         </Col>
-        <Col lg={6} md={6} sm={6} xs={6}>
-          <div className="float-right form-inline">
-            <img src="Image/dp.jpeg" className="imgProfile"  style={{ width: "40px", borderRadius: "50%" }}/>
-            <span className="lblName mx-2">{loggedUser.first_name + " " + loggedUser.last_name}</span>
-            <Dropdown>
-              <Dropdown.Toggle
-                className="dropdown-profile"
-                id="dropdown-basic"
-              ></Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-                <Dropdown.Item href="/profile">Edit Profile</Dropdown.Item>
-                <Dropdown.Item href="/profile">Settings</Dropdown.Item>
-                <Dropdown.Item onClick={handleShow}>Logout</Dropdown.Item>
-              </Dropdown.Menu>
-
-            </Dropdown>
-          </div>
+        <Col lg={6} md={6} sm={6} xs={6} className="d-flex justify-content-end">
+            <Button onClick={()=>Router.push('/')} className="my-0 btn btn-danger" style={{marginRight: "10px", width: "100px", height: "40px"}}>Go home</Button>
+            <Button onClick={handleLogout} className="my-0 btn btn-secondary" style={{marginRight: "10px", width: "100px", height: "40px"}}>Logout</Button>
         </Col>
-      </Row>
       <Modal show={show}
         onHide={() => setShow(false)}>
         <Modal.Header closeButton>

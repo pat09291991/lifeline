@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tooltip from "react-bootstrap/Tooltip";
 import Dropdown from "react-bootstrap/Dropdown";
-import { Container, Row, Col, OverlayTrigger } from "react-bootstrap";
+import { Container, Row, Col, OverlayTrigger, Button, Modal } from "react-bootstrap";
 import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
 import Bottom from "../components/bottom";
@@ -10,11 +10,18 @@ import Loader from "../components/loader";
 import Head from "next/head";
 import cookie from 'js-cookie'
 import jwt from 'jwt-decode';
+import { useForm } from "react-hook-form";
+import axios from 'axios'
+
+import apiUrl from '../api'
 
 
 
-const profile = () => {
+const profile = (props) => {
 
+const [modalShow, setModalShow] = React.useState(false);
+
+const handleClose = () => setShow(false);
 
     function loadwindows() {
         const element = document.querySelector('#load')
@@ -26,6 +33,7 @@ const profile = () => {
 
 const [token, setToken] = useState({})
 const [loggedUser, setLoggedUser] = useState({});
+const [edit, setEdit] = useState(false);
 
 useEffect(()=>{
   const token = cookie.get("token");
@@ -35,8 +43,12 @@ useEffect(()=>{
   setLoggedUser(payload);
 }, [])
 
+const handleOpenEdit = () => {
+    setModalShow(true);
+}
 
     return (
+        <Fragment>
         <div onLoad = {loadwindows} >
             <head>
                 <meta charset="utf-8" />
@@ -95,9 +107,9 @@ useEffect(()=>{
                             <p className="pNameProfile">{loggedUser.first_name + " " + loggedUser.last_name}</p>
                             <p className="pStatus">Active</p>
                         </div>
-                        <div className="form-inline divNameStatus">
+                        <div className="form-inline divNameStatus d-flex align-items-center my-auto">
                             <span className="spanEmail"><img src="Image/mail.png" className="img-fluid imgStatus" style={{ width: "15px", marginTop: "-35px" }}></img></span>
-                            <p className="pEmail">{loggedUser.email}</p>
+                                <p className="pEmail">{loggedUser.email}</p>
                             <span style={{ marginLeft: "20px" }}><img src="Image/phone.png" className="img-fluid imgStatus" style={{ width: "14px", marginTop: "-35px" }}></img></span>
                             <p className="pEmail">{loggedUser.mobile_number}</p>
                         </div>
@@ -108,7 +120,7 @@ useEffect(()=>{
                         <p className="pHeaderProfile">Information</p>
                     </Col>
                     <Col lg={6} mc={6} sm={6} xs={6}>
-                        <img src="Image/marker.png" className="img-fluid float-right imgEdit" style={{ width: "20px", marginTop: "-10px" }}></img>
+                        <img src="Image/marker.png" className="img-fluid float-right imgEdit" onClick={handleOpenEdit} style={{ width: "20px", marginTop: "-10px" }}></img>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: "-10px" }}>
@@ -228,7 +240,228 @@ useEffect(()=>{
             </Container>
             <Bottom></Bottom>
         </div>
+
+        <ProfileUpdate
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+         />
+         </Fragment>
     )
 };
+
+
+
+
+
+
+function ProfileUpdate(props) {
+const [token, setToken] = useState({})
+const [loggedUser, setLoggedUser] = useState({});
+const [id, setId] = useState(null);
+const [updateUser, setUpdateUser] = useState({});
+
+
+useEffect(()=>{
+  const token = cookie.get("token");
+  const accessToken = JSON.parse(token);
+  setToken(accessToken)
+  const payload = jwt(accessToken.access);
+  setLoggedUser(payload);
+  setId(payload.user_id);
+}, [])
+
+
+const { handleSubmit, register, errors, watch } = useForm({
+    reValidateMode: 'onChange'
+    
+});
+
+const [error, setError] = useState("");
+const handleCloseButton = () => {
+    setError("")
+    props.onHide()
+}
+
+const [show, setShow] = useState(false);
+const handleClose = () => setShow(false);
+
+const onSubmit = (values) => {
+    if(Object.keys(errors).length === 0){
+        //console.log(Object.keys(errors).length === 0)
+        setShow(true)
+        setUpdateUser(values)
+    }
+}
+
+
+const handleSaveUpdate = () => {
+        
+    axios.put(`${apiUrl}/accounts/${id}`, {
+        headers: {"Content-Type": "application/json", Authorization: `Bearer ${token.access}`},
+        first_name: loggedUser.firstname
+    }).then(res=>{
+        console.log(res);
+    })
+}
+
+
+
+  return (
+    <Modal
+              {...props}
+              size="xl"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+            >
+            <Modal.Footer className="modalFooter">
+                <Button onClick={handleCloseButton}>X</Button>
+              </Modal.Footer>
+              <Modal.Header>
+                <Modal.Title id="contained-modal-title-vcenter" className="text-center justify-content-center">
+                <h5>Profile Update: Please fill out all the details.</h5>
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="modalbody">
+                    <div className="text-center text-white bg-danger">
+                        <h5>{error}</h5>
+                    </div>
+                    
+                    <p className="mt-5">Personal details</p>
+                    <div className="form-group">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <input
+                    name="firstname"
+                    className="form-control"
+                    ref={register({
+                      required: 'First name is required'
+                    })}
+                    defaultValue={loggedUser.first_name}
+                  />
+                  <small className="text-danger">{errors.firstname && errors.firstname.message}</small>
+                    
+                    <input
+                    name="lastname"
+                    className="form-control mt-2"
+                    ref={register({
+                      required: 'Last name is required'
+                    })}
+                    defaultValue={loggedUser.last_name}
+                    
+                  />
+                  <small className="text-danger">{errors.lastname && errors.lastname.message}</small>
+                    
+
+                    <input
+                    name="email"
+                    className="form-control mt-2"
+                    ref={register({
+                      required: 'Required',
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                        message: "Invalid email address"
+                      }
+                    })}
+                    defaultValue={loggedUser.email}
+                    
+                  />
+                  <small className="text-danger">{errors.email && errors.email.message}</small>
+
+                  <input
+                    name="mobilenumber"
+                    className="form-control mt-2"
+                    maxLength="11"
+                    ref={register({
+                      required: 'Required'
+                    })}
+                    defaultValue={loggedUser.mobile_number}
+                  />
+                  <small className="text-danger">{errors.mobilenumber && errors.mobilenumber.message}</small>
+                  
+                  <input
+                    name="landlinenumber"
+                    className="form-control mt-2"
+                    maxLength="11"
+                    ref={register({
+                      required: 'Required'
+                    })}
+                    defaultValue={loggedUser.landline_number}
+                    
+                  />
+                  <small className="text-danger">{errors.landlinenumber && errors.landlinenumber.message}</small>
+                  
+
+                <p className="mt-5">Address</p>
+
+                  <input
+                    name="street"
+                    className="form-control mt-2"
+                    ref={register({
+                      required: 'Street is required'
+                    })}
+                    defaultValue={loggedUser.address}
+                    
+                  />
+                  <small className="text-danger">{errors.street && errors.street.message}</small>
+                   
+                   <input
+                    name="city"
+                    className="form-control mt-2"
+                    ref={register({
+                      required: 'City is required'
+                    })}
+                    defaultValue={loggedUser.city}
+                  />
+                  <small className="text-danger">{errors.city && errors.city.message}</small>
+                   
+                   <input
+                    name="state"
+                    className="form-control mt-2"
+                    ref={register({
+                      required: 'State is required'
+                    })}
+                    defaultValue={loggedUser.state}
+                  />
+                  <small className="text-danger">{errors.state && errors.state.message}</small>
+                   
+
+                  <input
+                    name="country"
+                    className="form-control mt-2"
+                    ref={register({
+                      required: 'Country is required'
+                    })}
+                    defaultValue={loggedUser.country}
+                    
+                  />
+                  <small className="text-danger">{errors.country && errors.country.message}</small>
+                   
+
+                  
+                  
+                <Button type="submit" className="form-control mt-2 w-100" variant="primary">
+                        Save Update
+                </Button>
+
+                    <Modal show={show} onHide={handleClose} >
+                    <Modal.Header>
+                             <Modal.Title>Profile Update</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>Are you sure you want to save changes?</Modal.Body>
+                        <Modal.Footer>
+                             <Button type="submit" variant="primary" className="px-3 w-100" onClick={handleSaveUpdate}>
+                                Save
+                             </Button>
+                             <Button variant="secondary" className="px-3 w-100" onClick={handleClose}>
+                               Cancel
+                             </Button>
+                        </Modal.Footer>
+                        </Modal>    
+                </form>
+            </div>
+        </Modal.Body>
+              
+            </Modal>
+  );
+}
 
 export default profile;

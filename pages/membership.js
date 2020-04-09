@@ -1,240 +1,170 @@
-import Link from "next/link";
-import React, { useState } from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col, OverlayTrigger, Tooltip, Dropdown, Modal, Button } from "react-bootstrap";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
-import Head from "next/head";
-import Bottom from "../components/bottom";
-import Loader from "../components/loader";
-import { statusColor } from '../utils/layout'
+import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card, Modal, CardDeck } from 'react-bootstrap'
+import Link from 'next/link';
+import Router from 'next/router'
+import cookie from 'js-cookie'
 
 
-const membership = () => {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+import Default from '../layouts/default';
+import VideoMP4 from '../public/home/video.mp4';
+import VideoWEBM from '../public/home/video.webm';
+import JumboImage from '../public/home/jumbo.jpg';
+import SagisagImage from '../public/home/sagisag.jpg';
+import Pope from '../public/Image/pope.png';
+import Apec from '../public/Image/apec.png';
+import Potus from '../public/Image/potus.png';
 
+const jumboStyle = {
+  background: `url(${JumboImage}) rgba(0, 0, 0, 0.4)`,
+  backgroundSize: 'cover',
+  backgroundBlendMode: 'multiply'
+}
 
+const trustedStyle = {
+  background: `url(${SagisagImage}) rgba(0, 0, 0, 0.5)`,
+  backgroundSize: 'cover',
+  backgroundBlendMode: 'multiply',
+  color: 'white'
+}
 
-  function loadwindows() {
-    const element = document.querySelector('#load')
-    element.classList.add('animated', 'fadeOut')
-    $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
-    var rowCount = $('#myTable tr').length;
-    rowCount = rowCount - 1;
-    $('.pNumber').html(rowCount + " " + "entries");
-  }
+const handleIndiPlan = () => {
+	cookie.remove("plan");
+	cookie.set("plan", "individual")
+	Router.push('/membership/registration')
+}
 
-  const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Membership - Group Plan 2 Years', 'date': 'June 12, 2019', status: 'Paid' },
-  { 'name': 'Eskye Custodio', 'items': 'Membership - Group Plan 1 Year', 'date': 'March 22, 2019', status: 'Failed' },
-  { 'name': 'Leo Sanico', 'items': 'Membership - Individual Plan 1 Year', 'date': 'December 20, 2020', status: 'Pending' }]
+const handleGroupPlan = () => {
+	cookie.remove("plan");
+	cookie.set("plan", "group")
+	Router.push('/membership/registration')
+}
 
-  var filterState = 1;
-  function btnFilterPaid() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnPaid').css('backgroundColor', '#3b3b66');
-      $('.btnPaid').css('color', 'white');
-      $('.btnPaid').css('border', '2px solid white');
-      $('.btnPaid').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnPaid').css('backgroundColor', 'white');
-      $('.btnPaid').css('color', '#3b3b66');
-      $('.btnPaid').css('border', '2px solid #3b3b66');
-      $('.btnPaid').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
+const Membership = () => {
 
-  function btnFilterPending() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnPending').css('backgroundColor', '#3b3b66');
-      $('.btnPending').css('color', 'white');
-      $('.btnPending').css('border', '2px solid white');
-      $('.btnPending').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnPending').css('backgroundColor', 'white');
-      $('.btnPending').css('color', '#3b3b66');
-      $('.btnPending').css('border', '2px solid #3b3b66');
-      $('.btnPending').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
-
-  function btnFilterFailed() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnFailed').css('backgroundColor', '#3b3b66');
-      $('.btnFailed').css('color', 'white');
-      $('.btnFailed').css('border', '2px solid white');
-      $('.btnFailed').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnFailed').css('backgroundColor', 'white');
-      $('.btnFailed').css('color', '#3b3b66');
-      $('.btnFailed').css('border', '2px solid #3b3b66');
-      $('.btnFailed').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
-
-  return (
-    <div onLoad={loadwindows}>
-      <head>
-        <script type="text/javascript" src="Script/myScript.js"></script>
-        <meta charset="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <link
-          rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous"
-        />
-        <script
-          src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-          integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-          crossorigin="anonymous"
-        ></script>
-        <script
-          src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-          integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-          crossorigin="anonymous"
-        ></script>
-        <script
-          src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-          integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-          crossorigin="anonymous"
-        ></script>
-        <link rel="stylesheet" type="text/css" href="Css/dashboard.css" />
-
-        <link
-          href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700&display=swap"
-          rel="stylesheet"
-        />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"></link>
-      </head>
-      <Loader></Loader>
-      <Navbar></Navbar>
-      <Sidebar></Sidebar>
-      <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain">
-        <Row style={{ paddingTop: "100px" }}>
-          <Col lg={6} md={6}>
-            <p className="pNav pNav1">
-              Membership<span className="pNumber">56 entries</span>
-            </p>
-          </Col>
-          <Col lg={6} md={6}>
-            <button className="float-right btnAdd" onClick={handleShow}>&#x2b;&nbsp;Add Membership</button>
-          </Col>
-        </Row>
-        <Row style={{ marginTop: "-10px" }} className="rowTag">
-          <Col lg={12}>
-            <button className="btnTag">
-              <img
-                src="Image/filter.png"
-                className="img-fluid"
-                style={{ width: "15px" }}
-              ></img>
-            </button>
-            <button className="btnTagList btnPaid" onClick={btnFilterPaid}>
-              Paid
-            <span className="span" style={{ marginLeft: "10px" }}>&#x2715;</span>
-            </button>
-            <button className="btnTagList btnFailed" onClick={btnFilterFailed}>
-              Failed
-              <span style={{ marginLeft: "10px" }}>&#x2715;</span>
-            </button>
-            <button className="btnTagList btnPending" onClick={btnFilterPending}>
-              Pending
-              <span style={{ marginLeft: "10px" }}>&#x2715;</span>
-            </button>
-          </Col>
-        </Row>
-        <Row style={{ marginTop: "40px" }} >
-          <Col lg={12} className="colTable">
-            <table id="myTable">
-              <thead>
-                <tr>
-                  <th>Full Name</th>
-                  <th>Items</th>
-                  <th>Book Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {memberships.map((membership, index) => {
-                  return (
-                    <tr key={index}>
-                      <td data-column="Full Name">{membership.name}</td>
-                      <td data-column="Items">{membership.items}</td>
-                      <td data-column="Date">{membership.date}</td>
-                      <td data-column="Status" className={statusColor(membership.status)}>{membership.status}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </Col>
-        </Row>
-      </Container>
-      <Bottom></Bottom>
-
-      {/* Modal */}
-
-      <Modal show={show}
-        onHide={() => setShow(false)}>
-        <Modal.Header closeButton className="text-center d-block">
-          <Modal.Title>Choose Option</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="text-center">
-          <Container fluid={true}>
-            <Row>
-              <Col lg={6} md={6} sm={6} className="colModal">
-                <Link href="/addmember">
-                  <img src="Image/team(3).png" className="img-fluid imgModa mx-auto"></img>
-                </Link>
-                <p className="pChoose">Individual</p>
-              </Col>
-              <Col lg={6} md={6} sm={6} className="colModal">
-                <img src="Image/boss.png" className="img-fluid imgModal mx-auto" style={{ width: "115px", marginTop: "10px" }}></img>
-                <p className="pChoose" style={{ marginTop: "10px" }}>Group</p>
-              </Col>
+	return(
+		<Default>
+		<Jumbotron className="vh-100 text-center d-flex align-items-center justify-content-center" style={jumboStyle}>
+      		<div>
+		        <h1 className="jumbo-title text-white">We take pride in our work.</h1>
+		        <h5 className="jumbo-subtitle text-white">Start today and be a lifeline member.</h5>
+		        <div className="pb-container"><div className="play-button large"></div></div>
+		        <div className="mt-5">
+		          <Button className="mr-2 text-white" variant="danger" style={{height: "100px", width: "250px", fontSize: "30px"}}>Start Now</Button>
+		        </div>
+		        <p className="text-white mt-3 mb-0">
+		          By continuting you agree to our
+		        </p>
+		        <Link to="#"><p className="text-white mt-0">Terms of Use</p></Link>
+      		</div>
+      	<video className="jumbo-video" controls hidden>
+        	<source src={VideoMP4} type="video/mp4" />
+        	<source src={VideoWEBM} type="video/webm" />
+      	</video>
+    </Jumbotron>
+    <Container fluid className="px-0">
+    	<Jumbotron className="text-center mb-0 d-flex flex-column justify-content-center bg-light">
+      		<div className="mb-3">
+		        <h1 className="jumbo-title font-weight-bolder" style={{fontSize: "60px"}}>Individual Membership Plans</h1>
+		        <h5 className="jumbo-subtitle"><span className="font-weight-bolder">What:</span> Emergency Quick Response (EQR) for one member.</h5>
+		        <h5 className="jumbo-subtitle"><span className="font-weight-bolder">Where:</span>Member coverage is inside and outside the home, whole of Metro Manila.</h5>
+		        
+      		</div>
+   			<Container>
+   			<Row className="show-grid">
+	    		<Col lg={6} md={6} sm={12} xs={12} className="mx-0 px-0 mb-4">
+	            	<div className="d-flex flex-column align-items-center justify-content-center planBox1">
+	                	<h1 className="pBoxTitle">Individual Plan 1 Year</h1>
+	                	<h2>&#8369;<span className="font-weight-bolder">2,000</span><span> /yr</span></h2>
+	                	<Button onClick={handleIndiPlan} className="btn btn-success px-3 mt-3" style={{height: "50px", width: "150px", borderRadius: "100px"}}>Enroll Now</Button>
+	              	</div>
+	            </Col>
+	    		<Col lg={6} md={6} sm={12} xs={12} className="mx-0 px-0 mb-4">
+	            	<div className="d-flex flex-column align-items-center justify-content-center planBox2">
+	                	<h1 className="pBoxTitle">Individual Plan 2 Years</h1>
+	                	<h2>&#8369;<span className="font-weight-bolder">3,000</span><span> /2yrs</span></h2>
+	              		<Button onClick={handleIndiPlan} className="btn btn-success px-3 mt-3" style={{height: "50px", width: "150px", borderRadius: "100px"}}>Enroll Now</Button>
+	              	</div>
+	            </Col>
             </Row>
-          </Container>
-        </Modal.Body>
-      </Modal>
 
-    </div>
-  )
-};
 
-export default membership;
+    	</Container>
+    	<div className="mb-3">
+		        <h1 className="jumbo-title font-weight-bolder" style={{fontSize: "60px"}}>Group Plan</h1>
+		        <h5 className="jumbo-subtitle"><span className="font-weight-bolder">What:</span> Emergency Quick Response (EQR) for groups of 6.<br />
+		Additional members pay ₱ 1,700.00 (Under one transaction date).<br />
+		Comes with one FREE (1) In-Home coverage for one identified residential address.<br />
+		In-Home plan covers household staff and guests.</h5><br />
+		        <h5 className="jumbo-subtitle"><span className="font-weight-bolder">Where:</span>Coverage for the 6 or more individual members is inside and outside the home, whole of Metro Manila.<br />Coverage for the household staff and guests are inside the home only.</h5>
+		        
+      		</div>
+   			<Container>
+   			<Row className="show-grid">
+	    		<Col lg={6} md={6} sm={12} xs={12} className="mx-0 px-0 mb-4">
+	            	<div className="d-flex flex-column align-items-center justify-content-center planBox3">
+	                	<h1 className="pBoxTitle">Group Plan 1 Year</h1>
+	                	<h2>&#8369;<span className="font-weight-bolder">10,000</span><span> /yr</span></h2>
+	                	<small>Additional P1,700 per person for one year.</small>
+	                	<Button onClick={handleGroupPlan} className="btn btn-success px-3 mt-3" style={{height: "50px", width: "150px", borderRadius: "100px"}}>Enroll Now</Button>
+	              	</div>
+	            </Col>
+	    		<Col lg={6} md={6} sm={12} xs={12} className="mx-0 px-0 mb-4">
+	            	<div className="d-flex flex-column align-items-center justify-content-center planBox4">
+	                	<h1 className="pBoxTitle">Group Plan 2 Years</h1>
+	                	<h2>&#8369;<span className="font-weight-bolder">17,000</span><span> /2yrs</span></h2>
+	                	<small>Additional P2,850 per person for two years.</small>
+	              		<Button onClick={handleGroupPlan} className="btn btn-success px-3 mt-3" style={{height: "50px", width: "150px", borderRadius: "100px"}}>Enroll Now</Button>
+	              	</div>
+	            </Col>
+            </Row>
+
+            
+    	</Container>
+    	</Jumbotron>
+    	<Jumbotron className="py-5 my-0 text-center d-flex align-items-center justify-content-center" style={{minHeight: "50vh"}}>
+      		<div>
+				    <Row className="align-items-center">
+	    				<Col lg={4} md={4} sm={4} xs={4} className="mx-0 px-0 mb-4 text-right">
+					    	<img src={Potus} className="icon" />
+					    </Col>
+					    <Col lg={4} md={4} sm={4} xs={4} className="mx-0 px-0 mb-4">
+						    <img src={Pope} className="icon" />
+					    </Col>
+					    <Col lg={4} md={4} sm={4} xs={4} className="mx-0 px-0 mb-4 text-left">
+						    <img src={Apec} className="icon" />
+					    </Col>
+				    </Row>
+
+		        <h1 className="jumbo-title">You're in good company</h1>
+		        <h5 className="jumbo-subtitle">Join our satisfied customers locally and globally, and get secured by award winning service.</h5>
+      		</div>
+    </Jumbotron>
+    </Container>
+    <style jsx>{`
+    	.icon{
+    		opacity: .3;
+    	}
+    	.icon:hover{
+    		opacity: 1;
+    	}
+    	.planBox1, .planBox2, .planBox3, .planBox4{
+    		border: 1px solid lightgray; 
+    		border-radius: 2%;
+    		min-height: 50vh;
+    		transition: transform .2s;
+    		
+    	}
+    	.planBox1:hover, .planBox2:hover, .planBox3:hover, .planBox4:hover{
+    		background-color: #dc3545;
+    		color: #FFF;
+    		transform: scale(1.1); 
+    		overflow: hidden;
+    	}
+    	
+    `}</style>
+		</Default>
+	)
+}
+
+export default Membership;

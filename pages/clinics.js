@@ -14,29 +14,30 @@ import Potus from '../public/Image/potus.png';
 
 function ClinicCard({ name, imgUrl, readmore, address, number }){
 
-console.log(name);
-
 const [modalShow, setModalShow] = React.useState(false);
 
 const handleOpenLocation = () =>{
 	console.log("Hello")
 }
  return(
+ 	<Fragment>
  		<Card style={{borderStyle: "none"}} className="px-2">
-    <Card.Img variant="top" src={imgUrl} className="clinicard"/>
-    	<Card.Body style={{marginTop: "-50px"}}>
-      		<div className="text-center bg-light d-flex flex-column align-items-center py-3">
-      		<h3>{name}</h3>
-      		<h6 className="text-center mb-0" onClick={() => setModalShow(true)}><button className="btn btn-link">{readmore}</button></h6>
-      		</div>
-    	</Card.Body>
-    	<Clinic show={modalShow}
-			onHide={() => setModalShow(false)}
-			name={name}
-			address={address}
-			number={number}
-		/>
-  	</Card>
+		    <Card.Img variant="top" src={imgUrl} className="clinicard"/>
+		    	<Card.Body style={{marginTop: "-50px"}}>
+		      		<div className="text-center bg-white d-flex flex-column align-items-center py-3 shadow">
+		      		<h3>{name}</h3>
+		      		<h6 className="text-center mb-0" onClick={() => setModalShow(true)}><button className="btn btn-link">{readmore}</button></h6>
+		      		</div>
+		    	</Card.Body>
+		    	<Clinic show={modalShow}
+					onHide={() => setModalShow(false)}
+					name={name}
+					address={address}
+					number={number}
+				/>
+	 	</Card>
+	 	
+ 	</Fragment>
  )
 }
 
@@ -88,7 +89,11 @@ const Clinics = () => {
     				<p>All ambulances are equipped with GPS trackers and dashboard cameras<br /> for full transparency, efficiency, and security. Lifeline knows the<br /> location of each ambulance in real-time as shown below.</p>
     			</Container>
     		</Jumbotron>
-    			
+    			<style jsx>{`
+	 		.clinicard{
+	 			opacity: .5;
+	 		}
+	 	`}</style>
     		</Default>
 		</Fragment>
 	)

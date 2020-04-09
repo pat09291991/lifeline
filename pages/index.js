@@ -4,6 +4,7 @@ import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card, Modal }
 import cookie from 'js-cookie'
 import jwt from 'jwt-decode';
 import Link from 'next/link';
+import Router from 'next/router';
 
 import Default from '../layouts/default'
 // import MainVideoMP4 from '../public/home/video.mp4'
@@ -118,7 +119,7 @@ const [modalShow, setModalShow] = React.useState(false);
         <p className="jumbo-subtitle">24/7 EMERGENCY QUICK RESPONSE.</p>
         <div className="pb-container"><div className="play-button large"></div></div>
         <div className="mt-5">
-          <Button className="mr-2" variant="warning">Be a Member</Button>
+          <Button onClick={()=>Router.push('/membership')} className="mr-2" variant="warning">Be a Member</Button>
           <Button variant="warning">Pay for Services</Button>
         </div>
         <p>

@@ -4,6 +4,7 @@ import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card, Modal, 
 import Link from 'next/link';
 import { useForm } from "react-hook-form";
 import cookie from 'js-cookie'
+import Router from 'next/router'
 
 import Default from '../../layouts/default';
 

@@ -1,4 +1,9 @@
-import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card, Modal } from 'react-bootstrap'
+import cookie from 'js-cookie'
+import jwt from 'jwt-decode';
+import Link from 'next/link';
 
 import Default from '../layouts/default'
 // import MainVideoMP4 from '../public/home/video.mp4'
@@ -29,6 +34,7 @@ import AwardNSCAAImage from '../public/home/awards/national_shoppers_choice_annu
 import AwardPHQABEImage from '../public/home/awards/ph_quality_awards_for_business_excellence.jpg'
 
 const ClinicCard = ({ name, number, address, imgUrl }) => (
+
   <Card>
     <Card.Img variant="top" src={imgUrl} />
     <Card.Body>
@@ -58,8 +64,54 @@ const trustedStyle = {
   color: 'white'
 }
 
-const Home = () => (
+function ProfileDetailsChecker(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Missing Information:
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+           Please complete your profile details.
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide} className="mr-2 text-center">Later</Button>
+        <Link href="/profile"><Button className="text-center btn-danger">GO</Button></Link>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+const Home = () => {
+const [modalShow, setModalShow] = React.useState(false);
+
+  useEffect(()=>{
+  const token = cookie.get("token");
+  if(token){
+    const accessToken = JSON.parse(token);
+    const payload = jwt(accessToken.access);
+
+    if(!payload.address){
+    setModalShow(true);
+  } 
+  }
+
+
+}, [])
+  return(
   <Default>
+  <ProfileDetailsChecker
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
     <Jumbotron className="vh-100 text-center d-flex align-items-center justify-content-center" style={jumboStyle}>
       <div>
         <h1 className="jumbo-title"> Emergency Quick Response</h1>
@@ -554,6 +606,10 @@ const Home = () => (
   //     }
   //   `}</style>
   // </div>
-)
+  )
+}
+
+
+
 
 export default Home

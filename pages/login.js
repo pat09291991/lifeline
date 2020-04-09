@@ -1,28 +1,56 @@
-import Reac, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
+import { useForm } from "react-hook-form";
+import Router from 'next/router'
+import cookie from 'js-cookie'
 
 import Default from '../layouts/default'
 import apiUrl from '../api'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState({})
 
-  const submitLogin = () => {
+  const { handleSubmit, register, errors, watch } = useForm();
+  const [token, setToken] = useState({}); 
+  //const [email, setEmail] = useState('')
+  //const [password, setPassword] = useState('')
+  const [userInput, setUserInput] = useState({
+    email: "",
+    password: ""
+  })
+  const [error, setError] = useState("")
+
+  useEffect(()=>{
+    cookie.set("token", JSON.stringify(token))
+    //cookie.set("refreshToken", JSON.stringify(token.refresh))
+  }, [token])
+
+  const onSubmit = (values) => {
+    setError("")
+  if(Object.keys(errors).length === 0){
+      setUserInput({
+        email: values.email,
+        password: values.password,
+      })
     axios.post(`${apiUrl}/token/`,
-      { username: email, password: password }
+      { username: values.email, password: values.password }
     )
-      .then((response) => {
-        console.log(response);
+      .then(response => {
+        setToken(response.data)
+
+        Router.push('/')
       })
       .catch((error) => {
-        console.log(error.response.data)
-        setErrors(error.response.data)
+        if(error.response){
+          //console.log(error.response.data.detail)
+          setError(error.response.data.detail)
+        }else{
+          setError("")
+        }
       })
   }
+}
 
   return (
     <Default hideNav={true}>
@@ -45,26 +73,38 @@ const Login = () => {
             <p className="pHelloSub">
               Sign in by entering the information below
             </p>
-            {errors.detail && <p className="text-danger">{errors.detail}</p>}
-            <div className="divEmail" style={{ marginTop: "35px" }}>
+            {error && <p className="text-danger font-weight-bolder" style={{ marginTop: "25px" }}>{error}</p>}
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="divEmail" style={{ marginTop: "15px" }}>
               <p className="pEmail">Email Address</p>
               <input
-                type="email"
-                className="txtEmail"
-                placeholder="Enter email address here.."
-                onChange={e => setEmail(e.target.value)}
-              />
-              {errors.username && <span className="text-danger">{errors.username}</span>}
+              name="email"
+              className="form-control txtEmail"
+              ref={register({
+                required: 'Email is required',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: "Invalid email address"
+                }
+              })}
+              placeholder="Enter email address here.."
+            />
+            <small className="text-danger">{errors.email && errors.email.message}</small>
             </div>
+            
             <div className="divPassword">
               <p className="pPassword">Password</p>
+              
               <input
-                type="password"
-                className="txtPassword"
-                placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
-                onChange={e => setPassword(e.target.value)}
-              />
-              {errors.password && <span className="text-danger">{errors.password}</span>}
+              name="password"
+              type="password"
+              className="txtPassword form-control"
+              ref={register({
+                required: 'Password is required',
+              })}
+              placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+            />
+            <small className="text-danger">{errors.password && errors.password.message}</small>
             </div>
             <div className="divFooter">
               <input
@@ -85,7 +125,7 @@ const Login = () => {
                 <span className="lblRemember">Remember me</span>
               </label>
               <span className="lblForgot">Forgot password?</span> <br />
-              <button className="btnSignIn" onClick={() => submitLogin()}>
+              <button className="btnSignIn" type="submit">
                 Sign In
               </button>
               <Link href="/sign-up">
@@ -97,6 +137,7 @@ const Login = () => {
                 </a>
               </Link>
             </div>
+            </form>
           </Col>
           <Col lg={8} md={8} sm={12} className="colright">
             <div className="banner">

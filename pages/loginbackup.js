@@ -4,6 +4,10 @@ import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 import { useForm } from "react-hook-form";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/auth
 import Default from '../layouts/default'
 import apiUrl from '../api'
 

@@ -1,13 +1,35 @@
+<<<<<<< HEAD
 import React, { useEffect } from 'react'
+=======
+import React, { useState, useEffect } from 'react'
+>>>>>>> feature/auth
 import { Navbar, Nav, Form, Button, Image } from 'react-bootstrap'
 import ActiveLink from './activeLink'
 import LogoImage from '../../public/logo512.png'
 import Link from 'next/link'
+import cookie from 'js-cookie'
+import jwt from 'jwt-decode';
 
 
 export default () => {
 
+<<<<<<< HEAD
 return (
+=======
+const [token, setToken] = useState({})
+
+useEffect(()=>{
+
+  const token = cookie.get("token");
+  const accessToken = JSON.parse(token);
+  setToken(accessToken)
+  
+}, [])
+  
+  
+  
+  return (
+>>>>>>> feature/auth
     <Navbar bg="light" expand="xl" fixed="top" style={{ borderBottom: '1px solid #0366B1' }}>
       <Navbar.Brand>
         <Link href="/">

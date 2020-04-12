@@ -120,7 +120,7 @@ const [modalShow, setModalShow] = React.useState(false);
         <div className="pb-container"><div className="play-button large"></div></div>
         <div className="mt-5">
           <Button onClick={()=>Router.push('/membership')} className="mr-2" variant="warning">Be a Member</Button>
-          <Button variant="warning">Pay for Services</Button>
+          <Button onClick={()=>Router.push('/payforservices')} variant="warning">Pay for Services</Button>
         </div>
         <p>
           We are constantly striving to improve so as to better serve our client communities

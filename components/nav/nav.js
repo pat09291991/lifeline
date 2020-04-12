@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-import React, { useEffect } from 'react'
-=======
-import React, { useState, useEffect } from 'react'
-<<<<<<< HEAD
->>>>>>> feature/auth
-import { Navbar, Nav, Form, Button, Image } from 'react-bootstrap'
-=======
-import { Navbar, Nav, Form, Button, Image, Dropdown, Modal, Container, Row, Col, DropdownButton } from 'react-bootstrap'
->>>>>>> feature/dashboard
+import React, { useState, useEffect, Fragment } from 'react'
+import { Navbar, Nav, Form, Button, Image, Dropdown, Modal, Container, Row, Col, DropdownButton,NavDropdown } from 'react-bootstrap'
 import ActiveLink from './activeLink'
 import LogoImage from '../../public/logo512.png'
 import Link from 'next/link'
@@ -18,11 +10,6 @@ import jwt from 'jwt-decode';
 
 export default () => {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-return (
-=======
-=======
  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -34,7 +21,6 @@ return (
   }
 const [modalShow, setModalShow] = React.useState(true);
 
->>>>>>> feature/dashboard
 const [token, setToken] = useState({})
 const [loggedUser, setLoggedUser] = useState({});
 const [isLogged, setIsLogged] = useState(false);
@@ -53,7 +39,7 @@ useEffect(()=>{
   
   
   return (
->>>>>>> feature/auth
+    <Fragment>
     <Navbar bg="light" expand="xl" fixed="top" style={{ borderBottom: '1px solid #0366B1' }}>
       <Navbar.Brand>
         <Link href="/">
@@ -66,30 +52,42 @@ useEffect(()=>{
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
-        <Nav className="mr-auto">
-          <ActiveLink href="/" activeClassName="active"><a className="nav-link">Home</a></ActiveLink>
-          <ActiveLink href="/services" activeClassName="active"><a className="nav-link">Services</a></ActiveLink>
-          <ActiveLink href="/clinics" activeClassName="active"><a className="nav-link">Clinics / Pods</a></ActiveLink>
-          <ActiveLink href="/blog" activeClassName="active"><a className="nav-link">Blog</a></ActiveLink>
-          <ActiveLink href="/academy" activeClassName="active"><a className="nav-link">Academy</a></ActiveLink>
-        </Nav>
-        <Form inline>
-          <Button onClick={()=>Router.push('/membership')} className="mx-1" variant="warning">Be a Member</Button>
-          <Button className="mx-1" variant="warning">Pay for Services</Button>
-          {isLogged ? 
-            <div className="float-right form-inline">
-            
-            <Button onClick={()=>Router.push('/dashboard')} className="mx-1" variant="danger">Go to Dashboard</Button>
-            <Button onClick={handleLogout} className="mx-1" variant="secondary">Logout</Button>
-
+        <Nav>
+          <div className="d-flex">
+          <button onClick={()=>Router.push('/membership')} className="btn btn-warning  nav-link mx-1 mb-1 d-none" id="member1">Be a Member</button>
+          <button className="memberservice btn btn-warning mx-1 nav-link mb-1 d-none" id="payservices1">Pay for Services</button>
           </div>
+          <NavDropdown.Divider />
+          <ActiveLink href="/" activeClassName="active"><a className="nav-link mx-auto home">Home</a></ActiveLink>
+          <NavDropdown.Divider />
+          <ActiveLink href="/services" activeClassName="active"><a className="nav-link mx-auto services">Services</a></ActiveLink>
+          <NavDropdown.Divider />
+          <ActiveLink href="/clinics" activeClassName="active"><a className="nav-link mx-auto clinics">Clinics / Pods</a></ActiveLink>
+          <NavDropdown.Divider />
+          <ActiveLink href="/blog" activeClassName="active"><a className="nav-link mx-auto blog">Blog</a></ActiveLink>
+          <NavDropdown.Divider />
+          <ActiveLink href="/academy" activeClassName="active"><a className="nav-link mx-auto academy">Academy</a></ActiveLink>
+          <NavDropdown.Divider />
+        </Nav>
+        <Nav className="ml-auto">
+          <button onClick={()=>Router.push('/membership')} className="btn btn-warning  nav-link mx-1 mb-1" id="member2">Be a Member</button>
+          <button onClick={()=>Router.push('/payforservices')} className="memberservice btn btn-warning mx-1 nav-link mb-1" id="payservices2">Pay for Services</button>
+        
+          {isLogged ? 
+            <Fragment>
+            
+            <Button onClick={()=>Router.push('/dashboard')} className="mx-1 mb-1" variant="danger">Dashboard</Button>
+            <Button onClick={handleShow} className="mx-1 mb-1" variant="secondary">Logout</Button>
+
+          </Fragment>
           :
-          <div>
-              <Link href="/sign-up"><Button className="mx-1" variant="outline-primary">Sign Up</Button></Link>
-              <Link href="/login"><Button className="mx-1" variant="primary">Login</Button></Link>
-            </div>
+          <Fragment>
+              <Link href="/sign-up"><Button className="mx-1 mb-1" variant="outline-primary">Sign Up</Button></Link>
+              
+              <Link href="/login"><Button className="mx-1 mb-1" variant="primary">Login</Button></Link>
+            </Fragment>
           }
-        </Form>
+        </Nav>
       </Navbar.Collapse>
       <style jsx>{`
         .nav-title {
@@ -99,6 +97,23 @@ useEffect(()=>{
         .nav-link {
           font-weight: 600;
         }
+      @media only screen and (max-width: 1200px) {
+        
+        #member2{
+          display: none !important;
+        }
+        #payservices2{
+          display: none !important;
+        }
+        #member1{
+          display: block !important;
+          width: 100%;
+        }
+        #payservices1{
+          display: block !important;
+          width: 100%;
+        }
+      }
         `}</style>
         <Modal show={show}
         onHide={() => setShow(false)}>
@@ -120,6 +135,7 @@ useEffect(()=>{
         </Modal.Footer>
       </Modal>
     </Navbar>
+    </Fragment>
   )
 }
 

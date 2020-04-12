@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Jumbotron, Button, Row, Col, Image, Container, CardGroup, Card, Modal, CardDeck } from 'react-bootstrap'
 import Link from 'next/link';
-import Router from 'next/router'
-import cookie from 'js-cookie'
-
+import Router from 'next/router';
+import cookie from 'js-cookie';
+import { Link as SectionLink } from "react-scroll";
 
 import Default from '../layouts/default';
 import VideoMP4 from '../public/home/video.mp4';
@@ -49,9 +49,7 @@ const Membership = () => {
 		        <h1 className="jumbo-title text-white">We take pride in our work.</h1>
 		        <h5 className="jumbo-subtitle text-white">Start today and be a lifeline member.</h5>
 		        <div className="pb-container"><div className="play-button large"></div></div>
-		        <div className="mt-5">
-		          <Button className="mr-2 text-white" variant="danger" style={{height: "100px", width: "250px", fontSize: "30px"}}>Start Now</Button>
-		        </div>
+                	<SectionLink className="btn btn-danger text-white d-flex align-items-center justify-content-center mx-auto" style={{height: "100px", width: "250px", fontSize: "30px"}}  activeClass="active" to="membership" spy={true} smooth={true} offset={-100} duration={500}>START NOW</SectionLink>
 		        <p className="text-white mt-3 mb-0">
 		          By continuting you agree to our
 		        </p>
@@ -62,7 +60,7 @@ const Membership = () => {
         	<source src={VideoWEBM} type="video/webm" />
       	</video>
     </Jumbotron>
-    <Container fluid className="px-0">
+    <Container fluid className="px-0 membership">
     	<Jumbotron className="text-center mb-0 d-flex flex-column justify-content-center bg-light">
       		<div className="mb-3">
 		        <h1 className="jumbo-title font-weight-bolder" style={{fontSize: "60px"}}>Individual Membership Plans</h1>

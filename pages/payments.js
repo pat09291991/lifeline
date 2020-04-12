@@ -1,3 +1,4 @@
+import React, { useState, useEffect, Fragment } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tooltip from "react-bootstrap/Tooltip";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -6,14 +7,26 @@ import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
 import Head from "next/head";
 import { statusColor } from '../utils/layout'
+import axios from 'axios';
+import apiUrl from '../api'
+import Moment from 'react-moment';
 
 
 const payments = () => {
 
-    const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Paid' },
-    { 'name': 'Eskye Custodio', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Failed' },
-    { 'name': 'Leo Sanico', 'items': 'Booking - Book A Nurse', 'date': 'March 18, 2019', status: 'Pending' },
-    { 'name': 'Nathan Nakar', 'items': 'Booking - Doctor on Call', 'date': 'December 24, 2019', status: 'Pending' }]
+const [bookings, setBookings] = useState([])
+useEffect(()=>{
+  axios.get(`${apiUrl}/bookings`)
+    .then(response=>{
+      console.log(response.data);
+      setBookings(response.data);
+    })
+}, [])
+
+    // const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Paid' },
+    // { 'name': 'Eskye Custodio', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Failed' },
+    // { 'name': 'Leo Sanico', 'items': 'Booking - Book A Nurse', 'date': 'March 18, 2019', status: 'Pending' },
+    // { 'name': 'Nathan Nakar', 'items': 'Booking - Doctor on Call', 'date': 'December 24, 2019', status: 'Pending' }]
    
    function loadwindows() {
     var rowCount = $('#myTable tr').length;
@@ -190,13 +203,29 @@ const payments = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {memberships.map((membership, index) => {
+                                {bookings.map((booking, index) => {
                                     return (
                                         <tr key={index}>
-                                            <td data-column="Full Name">{membership.name}</td>
-                                            <td data-column="Items">{membership.items}</td>
-                                            <td data-column="Date">{membership.date}</td>
-                                            <td data-column="Status" className={statusColor(membership.status)}>{membership.status}</td>
+                                            <td data-column="Full Name">{booking.first_name} {booking.last_name}</td>
+                                            <td data-column="Items">
+                                            {booking.services_detail !== null ? 
+                                              booking.services_detail.map((servicedetail)=>{
+                                                return(
+                                                    <Fragment>
+                                                      {booking.services_detail !== null ? 
+                                                          booking.services_detail.map((service)=>{
+                                                            return(
+                                                                <p key={service.id}>{service.title}</p>
+                                                            )
+                                                          })
+                                                     : ""}
+                                                    </Fragment> 
+                                                )
+                                              })
+                                         : ""} 
+                                            </td>
+                                            <td data-column="Date"><Moment format="LL">{booking.date}</Moment></td>
+                                            <td data-column="Status" className={statusColor(booking.status)}>{booking.status}</td>
                                         </tr>
                                     );
                                 })}

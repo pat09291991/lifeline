@@ -82,7 +82,7 @@ const handleBackToHome = () => {
           </OverlayTrigger>
 
           <OverlayTrigger placement="right" overlay={<Tooltip id="tooltip">Membership</Tooltip>}>
-            <Link href="/membership">
+            <Link href="/usermembership">
               <button className="btn btnMembership">
                 <img src="Image/membership.png" className="imgLogo" />
                 <span>Membership</span>

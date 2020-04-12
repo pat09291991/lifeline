@@ -896,8 +896,8 @@ textarea {
   stroke-width: 0.5px;
   opacity: 1;
   stroke-dasharray: 600;
-  -webkit-animation: move 5s linear forwards infinite, fade 5s linear infinite;
-  animation: move 5s linear forwards infinite, fade 5s linear infinite;
+  -webkit-animation: move 5s linear forwards 2s, fade 5s linear 2s;
+  animation: move 5s linear forwards 2s, fade 5s linear 2s;
 }
 
 

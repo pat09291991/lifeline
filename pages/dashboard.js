@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tooltip from "react-bootstrap/Tooltip";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Container, Row, Col, OverlayTrigger, Modal, Button } from "react-bootstrap";
 import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import DashboardNavbar from "../components/navbar";
 import Bottom from "../components/bottom";
 import Loader from "../components/loader";
 import Head from "next/head";
@@ -17,12 +17,12 @@ const dashboard = (props) => {
 
 const [modalShow, setModalShow] = React.useState(false);
 
-  // function loadwindows() {
-  //   const element = document.querySelector('#load')
-  //   element.classList.add('animated', 'fadeOut')
-  //   $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
+  function loadwindows() {
+        const element = document.querySelector('#load')
+        element.classList.add('animated', 'fadeOut')
+        $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
     
-  // }
+      }
 
 const [token, setToken] = useState({})
 const [loggedUser, setLoggedUser] = useState({});
@@ -41,9 +41,9 @@ useEffect(()=>{
 }, [])
 
   return (
-    <div>
+    <Fragment>
       <head>
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -52,22 +52,22 @@ useEffect(()=>{
           rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         />
         <script
           src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
           integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <script
           src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
           integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <script
           src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
           integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"></link>
         <link rel="stylesheet" type="text/css" href="Css/dashboard.css" />
@@ -83,18 +83,17 @@ useEffect(()=>{
         />
 
       </head>
-      <body>
+        <body onLoad={loadwindows}>
         <Loader></Loader>
-        <Navbar></Navbar>
         <Sidebar></Sidebar>
-        <bottom></bottom>
+        <DashboardNavbar></DashboardNavbar>
         
 
       <MyVerticallyCenteredModal
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-        <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain">
+        <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain" >
           <Row style={{ paddingTop: "100px" }}>
             <Col lg={12}>
               <p className="pGreetings">Good morning</p>
@@ -269,13 +268,12 @@ useEffect(()=>{
                   </tbody>
                 </table>
               </section>
-              
             </main>
           </Row>
         </Container>
-        <Bottom></Bottom>
       </body>
-    </div>
+        <Bottom></Bottom>
+    </Fragment>
   )
 };
 

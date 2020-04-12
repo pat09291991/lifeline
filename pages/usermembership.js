@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import Link from "next/link";
-import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, OverlayTrigger, Tooltip, Dropdown, Modal, Button } from "react-bootstrap";
 import Sidebar from "../components/sidebar";
@@ -8,6 +8,9 @@ import Head from "next/head";
 import Bottom from "../components/bottom";
 import Loader from "../components/loader";
 import { statusColor } from '../utils/layout'
+import axios from 'axios';
+import apiUrl from '../api'
+import Moment from 'react-moment';
 
 
 const membership = () => {
@@ -15,7 +18,16 @@ const membership = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+const [memberships, setMemberships] = useState([])
 
+useEffect(()=>{
+  axios.get(`${apiUrl}/memberships`)
+    .then(response=>{
+      setMemberships(response.data);
+    })
+}, [])
+
+  
 
   function loadwindows() {
     const element = document.querySelector('#load')
@@ -26,9 +38,9 @@ const membership = () => {
     $('.pNumber').html(rowCount + " " + "entries");
   }
 
-  const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Membership - Group Plan 2 Years', 'date': 'June 12, 2019', status: 'Paid' },
-  { 'name': 'Eskye Custodio', 'items': 'Membership - Group Plan 1 Year', 'date': 'March 22, 2019', status: 'Failed' },
-  { 'name': 'Leo Sanico', 'items': 'Membership - Individual Plan 1 Year', 'date': 'December 20, 2020', status: 'Pending' }]
+  // const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Membership - Group Plan 2 Years', 'date': 'June 12, 2019', status: 'Paid' },
+  // { 'name': 'Eskye Custodio', 'items': 'Membership - Group Plan 1 Year', 'date': 'March 22, 2019', status: 'Failed' },
+  // { 'name': 'Leo Sanico', 'items': 'Membership - Individual Plan 1 Year', 'date': 'December 20, 2020', status: 'Pending' }]
 
   var filterState = 1;
   function btnFilterPaid() {
@@ -184,8 +196,8 @@ const membership = () => {
             <table id="myTable">
               <thead>
                 <tr>
-                  <th>Full Name</th>
                   <th>Items</th>
+                  <th>Full Name</th>
                   <th>Book Date</th>
                   <th>Status</th>
                 </tr>
@@ -194,10 +206,26 @@ const membership = () => {
                 {memberships.map((membership, index) => {
                   return (
                     <tr key={index}>
-                      <td data-column="Full Name">{membership.name}</td>
-                      <td data-column="Items">{membership.items}</td>
-                      <td data-column="Date">{membership.date}</td>
-                      <td data-column="Status" className={statusColor(membership.status)}>{membership.status}</td>
+                      <td data-column="Items">{membership.membership_type__name}</td>
+                      <td data-column="Full Name">
+                        {membership.members !== null ? 
+                      membership.members.map((member)=>{
+                        return(
+                            <p key={member.id}>{member.first_name} {member.last_name}</p>
+                        )
+                      })
+                     : ""} 
+                      </td>
+                      <td data-column="Date"><Moment format="LL">{membership.created_at}</Moment></td>
+                      <td data-column="Status" className={statusColor(membership.status)}>
+                        {membership.members !== null ? 
+                          membership.members.map((member)=>{
+                            return(
+                                <p key={member.id}>{member.status}</p>
+                            )
+                          })
+                     : ""} 
+                      </td>
                     </tr>
                   );
                 })}

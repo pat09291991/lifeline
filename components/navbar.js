@@ -1,12 +1,14 @@
 import Link from "next/link";
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, OverlayTrigger, Image, Tooltip, Dropdown, Modal, Button } from "react-bootstrap";
+import React, { useState, useEffect, Fragment } from 'react';
+import { Container, Row, Col, OverlayTrigger, Image, Tooltip, Dropdown, Modal, Button, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import Router from 'next/router'
 import jwt from 'jwt-decode';
 import cookie from 'js-cookie'
 import LogoImage from '../public/logo512.png'
+import { faHome} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Navbar = () => {
+const DashboardNavbar = () => {
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -38,19 +40,22 @@ useEffect(()=>{
 const handleBackToHome = () => {
   Router.push("/")
 }
+
   return (
-    <Container fluid={true} className="divNav d-flex align-items-center justify-content-between">
-        <Col lg={6} md={6} sm={6} xs={6}>
-          <div className="d-flex align-items-center ml-5" onClick={handleBackToHome}>
-              <Image src={LogoImage} height={48} />
-              <strong className="pl-2 nav-title"><span className="text-red">LIFELINE</span><br /> 16-911</strong>
-            </div>
-        </Col>
-        <Col lg={6} md={6} sm={6} xs={6} className="d-flex justify-content-end">
-            <Button onClick={()=>Router.push('/')} className="my-0 btn btn-danger" style={{marginRight: "10px", width: "100px", height: "40px"}}>Go home</Button>
-            <Button onClick={handleLogout} className="my-0 btn btn-secondary" style={{marginRight: "10px", width: "100px", height: "40px"}}>Logout</Button>
-        </Col>
-      <Modal show={show}
+    <Fragment>
+    <Container fluid={true} className="divNav shadow px-0">
+        <Navbar bg="light" expand="lg">
+          <Navbar.Brand href="/"><Image src={LogoImage} height={48} />
+            <strong className="pl-2 nav-title">LIFELINE 16-911</strong>
+          </Navbar.Brand>
+          
+          <div className="ml-auto">
+            <Button onClick={()=>Router.push('/')} className="my-0 btn btn-danger">
+              <FontAwesomeIcon style={{height: "20px"}} icon={faHome} />
+            </Button>
+          </div>
+        </Navbar>
+    <Modal show={show}
         onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title className="modalTitleLogout">Logout Account</Modal.Title>
@@ -70,8 +75,9 @@ const handleBackToHome = () => {
         </Modal.Footer>
       </Modal>
     </Container>
+    </Fragment>
   )
 
 };
 
-export default Navbar;
+export default DashboardNavbar;

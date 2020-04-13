@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Container, Row, Col, OverlayTrigger } from "react-bootstrap";
 import Tooltip from "react-bootstrap/Tooltip";
-import Router from 'next/Router'
+import Router from 'next/router'
 
 const Sidebar = () => {
 

@@ -228,7 +228,7 @@ const payments = () => {
                                                 })
                                             }</td>
                                             <td data-column="Date"><Moment format="LL">{booking.booking_datetime}</Moment></td>
-                                            <td data-column="Status" className={statusColor(booking.payment_status)}>{booking.payment_status}</td>
+                                            <td data-column="Status" className={statusColor(booking.status)}>{booking.status}</td>
                                         </tr>
                                     );
                                 })}
@@ -254,24 +254,24 @@ const payments = () => {
                               <p>{booking.first_name} {booking.last_name}</p>
                           </Col>
                           <Col lg={6} md={6} sm={4} xs={4} className="text-right">
-                              <p className={statusColor(booking.payment_status)}>{booking.payment_status}</p>
+                              <p className={statusColor(booking.status)}>{booking.status}</p>
                           </Col>
                         </Row>
                         </Modal.Title>
                       </Modal.Header>
                       <Modal.Body className="pt-0">
-                        <Row className="show-grid">
+                      <Row className="show-grid">
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left">
-                              <p className="mb-0">TOTAL AMOUNT:</p>
+                              <p className="mb-0">Booking Date:</p>
                           </Col>
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left pl-0">
-                              <p>&#8369;{booking.total_amount}</p>
+                              <p><Moment format="LL">{booking.booking_datetime}</Moment></p>
                           </Col>
                         </Row>
 
                         <Row className="show-grid">
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left">
-                                <p className="mb-0">ITEM(S): </p>
+                                <p className="mb-0">Item(s): </p>
                           </Col>
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left pl-0">
                                 <ul className="px-0">
@@ -288,16 +288,29 @@ const payments = () => {
 
                         <Row className="show-grid">
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left">
-                              <p className="mb-0">BOOKING DATE:</p>
+                              <p className="mb-0">Total Amount:</p>
                           </Col>
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left pl-0">
-                              <p><Moment format="LL">{booking.booking_datetime}</Moment></p>
+                              <p>&#8369;{booking.total_amount}</p>
                           </Col>
                         </Row>
 
                         <Row className="show-grid">
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left">
-                              <p className="mb-0">ADDRESS:</p>
+                              <p className="mb-0">Payment Status:</p>
+                          </Col>
+                          <Col lg={6} md={6} sm={6} xs={6} className="text-left pl-0">
+                              <p className={statusColor(booking.status)}>{booking.payment_status}</p>
+                          </Col>
+                        </Row>
+
+                        
+
+                        
+
+                        <Row className="show-grid">
+                          <Col lg={6} md={6} sm={6} xs={6} className="text-left">
+                              <p className="mb-0">Address:</p>
                           </Col>
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left pl-0">
                               <p>{booking.address}</p>
@@ -306,7 +319,7 @@ const payments = () => {
 
                         <Row className="show-grid">
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left">
-                              <p className="mb-0">MOBILE NUMBER:</p>
+                              <p className="mb-0">Mobile Number:</p>
                           </Col>
                           <Col lg={6} md={6} sm={6} xs={6} className="text-left pl-0">
                               <p>{booking.phone_number}</p>

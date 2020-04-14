@@ -3,17 +3,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Tooltip from "react-bootstrap/Tooltip";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Container, Row, Col, OverlayTrigger, Button, Modal } from "react-bootstrap";
-import Sidebar from "../components/sidebar";
-import DashboardNavbar from "../components/navbar";
-import Bottom from "../components/bottom";
-import Loader from "../components/loader";
+import Sidebar from "../../components/sidebar";
+import DashboardNavbar from "../../components/navbar";
+import Bottom from "../../components/bottom";
+import Loader from "../../components/loader";
 import Head from "next/head";
 import cookie from 'js-cookie'
 import jwt from 'jwt-decode';
 import { useForm } from "react-hook-form";
 import axios from 'axios'
 
-import apiUrl from '../api'
+import apiUrl from '../../api'
 
 
 
@@ -23,12 +23,12 @@ const [modalShow, setModalShow] = React.useState(false);
 
 const handleClose = () => setShow(false);
 
-    function loadwindows() {
-        const element = document.querySelector('#load')
-        element.classList.add('animated', 'fadeOut')
-        $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
+    // function loadwindows() {
+    //     const element = document.querySelector('#load')
+    //     element.classList.add('animated', 'fadeOut')
+    //     $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
     
-      }
+    //   }
 
 
 const [token, setToken] = useState({})
@@ -49,7 +49,7 @@ const handleOpenEdit = () => {
 
     return (
         <Fragment>
-            <head onLoad={loadwindows}>
+            <head>
                 <meta charSet="utf-8" />
                 <meta
                     name="viewport"
@@ -77,8 +77,8 @@ const handleOpenEdit = () => {
                     crossOrigin="anonymous"
                 ></script>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"></link>
-                <link rel="stylesheet" type="text/css" href="Css/dashboard.css" />
-                <script type="text/javascript" src="Script/myScript.js"></script>
+                <link rel="stylesheet" type="text/css" href="../../Css/dashboard.css" />
+                <script type="text/javascript" src="../../Script/myScript.js"></script>
                 <link
                     href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
                     rel="stylesheet"
@@ -88,7 +88,7 @@ const handleOpenEdit = () => {
                     rel="stylesheet"
                 />
             </head>
-            <Loader></Loader>
+            <body>
             <Sidebar></Sidebar>
             <DashboardNavbar></DashboardNavbar>
             <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain colProfile">
@@ -99,7 +99,7 @@ const handleOpenEdit = () => {
                 </Row>
                 <Row style={{ marginTop: "10px" }} className="rowProfile">
                     <Col lg={1}>
-                        <img src="Image/dp.jpeg" className="img-fluid imgProfilePic"></img>
+                        <img src="../Image/dp.jpeg" className="img-fluid imgProfilePic"></img>
                     </Col>
                     <Col lg={11}>
                         <div className="form-inline divNameStatus">
@@ -107,9 +107,9 @@ const handleOpenEdit = () => {
                             <p className="pStatus">Active</p>
                         </div>
                         <div className="form-inline divNameStatus d-flex align-items-center my-auto">
-                            <span className="spanEmail"><img src="Image/mail.png" className="img-fluid imgStatus" style={{ width: "15px", marginTop: "-35px" }}></img></span>
+                            <span className="spanEmail"><img src="../Image/mail.png" className="img-fluid imgStatus" style={{ width: "15px", marginTop: "-35px" }}></img></span>
                                 <p className="pEmail">{loggedUser.email}</p>
-                            <span style={{ marginLeft: "20px" }}><img src="Image/phone.png" className="img-fluid imgStatus" style={{ width: "14px", marginTop: "-35px" }}></img></span>
+                            <span style={{ marginLeft: "20px" }}><img src="../Image/phone.png" className="img-fluid imgStatus" style={{ width: "14px", marginTop: "-35px" }}></img></span>
                             <p className="pEmail">{loggedUser.mobile_number}</p>
                         </div>
                     </Col>
@@ -119,7 +119,7 @@ const handleOpenEdit = () => {
                         <p className="pHeaderProfile">Information</p>
                     </Col>
                     <Col lg={6} mc={6} sm={6} xs={6}>
-                        <img src="Image/marker.png" className="img-fluid float-right imgEdit" onClick={handleOpenEdit} style={{ width: "20px", marginTop: "-10px" }}></img>
+                        <img src="../Image/marker.png" className="img-fluid float-right imgEdit" onClick={handleOpenEdit} style={{ width: "20px", marginTop: "-10px" }}></img>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: "-10px" }}>
@@ -237,6 +237,7 @@ const handleOpenEdit = () => {
                     </Col>
                 </Row>
             </Container>
+            </body>
             <Bottom></Bottom>
 
         <ProfileUpdate

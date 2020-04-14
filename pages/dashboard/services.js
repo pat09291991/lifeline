@@ -1,25 +1,38 @@
+import React, { useState, useEffect, Fragment } from 'react';
+import apiUrl from '../../api'
+import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tooltip from "react-bootstrap/Tooltip";
 import Dropdown from "react-bootstrap/Dropdown";
-import { Container, Row, Col, OverlayTrigger } from "react-bootstrap";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import { Container, Row, Col, OverlayTrigger, Modal, Button } from "react-bootstrap";
+import Link from 'next/link';
+import Sidebar from "../../components/sidebar";
+import Navbar from "../../components/navbar";
 import Head from "next/head";
-import Loader from "../components/loader";
-import Bottom from "../components/bottom";
-import { statusColor } from '../utils/layout'
+import Loader from "../../components/loader";
+import Bottom from "../../components/bottom";
+import { statusColor } from '../../utils/layout'
 
 
 const payments = () => {
 
-    function loadwindows() {
-        const element = document.querySelector('#load')
-        element.classList.add('animated', 'fadeOut')
-        $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
-        var rowCount = $('#myTable tr').length;
-        rowCount = rowCount - 1;
-        $('.pNumber').html(rowCount + " " + "entries");
-    }
+    // function loadwindows() {
+    //     const element = document.querySelector('#load')
+    //     element.classList.add('animated', 'fadeOut')
+    //     $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
+    //     var rowCount = $('#myTable tr').length;
+    //     rowCount = rowCount - 1;
+    //     $('.pNumber').html(rowCount + " " + "entries");
+    // }
+  const [modalShow, setModalShow] = useState(false);
+
+    useEffect(()=>{
+      axios.get(`${apiUrl}/services`)
+      .then(res=>{
+        console.log(res);
+      })
+    })
+
 
     const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Paid' },
     { 'name': 'Eskye Custodio', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Failed' },
@@ -96,10 +109,13 @@ const payments = () => {
     }
   }
 
+  const handleModalShow = (e) => {
+    console.log(e)
+  }
 
     return (
 
-        <div onLoad={loadwindows}>
+        <div>
             <head>
                 <meta charset="utf-8" />
                 <meta
@@ -127,8 +143,8 @@ const payments = () => {
                     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
                     crossorigin="anonymous"
                 ></script>
-                <link rel="stylesheet" type="text/css" href="Css/dashboard.css" />
-                <script type="text/javascript" src="Script/myScript.js"></script>
+                <link rel="stylesheet" type="text/css" href="../Css/dashboard.css" />
+                <script type="text/javascript" src="../Script/myScript.js"></script>
                 <link
                     href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
                     rel="stylesheet"
@@ -138,7 +154,6 @@ const payments = () => {
                     rel="stylesheet"
                 />
             </head>
-            <Loader></Loader>
             <Navbar></Navbar>
             <Sidebar></Sidebar>
             <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain">
@@ -156,7 +171,7 @@ const payments = () => {
                     <Col lg={12}>
                         <button className="btnTag">
                             <img
-                                src="Image/filter.png"
+                                src="../Image/filter.png"
                                 className="img-fluid"
                                 style={{ width: "15px" }}
                             ></img>
@@ -164,21 +179,21 @@ const payments = () => {
                         <button className="btnTagList btnPaid" onClick = {btnFilterPaid}>
                             Paid
             <img
-                                src="Image/close.png"
+                                src="../Image/close.png"
                                 style={{ width: "10px", marginLeft: "10px" }}
                             ></img>
                         </button>
                         <button className="btnTagList btnFailed" onClick = {btnFilterFailed}>
                             Failed
             <img
-                                src="Image/close.png"
+                                src="../Image/close.png"
                                 style={{ width: "10px", marginLeft: "10px" }}
                             ></img>
                         </button>
                         <button className="btnTagList btnPending" onClick = {btnFilterPending}>
                             Pending
             <img
-                                src="Image/close.png"
+                                src="../Image/close.png"
                                 style={{ width: "10px", marginLeft: "10px" }}
                             ></img>
                         </button>
@@ -198,7 +213,7 @@ const payments = () => {
                             <tbody>
                                 {memberships.map((membership, index) => {
                                     return (
-                                        <tr key={index}>
+                                        <tr key={index} onClick={handleModalShow(index)}>
                                             <td data-column="Full Name">{membership.name}</td>
                                             <td data-column="Items">{membership.items}</td>
                                             <td data-column="Date">{membership.date}</td>
@@ -211,9 +226,38 @@ const payments = () => {
                     </Col>
                 </Row>
             </Container>
+            <ServicesDetails 
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            />
             <Bottom></Bottom>
         </div>
     )
 };
 
+function ServicesDetails(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Missing Information:
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+           Please complete your profile details.
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide} className="pr-5 mr-2 text-center">Later</Button>
+        <Link href="/dashboard/profile"><Button className="text-center btn-danger">GO</Button></Link>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 export default payments;

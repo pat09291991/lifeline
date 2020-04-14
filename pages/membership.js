@@ -49,7 +49,7 @@ const Membership = () => {
 		        <h1 className="jumbo-title text-white">We take pride in our work.</h1>
 		        <h5 className="jumbo-subtitle text-white">Start today and be a lifeline member.</h5>
 		        <div className="pb-container"><div className="play-button large"></div></div>
-                	<SectionLink className="btn btn-danger text-white d-flex align-items-center justify-content-center mx-auto" style={{height: "100px", width: "250px", fontSize: "30px"}}  activeClass="active" to="membership" spy={true} smooth={true} offset={-100} duration={500}>START NOW</SectionLink>
+                	<SectionLink className="btn btn-danger text-white d-flex align-items-center justify-content-center mx-auto" style={{height: "100px", width: "250px", fontSize: "30px"}}  activeClass="active" to="membership" spy={true} smooth={true} offset={-50} duration={300}>START NOW</SectionLink>
 		        <p className="text-white mt-3 mb-0">
 		          By continuting you agree to our
 		        </p>

@@ -68,6 +68,7 @@ useEffect(()=>{
           <NavDropdown.Divider />
           <ActiveLink href="/academy" activeClassName="active"><a className="nav-link mx-auto academy">Academy</a></ActiveLink>
           <NavDropdown.Divider />
+          
         </Nav>
         <Nav className="ml-auto">
           <button onClick={()=>Router.push('/membership')} className="btn btn-warning  nav-link mx-1 mb-1" id="member2">Be a Member</button>
@@ -159,7 +160,7 @@ function MyVerticallyCenteredModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide} className="pr-5 mr-2 text-center">Later</Button>
-        <Link href="/profile"><Button className="text-center btn-danger">GO</Button></Link>
+        <Link href="/dashboard/profile"><Button className="text-center btn-danger">GO</Button></Link>
       </Modal.Footer>
     </Modal>
   );

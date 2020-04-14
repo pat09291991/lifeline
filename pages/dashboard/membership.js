@@ -1,26 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Link from "next/link";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, OverlayTrigger, Tooltip, Dropdown, Modal, Button } from "react-bootstrap";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import Sidebar from "../../components/sidebar";
+import Navbar from "../../components/navbar";
 import Head from "next/head";
-import Bottom from "../components/bottom";
-import Loader from "../components/loader";
-import { statusColor } from '../utils/layout'
+import Bottom from "../../components/bottom";
+import Loader from "../../components/loader";
+import { statusColor } from '../../utils/layout'
 import axios from 'axios';
-import apiUrl from '../api'
+import apiUrl from '../../api'
 import Moment from 'react-moment';
 
+import cookie from 'js-cookie'
 
 const membership = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [modalShow, setModalShow] = useState(false);
+const [id, setId] = useState(null);
 
 const [memberships, setMemberships] = useState([])
 
 useEffect(()=>{
+  const token = cookie.get("token")
   axios.get(`${apiUrl}/memberships`)
     .then(response=>{
       setMemberships(response.data);
@@ -29,14 +33,14 @@ useEffect(()=>{
 
   
 
-  function loadwindows() {
-    const element = document.querySelector('#load')
-    element.classList.add('animated', 'fadeOut')
-    $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
-    var rowCount = $('#myTable tr').length;
-    rowCount = rowCount - 1;
-    $('.pNumber').html(rowCount + " " + "entries");
-  }
+  // function loadwindows() {
+  //   const element = document.querySelector('#load')
+  //   element.classList.add('animated', 'fadeOut')
+  //   $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
+  //   var rowCount = $('#myTable tr').length;
+  //   rowCount = rowCount - 1;
+  //   $('.pNumber').html(rowCount + " " + "entries");
+  // }
 
   // const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Membership - Group Plan 2 Years', 'date': 'June 12, 2019', status: 'Paid' },
   // { 'name': 'Eskye Custodio', 'items': 'Membership - Group Plan 1 Year', 'date': 'March 22, 2019', status: 'Failed' },
@@ -112,10 +116,14 @@ useEffect(()=>{
     }
   }
 
+const handleOpenDetails = (id) =>{
+  setModalShow(true);
+  setId(id)
+}
   return (
-    <div onLoad={loadwindows}>
+  <Fragment>  
       <head>
-        <script type="text/javascript" src="Script/myScript.js"></script>
+        <script type="text/javascript" src="../Script/myScript.js"></script>
         <meta charset="utf-8" />
         <meta
           name="viewport"
@@ -142,7 +150,7 @@ useEffect(()=>{
           integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
           crossorigin="anonymous"
         ></script>
-        <link rel="stylesheet" type="text/css" href="Css/dashboard.css" />
+        <link rel="stylesheet" type="text/css" href="../Css/dashboard.css" />
 
         <link
           href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
@@ -154,9 +162,12 @@ useEffect(()=>{
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"></link>
       </head>
-      <Loader></Loader>
-      <Navbar></Navbar>
+      <body>
+      
       <Sidebar></Sidebar>
+      <Navbar></Navbar>
+      
+      
       <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain">
         <Row style={{ paddingTop: "100px" }}>
           <Col lg={6} md={6}>
@@ -172,7 +183,7 @@ useEffect(()=>{
           <Col lg={12}>
             <button className="btnTag">
               <img
-                src="Image/filter.png"
+                src="../Image/filter.png"
                 className="img-fluid"
                 style={{ width: "15px" }}
               ></img>
@@ -197,34 +208,18 @@ useEffect(()=>{
               <thead>
                 <tr>
                   <th>Items</th>
-                  <th>Full Name</th>
-                  <th>Book Date</th>
+                  <th>Expiration Date</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {memberships.map((membership, index) => {
                   return (
-                    <tr key={index}>
+                    <tr key={index} onClick={()=>handleOpenDetails(membership.id)}>
                       <td data-column="Items">{membership.membership_type__name}</td>
-                      <td data-column="Full Name">
-                        {membership.members !== null ? 
-                      membership.members.map((member)=>{
-                        return(
-                            <p key={member.id}>{member.first_name} {member.last_name}</p>
-                        )
-                      })
-                     : ""} 
-                      </td>
-                      <td data-column="Date"><Moment format="LL">{membership.created_at}</Moment></td>
-                      <td data-column="Status" className={statusColor(membership.status)}>
-                        {membership.members !== null ? 
-                          membership.members.map((member)=>{
-                            return(
-                                <p key={member.id}>{member.status}</p>
-                            )
-                          })
-                     : ""} 
+                      <td data-column="Date">{membership.expire_at ? <Moment format="LL">{membership.expire_at}</Moment> : "N/A"}</td>
+                      <td data-column="Status" className={statusColor(membership.membership_status)}>
+                        {membership.membership_status == "Active" ? "Paid" : "Pending"}
                       </td>
                     </tr>
                   );
@@ -234,6 +229,63 @@ useEffect(()=>{
           </Col>
         </Row>
       </Container>
+      </body>
+      <Modal
+      show={modalShow}
+      dialogClassName="mx-0"
+    >
+           {memberships.map(membership=>{
+            return(
+            <Fragment className="m-0">
+              {membership.id === id ? 
+                <Fragment>
+                    <Modal.Header closeButton style={{padding: "40px 40px 0px"}}>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                    {membership.membership_type__name}
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                  <Container fluid={true}>
+                  <Row>
+                    <Col lg={12} md={12} sm={12}>
+                      <p className="pModalBody">Price: <span>{membership.price}</span></p>
+                    <p className="pModalBody">Status: <span>{membership.membership_status == "Active" ? "Paid" : "Pending"}</span></p>
+                    <p className="pModalBody">
+                       Expiration: <span>{membership.expire_at ? <Moment format="LL">{membership.expire_at}</Moment> : "N/A"}</span>
+                    </p>
+                    {membership.membership_type == 3 || membership.membership_type == 4 ?
+                      <Fragment>
+                        <p className="pModalBody">Members:</p>
+                        <ul className="ml-auto">
+                          {membership.members.map(member=>{
+                            return(
+                              <Fragment key={member.id}>
+                                <li>{member.first_name} {member.last_name}</li>
+                              </Fragment>
+                            )
+                          })}
+                        </ul>
+                      </Fragment>
+                    : ""}
+                    {membership.membership_type == 1 || membership.membership_type == 1 ?
+                      <Fragment>
+                        <p>Full Name: {membership.first_name} {membership.last_name}</p>
+                      </Fragment>
+                    : ""}
+                    </Col>
+                  </Row>
+                </Container>
+                    
+                  </Modal.Body>
+                </Fragment>
+                : ""}
+            </Fragment>
+            )
+          })}
+      <Modal.Footer>
+        <Button onClick={()=>setModalShow(false)} className="pr-5 mr-2 text-center">Close</Button>
+      </Modal.Footer>
+    </Modal>
       <Bottom></Bottom>
 
       {/* Modal */}
@@ -261,8 +313,9 @@ useEffect(()=>{
         </Modal.Body>
       </Modal>
 
-    </div>
+  </Fragment>
   )
 };
+
 
 export default membership;

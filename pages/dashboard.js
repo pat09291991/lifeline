@@ -17,12 +17,12 @@ const dashboard = (props) => {
 
 const [modalShow, setModalShow] = React.useState(false);
 
-  function loadwindows() {
-        const element = document.querySelector('#load')
-        element.classList.add('animated', 'fadeOut')
-        $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
+  // function loadwindows() {
+  //       const element = document.querySelector('#load')
+  //       element.classList.add('animated', 'fadeOut')
+  //       $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
     
-      }
+  //     }
 
 const [token, setToken] = useState({})
 const [loggedUser, setLoggedUser] = useState({});
@@ -32,7 +32,6 @@ useEffect(()=>{
   if(token){
     const accessToken = JSON.parse(token);
     const payload = jwt(accessToken.access);
-    console.log(payload)
     setToken(accessToken)
     setLoggedUser(payload);
   }
@@ -83,8 +82,7 @@ useEffect(()=>{
         />
 
       </head>
-        <body onLoad={loadwindows}>
-        <Loader></Loader>
+        <body>
         <Sidebar></Sidebar>
         <DashboardNavbar></DashboardNavbar>
         
@@ -297,7 +295,7 @@ function MyVerticallyCenteredModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide} className="pr-5 mr-2 text-center">Later</Button>
-        <Link href="/profile"><Button className="text-center btn-danger">GO</Button></Link>
+        <Link href="/dashboard/profile"><Button className="text-center btn-danger">GO</Button></Link>
       </Modal.Footer>
     </Modal>
   );

@@ -85,7 +85,7 @@ function ProfileDetailsChecker(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide} className="mr-2 text-center">Later</Button>
-        <Link href="/profile"><Button className="text-center btn-danger">GO</Button></Link>
+        <Link href="/dashboard/profile"><Button className="text-center btn-danger">GO</Button></Link>
       </Modal.Footer>
     </Modal>
   );
@@ -99,7 +99,6 @@ const [modalShow, setModalShow] = React.useState(false);
   if(token){
     const accessToken = JSON.parse(token);
     const payload = jwt(accessToken.access);
-    console.log(payload)
     if(!payload.address){
     setModalShow(true);
   } 

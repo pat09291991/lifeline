@@ -21,10 +21,10 @@ const Login = () => {
   })
   const [error, setError] = useState("")
 
-  useEffect(()=>{
-    cookie.set("token", JSON.stringify(token))
-    //cookie.set("refreshToken", JSON.stringify(token.refresh))
-  }, [token])
+  // useEffect(()=>{
+  //   cookie.set("token", JSON.stringify(token))
+  //   //cookie.set("refreshToken", JSON.stringify(token.refresh))
+  // }, [token])
 
   const onSubmit = (values) => {
     setError("")
@@ -37,8 +37,8 @@ const Login = () => {
       { username: values.email, password: values.password }
     )
       .then(response => {
-        setToken(response.data)
-
+        //setToken(response.data)
+        cookie.set("token", JSON.stringify(response.data))
         Router.push('/')
       })
       .catch((error) => {

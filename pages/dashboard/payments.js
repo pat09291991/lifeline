@@ -2,24 +2,29 @@ import React, { useState, useEffect, Fragment } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tooltip from "react-bootstrap/Tooltip";
 import Dropdown from "react-bootstrap/Dropdown";
-import { Container, Row, Col, OverlayTrigger } from "react-bootstrap";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import { Container, Row, Col, OverlayTrigger, Modal, Button } from "react-bootstrap";
+import Sidebar from "../../components/sidebar";
+import Navbar from "../../components/navbar";
 import Head from "next/head";
-import { statusColor } from '../utils/layout'
+import { statusColor } from '../../utils/layout'
 import axios from 'axios';
-import apiUrl from '../api'
+import apiUrl from '../../api'
 import Moment from 'react-moment';
+import Link from "next/link";
 
 
 const payments = () => {
 
-const [bookings, setBookings] = useState([])
+const [payments, setPayments] = useState([])
+const [modalShow, setModalShow] = useState(false);
+const [show, setShow] = useState(false);
+
+const [id, setID] = useState(null)
 useEffect(()=>{
-  axios.get(`${apiUrl}/bookings`)
+  axios.get(`${apiUrl}/payments`)
     .then(response=>{
       console.log(response.data);
-      setBookings(response.data);
+      setPayments(response.data);
     })
 }, [])
 
@@ -104,6 +109,11 @@ useEffect(()=>{
     }
   }
 
+const handleOpenDetails = (id) =>{
+  setShow(true);
+  setID(id);
+}
+
    
     return (
 
@@ -135,8 +145,8 @@ useEffect(()=>{
                     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
                     crossorigin="anonymous"
                 ></script>
-                <link rel="stylesheet" type="text/css" href="Css/dashboard.css" />
-                <script type="text/javascript" src="Script/myScript.js"></script>
+                <link rel="stylesheet" type="text/css" href="../Css/dashboard.css" />
+                <script type="text/javascript" src="../Script/myScript.js"></script>
                 <link
                     href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
                     rel="stylesheet"
@@ -148,7 +158,7 @@ useEffect(()=>{
             </head>
             <Navbar></Navbar>
             <Sidebar></Sidebar>
-            <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }}>
+            <div className="container-fluid" id="payment">
                 <Row style={{ paddingTop: "100px" }}>
                     <Col lg={6}>
                         <p className="pNav">
@@ -156,14 +166,14 @@ useEffect(()=>{
                         </p>
                     </Col>
                     <Col lg={6}>
-                        <button className="float-right btnAdd">&#x2b;&nbsp;Add Payments</button>
+                        <button className="float-right btnAdd mb-4">&#x2b;&nbsp;Add Payments</button>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: "-10px" }}>
                     <Col lg={12}>
                         <button className="btnTag">
                             <img
-                                src="Image/filter.png"
+                                src="../Image/filter.png"
                                 className="img-fluid"
                                 style={{ width: "15px" }}
                             ></img>
@@ -171,26 +181,27 @@ useEffect(()=>{
                         <button className="btnTagList btnPaid" onClick = {btnFilterPaid}>
                             Paid
             <img
-                                src="Image/close.png"
+                                src="../Image/close.png"
                                 style={{ width: "10px", marginLeft: "10px" }}
                             ></img>
                         </button>
                         <button className="btnTagList btnFailed" onClick = {btnFilterFailed}>
                             Failed
             <img
-                                src="Image/close.png"
+                                src="../Image/close.png"
                                 style={{ width: "10px", marginLeft: "10px" }}
                             ></img>
                         </button>
                         <button className="btnTagList btnPending" onClick = {btnFilterPending}>
                             Pending
             <img
-                                src="Image/close.png"
+                                src="../Image/close.png"
                                 style={{ width: "10px", marginLeft: "10px" }}
                             ></img>
                         </button>
                     </Col>
                 </Row>
+                
                 <Row style={{ marginTop: "40px" }}>
                     <Col lg={12}>
                         <table id="myTable">
@@ -203,29 +214,15 @@ useEffect(()=>{
                                 </tr>
                             </thead>
                             <tbody>
-                                {bookings.map((booking, index) => {
+                                {payments.map((payment, index) => {
                                     return (
-                                        <tr key={index}>
-                                            <td data-column="Full Name">{booking.first_name} {booking.last_name}</td>
+                                        <tr key={index} onClick={()=>handleOpenDetails(payment.request_id)}>
+                                            <td data-column="Full Name">{payment.first_name} {payment.last_name}</td>
                                             <td data-column="Items">
-                                            {booking.services_detail !== null ? 
-                                              booking.services_detail.map((servicedetail)=>{
-                                                return(
-                                                    <Fragment>
-                                                      {booking.services_detail !== null ? 
-                                                          booking.services_detail.map((service)=>{
-                                                            return(
-                                                                <p key={service.id}>{service.title}</p>
-                                                            )
-                                                          })
-                                                     : ""}
-                                                    </Fragment> 
-                                                )
-                                              })
-                                         : ""} 
+                                              {payment.content_type_name}
                                             </td>
-                                            <td data-column="Date"><Moment format="LL">{booking.date}</Moment></td>
-                                            <td data-column="Status" className={statusColor(booking.status)}>{booking.status}</td>
+                                            <td data-column="Date"><Moment format="LL">{payment.date}</Moment></td>
+                                            <td data-column="Status" className={statusColor(payment.status)}>{payment.status}</td>
                                         </tr>
                                     );
                                 })}
@@ -233,9 +230,56 @@ useEffect(()=>{
                         </table>
                     </Col>
                 </Row>
-            </Container>
+                
+                <Modal show={show}
+                  onHide={() => setShow(false)}
+                  dialogClassName="mx-0"
+                  >
+                  
+                  {payments.map(payment=>{
+                    return(
+                      <Fragment>
+                        {payment.request_id == id ?
+                          <Fragment>
+                            <Modal.Header closeButton style={{padding: "40px 40px 0px"}}>
+                              <Modal.Title className="modalTitleLogout text-capitalize"><h3>{payment.content_type_name}</h3></Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                              <Container fluid={true}>
+                                <Row>
+                                  <Col lg={12} md={12} sm={12}>
+                                    <p>Status: <span>{payment.status}</span></p>
+                                    <p><span>Price: {payment.amount}</span></p>
+                                    <p>Date of payment: <Moment format="LL">{payment.paid_at}</Moment></p>
+                                  </Col>
+                                </Row>
+                              </Container>
+                            </Modal.Body>
+                          </Fragment>
+                          : ""}
+                      </Fragment>
+                    )
+                  })}
+
+                   <Modal.Footer>
+                    <Button onClick={()=>setShow(false)} className="pr-5 mr-2 text-center">Close</Button>
+                  </Modal.Footer>
+                </Modal>
+            </div>
+            <style jsx>{`
+              #payment{
+                padding-left: 90px;
+                z-index: -1;
+              }
+              @media only screen and (max-width: 767px){
+                #payment{
+                  padding-left: 15px !important;
+                }
+              }
+            `}</style>
         </div>
     )
 };
+
 
 export default payments;

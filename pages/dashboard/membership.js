@@ -172,7 +172,7 @@ const handleOpenDetails = (id) =>{
         <Row style={{ paddingTop: "100px" }}>
           <Col lg={6} md={6}>
             <p className="pNav pNav1">
-              Membership<span className="pNumber">56 entries</span>
+              Membership<span className="pNumber">{memberships.length} entries</span>
             </p>
           </Col>
           <Col lg={6} md={6}>
@@ -232,50 +232,78 @@ const handleOpenDetails = (id) =>{
       </body>
       <Modal
       show={modalShow}
-      dialogClassName="mx-0"
+      dialogClassName="mx-0 w-100"
     >
            {memberships.map(membership=>{
             return(
             <Fragment className="m-0">
               {membership.id === id ? 
                 <Fragment>
-                    <Modal.Header closeButton style={{padding: "40px 40px 0px"}}>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                    {membership.membership_type__name}
+                    <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter" className="w-100">
+                    
+                    <Row className="show-grid">
+                          <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                              <p>{membership.first_name} {membership.last_name}</p>
+                          </Col>
+                          <Col lg={6} md={6} sm={4} xs={4} className="text-right">
+                              <p className={statusColor(membership.payment_status)}>{membership.membership_status == "Active" ? "Paid" : "Pending"}</p>
+                          </Col>
+                        </Row>
                     </Modal.Title>
                   </Modal.Header>
-                  <Modal.Body>
-                  <Container fluid={true}>
+                  <Modal.Body className="mt-0">
+                  
                   <Row>
-                    <Col lg={12} md={12} sm={12}>
-                      <p className="pModalBody">Price: <span>{membership.price}</span></p>
-                    <p className="pModalBody">Status: <span>{membership.membership_status == "Active" ? "Paid" : "Pending"}</span></p>
-                    <p className="pModalBody">
-                       Expiration: <span>{membership.expire_at ? <Moment format="LL">{membership.expire_at}</Moment> : "N/A"}</span>
-                    </p>
-                    {membership.membership_type == 3 || membership.membership_type == 4 ?
+                    <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                      <p className="pModalBody">Membership Type:</p>
+                    </Col>
+                    <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                      <p className="pModalBody">{membership.membership_type__name}</p>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                      <p className="pModalBody">Price:</p>
+                    </Col>
+                    <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                      <p className="pModalBody">{membership.price}</p>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                      <p className="pModalBody">Expiration:</p>
+                    </Col>
+                    <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                      <p className="pModalBody">{membership.expire_at ? <Moment format="LL">{membership.expire_at}</Moment> : "N/A"}</p>
+                    </Col>
+                  </Row>
+
+
+                  {membership.membership_type == 3 || membership.membership_type == 4 ?
+                  <Row>
+                    <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                      <p className="pModalBody">Members:</p>
+                    </Col>
+                    <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                      {membership.membership_type == 3 || membership.membership_type == 4 ?
                       <Fragment>
-                        <p className="pModalBody">Members:</p>
-                        <ul className="ml-auto">
+                        <ul className="pl-0">
                           {membership.members.map(member=>{
                             return(
                               <Fragment key={member.id}>
-                                <li>{member.first_name} {member.last_name}</li>
+                                <li className="list-unstyled">{member.first_name} {member.last_name}</li>
                               </Fragment>
                             )
                           })}
                         </ul>
                       </Fragment>
-                    : ""}
-                    {membership.membership_type == 1 || membership.membership_type == 1 ?
-                      <Fragment>
-                        <p>Full Name: {membership.first_name} {membership.last_name}</p>
-                      </Fragment>
-                    : ""}
+                    : "N/A"}
                     </Col>
                   </Row>
-                </Container>
-                    
+                  : ""}
                   </Modal.Body>
                 </Fragment>
                 : ""}

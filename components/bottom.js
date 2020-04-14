@@ -10,7 +10,7 @@ const Bottom = () => (
                 </Link>
             </Col>
             <Col xs={2}>
-                <Link href="/dashboard/services">
+                <Link href="/dashboard/bookings">
                     <img src="../Image/services.png" className="imgLogo" />
                 </Link>
             </Col>

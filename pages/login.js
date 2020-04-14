@@ -39,7 +39,7 @@ const Login = () => {
       .then(response => {
         //setToken(response.data)
         cookie.set("token", JSON.stringify(response.data))
-        Router.push('/')
+        Router.push('/dashboard')
       })
       .catch((error) => {
         if(error.response){

@@ -15,7 +15,8 @@ import Link from "next/link";
 
 const payments = () => {
 
-const [payments, setPayments] = useState([])
+const [payments, setPayments] = useState([]);
+const [services, setServices] = useState([])
 const [modalShow, setModalShow] = useState(false);
 const [show, setShow] = useState(false);
 
@@ -23,21 +24,26 @@ const [id, setID] = useState(null)
 useEffect(()=>{
   axios.get(`${apiUrl}/payments`)
     .then(response=>{
-      console.log(response.data);
       setPayments(response.data);
     })
+
+  axios.get(`${apiUrl}/services`)
+    .then(response=>{
+      setServices(response.data);
+    })
 }, [])
+
 
     // const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Paid' },
     // { 'name': 'Eskye Custodio', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Failed' },
     // { 'name': 'Leo Sanico', 'items': 'Booking - Book A Nurse', 'date': 'March 18, 2019', status: 'Pending' },
     // { 'name': 'Nathan Nakar', 'items': 'Booking - Doctor on Call', 'date': 'December 24, 2019', status: 'Pending' }]
    
-   function loadwindows() {
-    var rowCount = $('#myTable tr').length;
-    rowCount = rowCount - 1;
-    $('.pNumber').html(rowCount + " " + "entries");
-   }
+   // function loadwindows() {
+   //  var rowCount = $('#myTable tr').length;
+   //  rowCount = rowCount - 1;
+   //  $('.pNumber').html(rowCount + " " + "entries");
+   // }
 
    var filterState = 1;
    function btnFilterPaid() {
@@ -113,11 +119,12 @@ const handleOpenDetails = (id) =>{
   setShow(true);
   setID(id);
 }
+ 
+console.log(payments);
 
-   
     return (
 
-        <div onLoad = {loadwindows}>
+        <div>
             <head>
                 <meta charset="utf-8" />
                 <meta
@@ -161,8 +168,8 @@ const handleOpenDetails = (id) =>{
             <div className="container-fluid" id="payment">
                 <Row style={{ paddingTop: "100px" }}>
                     <Col lg={6}>
-                        <p className="pNav">
-                            Payments<span className="pNumber"><span>0</span> entries</span>
+                        <p className="pNav pNav1">
+                          Payments<span className="pNumber">{payments.length} entries</span>
                         </p>
                     </Col>
                     <Col lg={6}>
@@ -209,7 +216,7 @@ const handleOpenDetails = (id) =>{
                                 <tr>
                                     <th>Full Name</th>
                                     <th>Items</th>
-                                    <th>Book Date</th>
+                                    <th>Payment Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -217,11 +224,13 @@ const handleOpenDetails = (id) =>{
                                 {payments.map((payment, index) => {
                                     return (
                                         <tr key={index} onClick={()=>handleOpenDetails(payment.request_id)}>
-                                            <td data-column="Full Name">{payment.first_name} {payment.last_name}</td>
-                                            <td data-column="Items">
+                                            <td data-column="Full Name">
+                                            {payment.first_name || payment.last_name ? <Fragment>{payment.first_name} {payment.last_name}</Fragment> : "N/A"}
+                                            </td>
+                                            <td data-column="Items" className="text-capitalize">
                                               {payment.content_type_name}
                                             </td>
-                                            <td data-column="Date"><Moment format="LL">{payment.date}</Moment></td>
+                                            <td data-column="Date"><Moment format="LL">{payment.paid_at}</Moment></td>
                                             <td data-column="Status" className={statusColor(payment.status)}>{payment.status}</td>
                                         </tr>
                                     );
@@ -233,27 +242,155 @@ const handleOpenDetails = (id) =>{
                 
                 <Modal show={show}
                   onHide={() => setShow(false)}
-                  dialogClassName="mx-0"
+                  dialogClassName="mx-0 w-100"
                   >
                   
                   {payments.map(payment=>{
                     return(
-                      <Fragment>
+                      <Fragment key={payment.payment_object.id}>
                         {payment.request_id == id ?
                           <Fragment>
-                            <Modal.Header closeButton style={{padding: "40px 40px 0px"}}>
-                              <Modal.Title className="modalTitleLogout text-capitalize"><h3>{payment.content_type_name}</h3></Modal.Title>
+                            <Modal.Header closeButton>
+                              <Modal.Title className="w-100">
+                              
+                              <Row className="show-grid">
+                          <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                              <p>{payment.first_name && payment.last_name ? <Fragment>{payment.first_name} {payment.last_name}</Fragment> : "N/A"}</p>
+                          </Col>
+                          <Col lg={6} md={6} sm={4} xs={4} className="text-right">
+                              <p className={statusColor(payment.status)}>{payment.status}</p>
+                          </Col>
+                        </Row>
+                              </Modal.Title>
                             </Modal.Header>
-                            <Modal.Body>
-                              <Container fluid={true}>
+                            <Modal.Body className="mt-0">
+                              
+                              <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody">Payment Type:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody text-capitalize">{payment.content_type_name}</p>
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody">Price:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody">{payment.amount}</p>
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody">Date of payment:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody">
+                                  <Moment format="LL">{payment.paid_at}</Moment>
+                                  </p>
+                                </Col>
+                              </Row>
+
+
+                              <p className="font-weight-bolder mt-3 mb-1">PAYMENT</p>
+
+                              <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody mb-1">Name:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody mb-1">
+                                  {payment.payment_object.first_name} {payment.payment_object.last_name}
+                                  </p>
+                                </Col>
+                              </Row>
+                              {payment.content_type == 9 ?
+                               <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody mb-1">Item:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody mb-1">
+                                   {payment.payment_object.membership_type__name}
+                                  </p>
+                                </Col>
+                              </Row>
+                              : ""}
+
+                              {payment.content_type == 16 ?
+                                <Fragment>
                                 <Row>
-                                  <Col lg={12} md={12} sm={12}>
-                                    <p>Status: <span>{payment.status}</span></p>
-                                    <p><span>Price: {payment.amount}</span></p>
-                                    <p>Date of payment: <Moment format="LL">{payment.paid_at}</Moment></p>
-                                  </Col>
-                                </Row>
-                              </Container>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody mb-1">Service Type:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  {payment.payment_object.services.map((service, index)=>{
+                                    return(
+                                      <Fragment key={index}>
+                                        {services.map((serve, index)=>{
+                                        return(
+                                          <p className="mb-1" key={index}>
+                                          {service == serve.id ? <Fragment>{serve.title}</Fragment> : ""}
+                                          </p>
+                                        )
+                                      })}
+                                      </Fragment>
+                                    )
+                                  })}
+                                </Col>
+                              </Row>
+
+                                <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody mb-1">Booking Date:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody mb-1">
+                                  <Moment format="LL">{payment.payment_object.booking_datetime}</Moment>
+                                  </p>
+                                </Col>
+                              </Row>
+
+                                  <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody mb-1">Address:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody mb-1">
+                                  {payment.payment_object.address}
+                                  </p>
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody mb-1">Email:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody mb-1">
+                                  {payment.payment_object.email}
+                                  </p>
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col lg={6} md={6} sm={8} xs={8} className="text-left">
+                                  <p className="pModalBody mb-1">Phone Number:</p>
+                                </Col>
+                                <Col lg={6} md={6} sm={4} xs={4} className="text-left">
+                                  <p className="pModalBody mb-1">
+                                  {payment.payment_object.phone_number}
+                                  </p>
+                                </Col>
+                              </Row>
+                                </Fragment>
+                              : ""}
+
+
+                              
                             </Modal.Body>
                           </Fragment>
                           : ""}

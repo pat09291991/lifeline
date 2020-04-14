@@ -15,8 +15,6 @@ import Link from 'next/link'
 
 const dashboard = (props) => {
 
-const [modalShow, setModalShow] = React.useState(false);
-
   // function loadwindows() {
   //       const element = document.querySelector('#load')
   //       element.classList.add('animated', 'fadeOut')
@@ -26,6 +24,7 @@ const [modalShow, setModalShow] = React.useState(false);
 
 const [token, setToken] = useState({})
 const [loggedUser, setLoggedUser] = useState({});
+const [modalShow, setModalShow] = useState(false);
 
 useEffect(()=>{
   const token = cookie.get("token");
@@ -34,13 +33,42 @@ useEffect(()=>{
     const payload = jwt(accessToken.access);
     setToken(accessToken)
     setLoggedUser(payload);
+    if(!payload.address){
+    setModalShow(true);
   }
-
-
+}
 }, [])
+
+function ProfileDetailsChecker(props) {
+  return (
+    <Modal
+      {...props}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Missing Information:
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+           Please complete your profile details.
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide} className="w-25 mr-2">Later</Button>
+        <Link href="/dashboard/profile"><Button className="btn-danger w-25">Go to Profile</Button></Link>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 
   return (
     <Fragment>
+    <ProfileDetailsChecker
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        dialogClassName="mx-0 w-100 modalDialog"
+      />
       <head>
         <meta charSet="utf-8" />
         <meta
@@ -82,15 +110,13 @@ useEffect(()=>{
         />
 
       </head>
+      
         <body>
         <Sidebar></Sidebar>
         <DashboardNavbar></DashboardNavbar>
         
 
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
+      
         <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain" >
           <Row style={{ paddingTop: "100px" }}>
             <Col lg={12}>
@@ -271,34 +297,20 @@ useEffect(()=>{
         </Container>
       </body>
         <Bottom></Bottom>
+        <style jsx>{`
+          
+          @media only screen and (max-width: 767px) {
+            .modal-dialog{
+            width: 100% !important;
+            max-width: auto !important;
+          }
+            
+            }
+        `}</style>
     </Fragment>
   )
 };
 
-function MyVerticallyCenteredModal(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Missing Information:
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>
-           Please complete your profile details.
-        </p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide} className="pr-5 mr-2 text-center">Later</Button>
-        <Link href="/dashboard/profile"><Button className="text-center btn-danger">GO</Button></Link>
-      </Modal.Footer>
-    </Modal>
-  );
-}
+
 
 export default dashboard;

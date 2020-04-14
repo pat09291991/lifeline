@@ -85,7 +85,7 @@ function ProfileDetailsChecker(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide} className="mr-2 text-center">Later</Button>
-        <Link href="/dashboard/profile"><Button className="text-center btn-danger">GO</Button></Link>
+        <Link href="/dashboard/profile"><Button className="text-center btn-danger">Go to Profile</Button></Link>
       </Modal.Footer>
     </Modal>
   );

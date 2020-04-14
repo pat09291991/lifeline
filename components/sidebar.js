@@ -99,11 +99,11 @@ const handleBackToHome = () => {
             </Link>
           </OverlayTrigger>
 
-          <OverlayTrigger placement="right" overlay={<Tooltip id="tooltip">Services</Tooltip>}>
-            <Link href="/dashboard/services">
+          <OverlayTrigger placement="right" overlay={<Tooltip id="tooltip">Bookings</Tooltip>}>
+            <Link href="/dashboard/bookings">
               <button className="btn btnServices">
                 <img src="../Image/services.png" className="imgLogo" />
-                <span>Services</span>
+                <span>Bookings</span>
               </button>
             </Link>
           </OverlayTrigger>
@@ -124,9 +124,8 @@ const handleBackToHome = () => {
             </button>
           </OverlayTrigger>
 
-          <button className="btn btnRight" onClick = {eventHandler}>
+          <button className="btn btnRight" onClick={eventHandler}>
             <img src="../Image/next.png" className="imgLogo imgRight" />
-            <span>Exit</span>
           </button>
         </Col>
       </Row>

@@ -19,6 +19,10 @@ export default () => {
     Router.push("/")
     cookie.remove("token")
     cookie.remove("plan")
+    cookie.remove("page")
+    cookie.remove("price")
+    cookie.remove("total")
+    cookie.remove("items")
     sessionStorage.removeItem("membership");
   }
 const [modalShow, setModalShow] = React.useState(true);

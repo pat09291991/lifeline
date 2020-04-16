@@ -20,6 +20,10 @@ const DashboardNavbar = () => {
     Router.push("/")
     cookie.remove("token")
     cookie.remove("plan")
+    cookie.remove("page")
+    cookie.remove("price")
+    cookie.remove("total")
+    cookie.remove("items")
   }
 const [modalShow, setModalShow] = React.useState(true);
 

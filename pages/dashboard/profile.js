@@ -19,7 +19,7 @@ import apiUrl from '../../api'
 
 const profile = (props) => {
 
-const [modalShow, setModalShow] = React.useState(false);
+const [modalShow, setModalShow] = useState(false);
 
 const handleClose = () => setShow(false);
 
@@ -59,32 +59,7 @@ const handleOpenEdit = () => {
     return (
         <Fragment>
             <head>
-                <meta charSet="utf-8" />
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-                />
-                <link
-                    rel="stylesheet"
-                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-                    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-                    crossOrigin="anonymous"
-                />
-                <script
-                    src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-                    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-                    crossOrigin="anonymous"
-                ></script>
-                <script
-                    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-                    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-                    crossOrigin="anonymous"
-                ></script>
-                <script
-                    src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-                    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                    crossOrigin="anonymous"
-                ></script>
+
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"></link>
                 <link rel="stylesheet" type="text/css" href="../../Css/dashboard.css" />
                 <script type="text/javascript" src="../../Script/myScript.js"></script>
@@ -254,8 +229,11 @@ const handleOpenEdit = () => {
             <Bottom></Bottom>
 
         <ProfileUpdate
-                    show={modalShow}
+                    modalShow={modalShow}
                     onHide={() => setModalShow(false)}
+                    loggedUser={loggedUser}
+                    setModalShow={setModalShow}
+                    token={token}
          />
          </Fragment>
     )
@@ -266,21 +244,21 @@ const handleOpenEdit = () => {
 
 
 
-function ProfileUpdate(props) {
-const [token, setToken] = useState({})
-const [loggedUser, setLoggedUser] = useState({});
-const [id, setId] = useState(null);
-const [updateUser, setUpdateUser] = useState({});
+function ProfileUpdate({loggedUser, modalShow, setModalShow, token }) {
 
+const [updateUser, setUpdateUser] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        mobile_number: "",
+        landline_number: "",
+        address: "",
+        city: "",
+        state: "",
+        country: ""
 
-useEffect(()=>{
-  const token = cookie.get("token");
-  const accessToken = JSON.parse(token);
-  setToken(accessToken)
-  const payload = jwt(accessToken.access);
-  setLoggedUser(payload);
-  setId(payload.user_id);
-}, [])
+});
+
 
 
 const { handleSubmit, register, errors, watch } = useForm({
@@ -291,34 +269,35 @@ const { handleSubmit, register, errors, watch } = useForm({
 const [error, setError] = useState("");
 const handleCloseButton = () => {
     setError("")
-    props.onHide()
+    setModalShow(false)
 }
 
 const [show, setShow] = useState(false);
 const handleClose = () => setShow(false);
 
 const onSubmit = (values) => {
+    console.log(updateUser)
     if(Object.keys(errors).length === 0){
         //console.log(Object.keys(errors).length === 0)
         setShow(true)
-        setUpdateUser(values)
+        setUpdateUser({
+        first_name: values.firstname,
+        last_name: values.lastname,
+        email: values.email,
+        mobile_number: values.mobilenumber,
+        landline_number: values.landlinenumber,
+        address: values.address,
+        city: values.city,
+        state: values.state,
+        country: values.country
+        })
     }
 }
 
 
 const handleSaveUpdate = () => {
         console.log(updateUser)
-    axios.post(`${apiUrl}/accounts`, {
-        first_name: updateUser.firstname,
-        last_name: updateUser.lastname,
-        email: updateUser.email,
-        mobile_number: updateUser.mobilenumber,
-        landline_number: updateUser.landlinenumber,
-        address: updateUser.address,
-        city: updateUser.city,
-        state: updateUser.state,
-        country: updateUser.country
-        }, {
+        axios.post(`${apiUrl}/accounts/${loggedUser.id}`, JSON.stringify(updateUser), {
             headers: {
                 Authorization: 'Bearer ' + token
             }
@@ -331,11 +310,10 @@ const handleSaveUpdate = () => {
 
 
   return (
-    <Modal
-              {...props}
+            <Modal
+            show={modalShow}
               size="xl"
-              aria-labelledby="contained-modal-title-vcenter"
-              centered
+              dialogClassName="mx-0 w-100"
             >
             <Modal.Footer className="modalFooter">
                 <Button onClick={handleCloseButton}>X</Button>

@@ -11,9 +11,10 @@ import Head from "next/head";
 import cookie from 'js-cookie'
 import jwt from 'jwt-decode';
 import Link from 'next/link'
+import { withAuthSync } from '../utils/auth'
 
 
-const dashboard = (props) => {
+const Dashboard = (props) => {
 
   // function loadwindows() {
   //       const element = document.querySelector('#load')
@@ -44,6 +45,7 @@ function ProfileDetailsChecker(props) {
   return (
     <Modal
       {...props}
+      animation={false}
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
@@ -289,4 +291,5 @@ function ProfileDetailsChecker(props) {
 
 
 
-export default dashboard;
+export default withAuthSync(Dashboard);
+

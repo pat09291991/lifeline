@@ -42,7 +42,7 @@ const Login = () => {
         if(sessionStorage.membership){
           Router.push('/membership/registration')
         }else{
-          Router.push('/dashboard')
+          Router.push('/error', '/dashboard');
         }
       })
       .catch((error) => {

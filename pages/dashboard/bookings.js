@@ -19,17 +19,6 @@ import Router from 'next/router'
 
 const Bookings = () => {
 
-    // function loadwindows() {
-    //     const element = document.querySelector('#load')
-    //     element.classList.add('animated', 'fadeOut')
-    //     $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
-    //     var rowCount = $('#myTable tr').length;
-    //     rowCount = rowCount - 1;
-    //     $('.pNumber').html(rowCount + " " + "entries");
-    // }
-
-  
-
   const [modalShow, setModalShow] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [id, setId] = useState(null);

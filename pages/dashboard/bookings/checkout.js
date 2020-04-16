@@ -11,6 +11,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Cards from 'react-credit-cards';
  import 'react-credit-cards/es/styles-compiled.css';
+import jwt from 'jwt-decode';
+import Router from 'next/router'
 
 import Navbar from "../../../components/navbar";
 
@@ -22,6 +24,7 @@ const [selected, setSelected] = useState([]);
 const [selectedStyle, setSelectedStyle ] = useState(false)
 const [show, setShow] = useState(false);
 const [page, setPage] = useState(1);
+const [userId, setUserId] = useState(null)
 
 useEffect(()=>{
 	axios.get(`${apiUrl}/services`)
@@ -38,6 +41,14 @@ useEffect(()=>{
 		const selectedItems = JSON.parse(items)
 		setSelected(selectedItems);
 	}
+
+	const token = cookie.get("token");
+	  if(token){
+	    const accessToken = JSON.parse(token);
+	    const payload = jwt(accessToken.access);
+	    setUserId(payload.user_id);
+	  }
+	 
 
 	
 }, [])
@@ -76,6 +87,7 @@ const handleClose = () => {
 							handleSelected={handleSelected}
 							setPage={setPage}
 							services={services}
+							userId={userId}
 						 />
 					 : ""}
 				</Jumbotron>
@@ -106,15 +118,7 @@ const handleCheckout = () => {
 		cookie.remove("page");
 		setPage(2);
 		cookie.set("page", 2);
-		cookie.set("items", JSON.stringify(selected));
-		// services.map((item, index)=>{
-		// 	selected.map((k, index)=>{
-		// 		if(item.id == k){
-		// 			setList(item);
-		// 		}
-		// 	})
-		// })
-		
+		cookie.set("items", JSON.stringify(selected));		
 	})
 		
 	}
@@ -122,7 +126,10 @@ const handleCheckout = () => {
 
 
 	return(
+		<Fragment>
+		<button className="btn bg-white text-left" onClick={()=>Router.push('/dashboard/bookings')}>Back</button>
 		<Container className="text-center d-flex align-items-center flex-column">
+
 						<div className="w-50 services">
 							<h1>Services</h1>
 						<p>We provide home services for the comfort and convenience of our patients</p>
@@ -152,10 +159,11 @@ const handleCheckout = () => {
 							}
 						`}</style>
 		</Container>
+		</Fragment>
 	)
 }
 
-function CheckoutPage({selected, services, setPage}){
+function CheckoutPage({selected, services, setPage, userId}){
 	
 const { handleSubmit, register, errors, watch } = useForm();
 const [startDate, setStartDate] = useState(new Date());
@@ -191,7 +199,8 @@ const [bookingInfo, setBookingInfo] = useState({
 	email: "",
 	booking_datetime: "",
 	services: [],
-	phone_number: ""
+	phone_number: "",
+	user: ""
 })
 
 const [payment, setPayment] = useState({
@@ -256,7 +265,7 @@ const onSubmit = (value) => {
 		// console.log(selected);
 
 		if(Object.keys(errors).length === 0){
-			setBookingInfo({first_name: value.first_name, last_name: value.last_name, address: value.address, email: value.email, booking_datetime: startDate, services: [...selected], phone_number: value.phone_number})
+			setBookingInfo({first_name: value.first_name, last_name: value.last_name, address: value.address, email: value.email, booking_datetime: startDate, services: [...selected], phone_number: value.phone_number, user: userId})
 			if(value.number){
 				setPayment({name: value.name, number: value.number, expiration_month: value.expiry.slice(2,7), expiration_year: value.expiry.slice(0,2), cvc: value.cvc})
 			}else{
@@ -285,13 +294,16 @@ const handleBook = () => {
 		}
 		}).then(res=>{
 			console.log(res.data.id);
-			axios.post(`${apiUrl}/payments/pay_magpie/`, {name: payment.name, number: payment.number, expiration_month: payment.expiration_month, expiration_year: payment.expiration_year, cvc: payment.cvc, booking_id: res.data.id}, {
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: 'Bearer ' + token
-		}}).then(res=>{
-			console.log(res);
-		})
+				if(selectedCC){
+						axios.post(`${apiUrl}/payments/pay_magpie/`, {name: payment.name, number: payment.number, expiration_month: payment.expiration_month, expiration_year: payment.expiration_year, cvc: payment.cvc, booking_id: res.data.id}, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: 'Bearer ' + token
+				}}).then(res=>{
+					console.log(res);
+				    
+				})
+			}
 
 			setBookingInfo({
 				first_name: "",
@@ -302,6 +314,7 @@ const handleBook = () => {
 				services: [],
 				phone_number: ""
 			})
+			
 			setShow(false)
 		})
 	}

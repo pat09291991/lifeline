@@ -11,6 +11,7 @@ import axios from 'axios';
 import apiUrl from '../../api'
 import Moment from 'react-moment';
 import Link from "next/link";
+import cookie from 'js-cookie'
 
 
 const payments = () => {
@@ -22,10 +23,21 @@ const [show, setShow] = useState(false);
 
 const [id, setID] = useState(null)
 useEffect(()=>{
-  axios.get(`${apiUrl}/payments`)
-    .then(response=>{
-      setPayments(response.data);
-    })
+  const cookieToken = cookie.get("token");
+        if(cookieToken){
+          const accessToken = JSON.parse(cookieToken);
+          const token = accessToken.access;
+          console.log(token)
+
+          axios.get(`${apiUrl}/payments`, {
+              headers: {
+                'Content-Type': 'application/json',
+                "Authorization": 'Bearer ' + token
+              }
+            }).then(res=>{
+              setPayments(res.data);
+            })
+        }
 
   axios.get(`${apiUrl}/services`)
     .then(response=>{

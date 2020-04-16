@@ -328,12 +328,12 @@ const handleOpenDetails = (id) =>{
             <Row>
               <Col lg={6} md={6} sm={6} className="colModal">
                 <Link href="/addmember">
-                  <img src="Image/team(3).png" className="img-fluid imgModa mx-auto"></img>
+                  <img src="../Image/team(3).png" className="img-fluid imgModa mx-auto"></img>
                 </Link>
                 <p className="pChoose">Individual</p>
               </Col>
               <Col lg={6} md={6} sm={6} className="colModal">
-                <img src="Image/boss.png" className="img-fluid imgModal mx-auto" style={{ width: "115px", marginTop: "10px" }}></img>
+                <img src="../Image/boss.png" className="img-fluid imgModal mx-auto" style={{ width: "115px", marginTop: "10px" }}></img>
                 <p className="pChoose" style={{ marginTop: "10px" }}>Group</p>
               </Col>
             </Row>

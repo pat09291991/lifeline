@@ -31,17 +31,26 @@ const handleClose = () => setShow(false);
     //   }
 
 
-const [token, setToken] = useState({})
 const [loggedUser, setLoggedUser] = useState({});
 const [edit, setEdit] = useState(false);
+const [token, setToken] = useState(null);
 
 useEffect(()=>{
-  const token = cookie.get("token");
-  const accessToken = JSON.parse(token);
-  setToken(accessToken)
-  const payload = jwt(accessToken.access);
-  setLoggedUser(payload);
+    const cookieToken = cookie.get("token");
+  if(cookieToken){
+    const accessToken = JSON.parse(cookieToken);
+    setToken(accessToken.access);
+
+    axios.get(`${apiUrl}/accounts`, {
+      headers: {"Authorization": `Bearer ${accessToken.access}`}
+    }).then(res=>{
+      setLoggedUser(res.data[0]);
+    })
+  }
+
 }, [])
+console.log(loggedUser)
+console.log(token)
 
 const handleOpenEdit = () => {
     setModalShow(true);
@@ -88,7 +97,6 @@ const handleOpenEdit = () => {
                     rel="stylesheet"
                 />
             </head>
-            <body>
             <Sidebar></Sidebar>
             <DashboardNavbar></DashboardNavbar>
             <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain colProfile">
@@ -103,7 +111,7 @@ const handleOpenEdit = () => {
                     </Col>
                     <Col lg={11}>
                         <div className="form-inline divNameStatus">
-                            <p className="pNameProfile">{loggedUser.first_name + " " + loggedUser.last_name}</p>
+                            <p className="pNameProfile">{loggedUser.first_name} {loggedUser.last_name}</p>
                             <p className="pStatus">Active</p>
                         </div>
                         <div className="form-inline divNameStatus d-flex align-items-center my-auto">
@@ -140,37 +148,43 @@ const handleOpenEdit = () => {
                                 <p className="pTitleProfile">Street</p>
                             </Col>
                             <Col lg={9} xs={9}>
-                                <p className="pTitleResult">Luxembroug Street</p>
+                                <p className="pTitleResult">{loggedUser.address}</p>
                             </Col>
                             <Col lg={3} xs={3}>
                                 <p className="pTitleProfile">City</p>
                             </Col>
                             <Col lg={9} xs={9}>
-                                <p className="pTitleResult">Imus City</p>
+                                <p className="pTitleResult">{loggedUser.city}</p>
                             </Col>
                             <Col lg={3} xs={3}>
                                 <p className="pTitleProfile">State</p>
                             </Col>
                             <Col lg={9} xs={9}>
-                                <p className="pTitleResult">Cavite</p>
+                                <p className="pTitleResult">{loggedUser.state}</p>
                             </Col>
                             <Col lg={3} xs={3}>
                                 <p className="pTitleProfile">Country</p>
                             </Col>
                             <Col lg={9} xs={9}>
-                                <p className="pTitleResult">Philippines</p>
+                                <p className="pTitleResult">{loggedUser.country}</p>
                             </Col>
                             <Col lg={3} xs={3}>
                                 <p className="pTitleProfile">Email</p>
                             </Col>
                             <Col lg={9} xs={9}>
-                                <p className="pTitleResult">alfonlabadan@gmail.com</p>
+                                <p className="pTitleResult">{loggedUser.email}</p>
                             </Col>
                             <Col lg={3} xs={3}>
                                 <p className="pTitleProfile">Contact Number</p>
                             </Col>
                             <Col lg={9} xs={9}>
-                                <p className="pTitleResult">09556448544</p>
+                                <p className="pTitleResult">{loggedUser.mobile_number}</p>
+                            </Col>
+                            <Col lg={3} xs={3}>
+                                <p className="pTitleProfile">Landline Number</p>
+                            </Col>
+                            <Col lg={9} xs={9}>
+                                <p className="pTitleResult">{loggedUser.landline_number}</p>
                             </Col>
                             <Col lg={3} xs={3}>
                                 <p className="pTitleProfile">Civil Status</p>
@@ -237,7 +251,6 @@ const handleOpenEdit = () => {
                     </Col>
                 </Row>
             </Container>
-            </body>
             <Bottom></Bottom>
 
         <ProfileUpdate
@@ -294,11 +307,23 @@ const onSubmit = (values) => {
 
 
 const handleSaveUpdate = () => {
-        
-    axios.put(`${apiUrl}/accounts/${id}`, {
-        headers: {"Content-Type": "application/json", Authorization: `Bearer ${token.access}`},
-        first_name: loggedUser.firstname
-    }).then(res=>{
+        console.log(updateUser)
+    axios.post(`${apiUrl}/accounts`, {
+        first_name: updateUser.firstname,
+        last_name: updateUser.lastname,
+        email: updateUser.email,
+        mobile_number: updateUser.mobilenumber,
+        landline_number: updateUser.landlinenumber,
+        address: updateUser.address,
+        city: updateUser.city,
+        state: updateUser.state,
+        country: updateUser.country
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + token
+            }
+        })
+    .then(res=>{
         console.log(res);
     })
 }
@@ -335,6 +360,7 @@ const handleSaveUpdate = () => {
                       required: 'First name is required'
                     })}
                     defaultValue={loggedUser.first_name}
+                    placeholder="First Name"
                   />
                   <small className="text-danger">{errors.firstname && errors.firstname.message}</small>
                     
@@ -345,6 +371,7 @@ const handleSaveUpdate = () => {
                       required: 'Last name is required'
                     })}
                     defaultValue={loggedUser.last_name}
+                    placeholder="Last Name"
                     
                   />
                   <small className="text-danger">{errors.lastname && errors.lastname.message}</small>
@@ -361,6 +388,7 @@ const handleSaveUpdate = () => {
                       }
                     })}
                     defaultValue={loggedUser.email}
+                    placeholder="Email"
                     
                   />
                   <small className="text-danger">{errors.email && errors.email.message}</small>
@@ -373,6 +401,8 @@ const handleSaveUpdate = () => {
                       required: 'Required'
                     })}
                     defaultValue={loggedUser.mobile_number}
+                    placeholder="Mobile Number"
+
                   />
                   <small className="text-danger">{errors.mobilenumber && errors.mobilenumber.message}</small>
                   
@@ -384,7 +414,7 @@ const handleSaveUpdate = () => {
                       required: 'Required'
                     })}
                     defaultValue={loggedUser.landline_number}
-                    
+                    placeholder="Landline Number"
                   />
                   <small className="text-danger">{errors.landlinenumber && errors.landlinenumber.message}</small>
                   
@@ -392,12 +422,13 @@ const handleSaveUpdate = () => {
                 <p className="mt-5">Address</p>
 
                   <input
-                    name="street"
+                    name="address"
                     className="form-control mt-2"
                     ref={register({
                       required: 'Street is required'
                     })}
                     defaultValue={loggedUser.address}
+                    placeholder="Address"
                     
                   />
                   <small className="text-danger">{errors.street && errors.street.message}</small>
@@ -409,6 +440,8 @@ const handleSaveUpdate = () => {
                       required: 'City is required'
                     })}
                     defaultValue={loggedUser.city}
+                    placeholder="City"
+
                   />
                   <small className="text-danger">{errors.city && errors.city.message}</small>
                    
@@ -419,6 +452,8 @@ const handleSaveUpdate = () => {
                       required: 'State is required'
                     })}
                     defaultValue={loggedUser.state}
+                    placeholder="State"
+
                   />
                   <small className="text-danger">{errors.state && errors.state.message}</small>
                    
@@ -430,6 +465,7 @@ const handleSaveUpdate = () => {
                       required: 'Country is required'
                     })}
                     defaultValue={loggedUser.country}
+                    placeholder="Country"
                     
                   />
                   <small className="text-danger">{errors.country && errors.country.message}</small>

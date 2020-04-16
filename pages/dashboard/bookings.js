@@ -13,9 +13,11 @@ import Loader from "../../components/loader";
 import Bottom from "../../components/bottom";
 import { statusColor } from '../../utils/layout'
 import Moment from 'react-moment';
+import cookie from 'js-cookie'
+import Router from 'next/router'
 
 
-const payments = () => {
+const Bookings = () => {
 
     // function loadwindows() {
     //     const element = document.querySelector('#load')
@@ -25,15 +27,30 @@ const payments = () => {
     //     rowCount = rowCount - 1;
     //     $('.pNumber').html(rowCount + " " + "entries");
     // }
-  const key = "w99mOq91P6DlGBpjy4T5"
+
+  
+
   const [modalShow, setModalShow] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [id, setId] = useState(null);
-    useEffect(()=>{
-      axios.get(`${apiUrl}/bookings/?access_key=${key}`)
-      .then(res=>{
-        setBookings(res.data);
-      })
+
+  useEffect(()=>{
+      const cookieToken = cookie.get("token");
+        if(cookieToken){
+          const accessToken = JSON.parse(cookieToken);
+          const token = accessToken.access;
+          console.log(token)
+
+          axios.get(`${apiUrl}/bookings`, {
+              headers: {
+                'Content-Type': 'application/json',
+                "Authorization": 'Bearer ' + token
+              }
+            }).then(res=>{
+              setBookings(res.data);
+            })
+        }
+      
     }, [])
 
 
@@ -169,7 +186,7 @@ const payments = () => {
                         </p>
                     </Col>
                     <Col lg={6} md={6}>
-                        <button className="float-right btnAdd">&#x2b;&nbsp;Add Bookings</button>
+                        <button className="float-right btnAdd" onClick={()=>Router.push('/dashboard/bookings/checkout')}>&#x2b;&nbsp;Add Bookings</button>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: "-10px" }} className="rowTag">
@@ -223,7 +240,7 @@ const payments = () => {
                                             <td data-column="Items">{
                                                 booking.services_detail.map(service=>{
                                                   return(
-                                                    <p key={service.id}>{service.title}</p>
+                                                    <p className="mb-0" key={service.id}>{service.title}</p>
                                                   )
                                                 })
                                             }</td>
@@ -355,4 +372,4 @@ const payments = () => {
 };
 
 
-export default payments;
+export default Bookings;

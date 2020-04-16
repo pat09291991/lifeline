@@ -18,6 +18,8 @@ export default () => {
     setIsLogged(false)
     Router.push("/")
     cookie.remove("token")
+    cookie.remove("plan")
+    sessionStorage.removeItem("membership");
   }
 const [modalShow, setModalShow] = React.useState(true);
 

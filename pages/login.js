@@ -38,8 +38,12 @@ const Login = () => {
     )
       .then(response => {
         //setToken(response.data)
-        cookie.set("token", JSON.stringify(response.data))
-        Router.push('/dashboard')
+        cookie.set("token", JSON.stringify(response.data));
+        if(sessionStorage.membership){
+          Router.push('/membership/registration')
+        }else{
+          Router.push('/dashboard')
+        }
       })
       .catch((error) => {
         if(error.response){

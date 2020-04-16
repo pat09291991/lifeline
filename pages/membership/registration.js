@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { useForm } from "react-hook-form";
 import cookie from 'js-cookie'
 import Router from 'next/router'
+import axios from 'axios';
+import apiUrl from '../../api'
+import jwt from 'jwt-decode';
 
 import Default from '../../layouts/default';
 
@@ -15,6 +18,11 @@ const { handleSubmit, register, errors, watch } = useForm();
 const [selectedIndi, setSelectedIndi] = useState(false);
 const [selectedGroup, setSelectedGroup] = useState(false);
 const [membershipType, setMembershipType] = useState(null);
+const [token, setToken] = useState(null);
+const [user, setUser] = useState({});
+const [sessionDetails, setSessionDetails] = useState(false);
+const [membershipInput, setMembershipInput] = useState({});
+
 
 const styleIndi = {
 	border: "1px solid lightgray",
@@ -32,7 +40,29 @@ const styleGroup = {
 	color: selectedGroup ? "#d1604e" : "white"
 }
 
+
+ 
 useEffect(()=>{
+   
+  const cookieToken = cookie.get("token");
+  if(cookieToken){
+    const accessToken = JSON.parse(cookieToken);
+    setToken(accessToken.access);
+
+    axios.get(`${apiUrl}/accounts`, {
+      headers: {"Authorization": `Bearer ${accessToken.access}`}
+    }).then(res=>{
+      setUser(res.data[0]);
+    })
+  }
+
+  const sessionMembershipUser = sessionStorage.getItem("membership");
+  if(sessionMembershipUser){
+    setSessionDetails(true)
+    const membershipDetails = JSON.parse(sessionMembershipUser);
+    setMembershipInput(membershipDetails);
+  }
+
   const plan = cookie.get("plan");
   if(plan==="individual"){
     setSelectedIndi(true);
@@ -41,7 +71,9 @@ useEffect(()=>{
     setSelectedGroup(true);
     setMembershipType(3);
   }
+
 }, [])
+
 
 const handleActivateIndi = () => {
 	setSelectedGroup(false)
@@ -53,9 +85,7 @@ const handleActivateGroup = () => {
 }
 
 
-const onSubmit = (values) => {
-	console.log(values)
-}
+
 	return(
 		<Default>
 			<Container fluid className="px-0">
@@ -79,26 +109,51 @@ const onSubmit = (values) => {
 			</Container>
 
 			<Container style={{minHeight: "80vh"}}>
-              {selectedIndi ? <Individual selectedIndi={selectedIndi}/> : ""}
-              {selectedGroup ? <Group selectedGroup={selectedGroup} /> : ""}
+              {selectedIndi ? <Individual selectedIndi={selectedIndi}
+                token={token}
+                user={user}
+                membershipInput={membershipInput}
+                sessionDetails={sessionDetails}
+              /> : ""}
+              {selectedGroup ? <Group selectedGroup={selectedGroup} token={token}
+                user={user}
+                membershipInput={membershipInput}
+                sessionDetails={sessionDetails}
+                 /> : ""}
 			</Container>
 		</Default>
 
 	)
 }
 
-function Individual(){
+function Individual({token, user, membershipInput, sessionDetails}){
 
 
 const { handleSubmit, register, errors, watch } = useForm();
 
 const onSubmit = (values) => {
-	if(values.year == 1 ){
-    console.log(values)
-    console.log("membershipType is 1")
+
+  if(!token){
+    Router.push('/login');
+    sessionStorage.setItem("membership", JSON.stringify(values))
   }else{
-    console.log(values)
-    console.log("membershipType is 2")
+    if(values.plan == 1 && Object.keys(errors).length === 0 ){
+      axios.post(`${apiUrl}/memberships/`, {owner: values.id, membership_type: values.plan}, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      }).then(res=>{
+        console.log(res)
+      })
+    }else if(values.plan == 2 && Object.keys(errors).length === 0){
+      axios.post(`${apiUrl}/memberships/`, {owner: values.id, membership_type: values.plan}, {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }).then(res=>{
+        console.log(res)
+      })
+    }
   }
 }
 
@@ -106,12 +161,13 @@ return(
 	<Col lg={12} md={12} sm={12} xs={12} className="mx-0 px-0 mb-4 d-flex flex-column align-items-center">
 		<form onSubmit={handleSubmit(onSubmit)}>     
               <div style={{ marginTop: "15px" }} className="w-100">
-              <Form.Control as="select" name="year" custom ref={register}>
+              <Form.Control as="select" name="plan" custom ref={register}>
                 <option value="1">1 Year Individual Plan</option>
 			          <option value="2">2 Years Individual Plan</option>
 			        </Form.Control>
 			  </div>
 			<Col lg={12} md={12} sm={12} xs={12} className="mx-0 px-0 d-flex align-items-center">
+              <input defaultValue={user.id} ref={register} name="id" hidden />
               <div style={{ marginTop: "15px" }} className="w-100 mr-2">
               <input
               name="firstname"
@@ -120,6 +176,8 @@ return(
                 required: 'First name is required',
               })}
               placeholder="First Name"
+
+              defaultValue={sessionDetails ? membershipInput.firstname : user.first_name}
             />
             <small className="text-danger">{errors.firstname && errors.firstname.message}</small>
             </div>
@@ -132,6 +190,7 @@ return(
               ref={register({
                 required: 'Last name is required',
               })}
+              defaultValue={sessionDetails ? membershipInput.lastname : user.last_name}
               placeholder="Last Name"
             />
             <small className="text-danger">{errors.lastname && errors.lastname.message}</small>
@@ -148,6 +207,7 @@ return(
                   message: "Invalid email address"
                 }
               })}
+              defaultValue={sessionDetails ? membershipInput.email : user.email}
               placeholder="Email"
             />
             <small className="text-danger">{errors.email && errors.email.message}</small>
@@ -162,6 +222,7 @@ return(
               ref={register({
                 required: 'Mobile number is required',
               })}
+              defaultValue={sessionDetails ? membershipInput.mobilenumber : user.mobile_number}
               placeholder="Mobile Number"
             />
             <small className="text-danger">{errors.mobilenumber && errors.mobilenumber.message}</small>
@@ -174,6 +235,7 @@ return(
               ref={register({
                 required: 'Landline number is required',
               })}
+              defaultValue={sessionDetails ? membershipInput.landlinenumber : user.landline_number}
               placeholder="Landline Number"
             />
             <small className="text-danger">{errors.landlinenumber && errors.landlinenumber.message}</small>
@@ -187,6 +249,7 @@ return(
               ref={register({
                 required: 'Address is required',
               })}
+              defaultValue={sessionDetails ? membershipInput.address : user.address}
               placeholder="Address"
             />
             <small className="text-danger">{errors.address && errors.address.message}</small>
@@ -199,6 +262,7 @@ return(
               ref={register({
                 required: 'City/State is required',
               })}
+              defaultValue={sessionDetails ? membershipInput.city : user.city}
               placeholder="City/State"
             />
             <small className="text-danger">{errors.city && errors.city.message}</small>
@@ -206,9 +270,10 @@ return(
 
             <div className="divEmail" style={{ marginTop: "15px" }} className="w-100">
               <input
-              name="promocodde"
+              name="promocode"
               className="form-control"
               placeholder="Promo Code"
+              defaultValue={sessionDetails ? membershipInput.promocode : ""}
             />
             <small className="text-danger">{errors.promocodde && errors.promocodde.message}</small>
             </div>
@@ -218,12 +283,13 @@ return(
                 Continue to Payment
               </button>
             </div>
+
     </form>
      </Col>
 )
 }
 
-function Group(){
+function Group({token, user, membershipInput, sessionDetails}){
 
 const [indexes, setIndexes] = useState([]);
 const [counter, setCounter] = useState(0);
@@ -232,8 +298,8 @@ const { handleSubmit, register, errors, watch } = useForm();
 
 
 const handleAddMember = () => {
-    setIndexes(prevIndexes => [...prevIndexes, counter]);
-    setCounter(prevCounter => prevCounter + 1);
+      setIndexes(prevIndexes => [...prevIndexes, counter]);
+      setCounter(prevCounter => prevCounter + 1);
   };
 
   const removeFriend = index => () => {
@@ -246,14 +312,32 @@ const handleAddMember = () => {
   };
 
 const onSubmit = (values) => {
-	if(values.year == 1 ){
-    console.log(values)
-    console.log("membershipType is 3")
+	if(!token){
+    Router.push('/login');
+    sessionStorage.setItem("membership", JSON.stringify(values))
   }else{
-    console.log(values)
-    console.log("membershipType is 4")
+    if(values.plan == 3 && Object.keys(errors).length === 0 ){
+      axios.post(`${apiUrl}/memberships/`, {owner: values.id, membership_type: values.plan, members: values.token}, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        }
+      }).then(res=>{
+        console.log(res)
+      })
+    }else if(values.plan == 4 && Object.keys(errors).length === 0){
+      axios.post(`${apiUrl}/memberships/`, {owner: values.id, membership_type: values.plan}, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      }).then(res=>{
+        console.log(res)
+      })
+    }
   }
 }
+
 
 
 return(
@@ -263,9 +347,9 @@ return(
               <div style={{border: "1px solid black", padding: "15px 10px"}}> 
               <h2>Primary Member</h2>
               <div style={{ marginTop: "15px" }} className="w-100">
-              <Form.Control as="select" name="year" custom ref={register}>
-			          <option value="1">1 Year Group Plan</option>
-                <option value="2">2 Years Group Plan</option>
+              <Form.Control as="select" name="plan" custom ref={register}>
+			          <option value="3">1 Year Group Plan</option>
+                <option value="4">2 Years Group Plan</option>
 			        </Form.Control>
 			  </div>
 			
@@ -278,6 +362,8 @@ return(
                 required: 'First name is required',
               })}
               placeholder="First Name"
+              defaultValue={sessionDetails ? membershipInput.firstname : user.first_name}
+
             />
             <small className="text-danger">{errors.firstname && errors.firstname.message}</small>
             </div>
@@ -291,6 +377,8 @@ return(
                 required: 'Last name is required',
               })}
               placeholder="Last Name"
+              defaultValue={sessionDetails ? membershipInput.lastname : user.last_name}
+
             />
             <small className="text-danger">{errors.lastname && errors.lastname.message}</small>
             </div>
@@ -308,6 +396,8 @@ return(
                 }
               })}
               placeholder="Email"
+              defaultValue={sessionDetails ? membershipInput.email : user.email}
+
             />
             <small className="text-danger">{errors.email && errors.email.message}</small>
             </div>
@@ -322,6 +412,7 @@ return(
                 required: 'Mobile number is required',
               })}
               placeholder="Mobile Number"
+              defaultValue={sessionDetails ? membershipInput.mobilenumber : user.mobile_number}
             />
             <small className="text-danger">{errors.mobilenumber && errors.mobilenumber.message}</small>
             </div>
@@ -334,6 +425,8 @@ return(
                 required: 'Landline number is required',
               })}
               placeholder="Landline Number"
+              defaultValue={token ? user.landline_number : ""}
+              defaultValue={sessionDetails ? membershipInput.landlinenumber : user.landline_number}
             />
             <small className="text-danger">{errors.landlinenumber && errors.landlinenumber.message}</small>
             </div>
@@ -347,6 +440,8 @@ return(
                 required: 'Address is required',
               })}
               placeholder="Address"
+              defaultValue={sessionDetails ? membershipInput.address : user.address}
+
             />
             <small className="text-danger">{errors.address && errors.address.message}</small>
             </div>
@@ -359,6 +454,8 @@ return(
                 required: 'City/State is required',
               })}
               placeholder="City/State"
+              defaultValue={sessionDetails ? membershipInput.city : user.city}
+
             />
             <small className="text-danger">{errors.city && errors.city.message}</small>
             </div>
@@ -366,12 +463,14 @@ return(
 
             <div className="divEmail" style={{ marginTop: "15px" }} className="w-100">
               <input
-              name="promocodde"
+              name="promocode"
               className="form-control"
               placeholder="Promo Code"
               ref={register()}
+              defaultValue={sessionDetails ? membershipInput.promocode : ""}
+
             />
-            <small className="text-danger">{errors.promocodde && errors.promocodde.message}</small>
+            <small className="text-danger">{errors.promocode && errors.promocode.message}</small>
             </div>
            </div>
            <AddMember 

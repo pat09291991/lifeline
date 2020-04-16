@@ -92,26 +92,10 @@ function ProfileDetailsChecker(props) {
 }
 
 const Home = () => {
-const [modalShow, setModalShow] = React.useState(false);
 
-  useEffect(()=>{
-  const token = cookie.get("token");
-  if(token){
-    const accessToken = JSON.parse(token);
-    const payload = jwt(accessToken.access);
-    if(!payload.address){
-    setModalShow(true);
-  } 
-  }
-
-
-}, [])
   return(
   <Default>
-  <ProfileDetailsChecker
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
+  
     <Jumbotron className="vh-100 text-center d-flex align-items-center justify-content-center" style={jumboStyle}>
       <div>
         <h1 className="jumbo-title"> Emergency Quick Response</h1>

@@ -264,10 +264,11 @@ console.log(payments);
                               </Modal.Title>
                             </Modal.Header>
                             <Modal.Body className="mt-0">
+                              <p className="font-weight-bolder mt-3 mb-1">PAYMENT</p>
                               
                               <Row>
                                 <Col lg={6} md={6} sm={8} xs={8} className="text-left">
-                                  <p className="pModalBody">Payment Type:</p>
+                                  <p className="pModalBody">Paid for:</p>
                                 </Col>
                                 <Col lg={6} md={6} sm={4} xs={4} className="text-left">
                                   <p className="pModalBody text-capitalize">{payment.content_type_name}</p>
@@ -295,7 +296,7 @@ console.log(payments);
                               </Row>
 
 
-                              <p className="font-weight-bolder mt-3 mb-1">PAYMENT</p>
+                              <p className="font-weight-bolder mt-3 mb-1">DETAILS</p>
 
                               <Row>
                                 <Col lg={6} md={6} sm={8} xs={8} className="text-left">

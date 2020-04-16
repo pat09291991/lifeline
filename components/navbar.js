@@ -19,6 +19,7 @@ const DashboardNavbar = () => {
     setIsLogged(false)
     Router.push("/")
     cookie.remove("token")
+    cookie.remove("plan")
   }
 const [modalShow, setModalShow] = React.useState(true);
 

@@ -15,12 +15,14 @@ import { statusColor } from '../../utils/layout'
 import Moment from 'react-moment';
 import cookie from 'js-cookie'
 import Router from 'next/router'
+import { withAuthSync } from '../../utils/auth'
 
 
 const Bookings = () => {
 
   const [modalShow, setModalShow] = useState(false);
   const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
   const [id, setId] = useState(null);
 
   useEffect(()=>{
@@ -37,87 +39,190 @@ const Bookings = () => {
               }
             }).then(res=>{
               setBookings(res.data);
+              setFilteredBookings(res.data);
             })
         }
       
     }, [])
 
 
+    const [paidFilter, setPaidFilter] = useState(true);
+    const [pendingFilter, setPendingFilter] = useState(true);
+    const [failedFilter, setFailedFilter] = useState(true);
 
-    // const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Paid' },
-    // { 'name': 'Eskye Custodio', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Failed' },
-    // { 'name': 'Leo Sanico', 'items': 'Booking - Book A Nurse', 'date': 'March 18, 2019', status: 'Pending' },
-    // { 'name': 'Nathan Nakar', 'items': 'Booking - Doctor on Call', 'date': 'December 24, 2019', status: 'Pending' }]
+    const btnFilterPaid = () =>{
+       if(paidFilter){
+        setPaidFilter(false);
+      //   $('table tr td:nth-child(4)').each(function () {
+      //   $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
+      // });
+        const _bookings = bookings.filter(booking=>{
+          if(booking.status != "Paid")
+          return booking;
+        })
+       setFilteredBookings([..._bookings]);
+      }else{
+       setPaidFilter(true);
+      //  $('table tr td:nth-child(4)').each(function () {
+      //   $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
+      // });
+        const _bookings = bookings.map(booking=>{
+          if(booking.status == "Paid")
+          return booking;
+        })
+       setFilteredBookings([..._bookings]);
+      }
+    }
 
-    var filterState = 1;
-   function btnFilterPaid() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnPaid').css('backgroundColor', '#3b3b66');
-      $('.btnPaid').css('color', 'white');
-      $('.btnPaid').css('border', '2px solid white');
-      $('.btnPaid').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnPaid').css('backgroundColor', 'white');
-      $('.btnPaid').css('color', '#3b3b66');
-      $('.btnPaid').css('border', '2px solid #3b3b66');
-      $('.btnPaid').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
+    const btnFilterPending = () => {
+      if(pendingFilter){
+        setPendingFilter(false);
+        
+       const _bookings = bookings.filter(booking=>{
+          if(booking.status != "Pending")
+          return booking;
+        })
+       setFilteredBookings([..._bookings]);
 
-  function btnFilterPending() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnPending').css('backgroundColor', '#3b3b66');
-      $('.btnPending').css('color', 'white');
-      $('.btnPending').css('border', '2px solid white');
-      $('.btnPending').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnPending').css('backgroundColor', 'white');
-      $('.btnPending').css('color', '#3b3b66');
-      $('.btnPending').css('border', '2px solid #3b3b66');
-      $('.btnPending').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
+      }else{
+        setPendingFilter(true);
+        if(paidFilter && failedFilter){
 
-  function btnFilterFailed() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
+         setFilteredBookings(bookings);
+        }else if(!paidFilter && failedFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Paid")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(paidFilter && !failedFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Failed")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(!paidFilter && !failedFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Paid")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }
+      }
+    }
+
+    const btnFilterFailed = () => {
+      if(failedFilter){
+        setFailedFilter(false);
+        $('table tr td:nth-child(4)').each(function () {
         $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
       });
-      $('.btnFailed').css('backgroundColor', '#3b3b66');
-      $('.btnFailed').css('color', 'white');
-      $('.btnFailed').css('border', '2px solid white');
-      $('.btnFailed').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
+       // const _bookings = bookings.filter(booking=>{
+       //    if(booking.status != "Pending")
+       //    return booking;
+       //  })
+       // setFilteredBookings([..._bookings]);
+
+      }else{
+        setFailedFilter(true);
+        $('table tr td:nth-child(4)').each(function () {
         $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
       });
-      $('.btnFailed').css('backgroundColor', 'white');
-      $('.btnFailed').css('color', '#3b3b66');
-      $('.btnFailed').css('border', '2px solid #3b3b66');
-      $('.btnFailed').css('color', '#3b3b66');
-      filterState = 1;
+       //  const _bookings = bookings.filter(booking=>{
+       //    if(booking.status == "Pending")
+       //    return booking;
+       //  })
+       // setFilteredBookings([..._bookings]);
     }
-  }
+    }
+
+    const paidStyle={
+      color: paidFilter ? "white" : "#3b3b66",
+      border: paidFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: paidFilter ? '#3b3b66' : 'white'
+    }
+
+    const pendingStyle={
+      color: pendingFilter ? "white" : "#3b3b66",
+      border: pendingFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: pendingFilter ? '#3b3b66' : 'white'
+    }
+
+    const failedStyle={
+      color: failedFilter ? "white" : "#3b3b66",
+      border: failedFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: failedFilter ? '#3b3b66' : 'white'
+    }
+
+  //   var filterState = 1;
+  //  function btnFilterPaid() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnPaid').css('backgroundColor', '#3b3b66');
+  //     $('.btnPaid').css('color', 'white');
+  //     $('.btnPaid').css('border', '2px solid white');
+  //     $('.btnPaid').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnPaid').css('backgroundColor', 'white');
+  //     $('.btnPaid').css('color', '#3b3b66');
+  //     $('.btnPaid').css('border', '2px solid #3b3b66');
+  //     $('.btnPaid').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
+  // }
+
+  // function btnFilterPending() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnPending').css('backgroundColor', '#3b3b66');
+  //     $('.btnPending').css('color', 'white');
+  //     $('.btnPending').css('border', '2px solid white');
+  //     $('.btnPending').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnPending').css('backgroundColor', 'white');
+  //     $('.btnPending').css('color', '#3b3b66');
+  //     $('.btnPending').css('border', '2px solid #3b3b66');
+  //     $('.btnPending').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
+  // }
+
+  // function btnFilterFailed() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnFailed').css('backgroundColor', '#3b3b66');
+  //     $('.btnFailed').css('color', 'white');
+  //     $('.btnFailed').css('border', '2px solid white');
+  //     $('.btnFailed').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnFailed').css('backgroundColor', 'white');
+  //     $('.btnFailed').css('color', '#3b3b66');
+  //     $('.btnFailed').css('border', '2px solid #3b3b66');
+  //     $('.btnFailed').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
+  // }
 
   const handleOpenBookingDetails = (e) => {
     setModalShow(true);
@@ -187,12 +292,8 @@ const Bookings = () => {
                                 style={{ width: "15px" }}
                             ></img>
                         </button>
-                        <button className="btnTagList btnPaid" onClick = {btnFilterPaid}>
-                            Paid
-            <img
-                                src="../Image/close.png"
-                                style={{ width: "10px", marginLeft: "10px" }}
-                            ></img>
+                        <button className="btnTagList btnPaid" style={paidStyle} onClick = {btnFilterPaid}>
+                            Paid {paidFilter ? " X " : " O "}
                         </button>
                         <button className="btnTagList btnFailed" onClick = {btnFilterFailed}>
                             Failed
@@ -201,12 +302,8 @@ const Bookings = () => {
                                 style={{ width: "10px", marginLeft: "10px" }}
                             ></img>
                         </button>
-                        <button className="btnTagList btnPending" onClick = {btnFilterPending}>
-                            Pending
-            <img
-                                src="../Image/close.png"
-                                style={{ width: "10px", marginLeft: "10px" }}
-                            ></img>
+                        <button className="btnTagList btnPending" onClick = {btnFilterPending} style={pendingStyle}>
+                            Pending {pendingFilter ? " X " : " O "}
                         </button>
                     </Col>
                 </Row>
@@ -222,7 +319,7 @@ const Bookings = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {bookings.map((booking, index) => {
+                                {filteredBookings.map((booking, index) => {
                                     return (
                                         <tr key={booking.id} onClick={()=>handleOpenBookingDetails(booking.id)}>
                                             <td data-column="Full Name">{booking.first_name != "" ? booking.first_name : "N/A"} {booking.last_name != "" ? booking.last_name : "N/A"}</td>
@@ -350,10 +447,10 @@ const Bookings = () => {
             </Modal>
             <Bottom></Bottom>
             <style jsx>{`
-                  @media only screen and (max-width: 420px){
-                      .modal-dialog{
-                      max-width: 100% !important; 
-                    }
+                  @media only screen and (max-width:767px){
+                      .btnTag{
+                        padding: 2px 5px !important;
+                      }
                   }
                 `}</style>
         </Fragment>
@@ -361,4 +458,4 @@ const Bookings = () => {
 };
 
 
-export default Bookings;
+export default withAuthSync(Bookings);

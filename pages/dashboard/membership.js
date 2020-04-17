@@ -13,6 +13,7 @@ import apiUrl from '../../api'
 import Moment from 'react-moment';
 
 import cookie from 'js-cookie'
+import { withAuthSync } from '../../utils/auth'
 
 const membership = () => {
   const [show, setShow] = useState(false);
@@ -346,4 +347,4 @@ const handleOpenDetails = (id) =>{
 };
 
 
-export default membership;
+export default withAuthSync(membership);

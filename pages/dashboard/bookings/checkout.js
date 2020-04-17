@@ -15,6 +15,7 @@ import jwt from 'jwt-decode';
 import Router from 'next/router'
 
 import Navbar from "../../../components/navbar";
+import { withAuthSync } from '../../../utils/auth'
 
 
 const Checkout = () => {
@@ -259,10 +260,6 @@ const handleInputChange = (e) => {
 
 
 const onSubmit = (value) => {
-		// console.log(value);
-		// console.log(startDate);
-		// console.log(totalPrice);
-		// console.log(selected);
 
 		if(Object.keys(errors).length === 0){
 			setBookingInfo({first_name: value.first_name, last_name: value.last_name, address: value.address, email: value.email, booking_datetime: startDate, services: [...selected], phone_number: value.phone_number, user: userId})
@@ -319,7 +316,6 @@ const handleBook = () => {
 		})
 	}
 }
-console.log(payment);
 
 	return(
 		<Fragment>
@@ -581,7 +577,8 @@ console.log(payment);
                     </Row>
 
                 </div>
-                <Modal show={show} onHide={handleClose}>
+                <Modal 
+                show={show} onHide={handleClose}>
 	        <Modal.Header closeButton>
 	          <Modal.Title>Booking Confirmation</Modal.Title>
 	        </Modal.Header>
@@ -612,5 +609,5 @@ console.log(payment);
 }
 
 
-export default Checkout;
+export default withAuthSync(Checkout);
 

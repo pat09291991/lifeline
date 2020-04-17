@@ -12,6 +12,7 @@ import apiUrl from '../../api'
 import Moment from 'react-moment';
 import Link from "next/link";
 import cookie from 'js-cookie'
+import { withAuthSync } from '../../utils/auth'
 
 
 const payments = () => {
@@ -432,4 +433,4 @@ console.log(payments);
 };
 
 
-export default payments;
+export default withAuthSync(payments);

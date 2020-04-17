@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import axios from 'axios'
 
 import apiUrl from '../../api'
+import { withAuthSync } from '../../utils/auth'
 
 
 
@@ -49,8 +50,6 @@ useEffect(()=>{
   }
 
 }, [])
-console.log(loggedUser)
-console.log(token)
 
 const handleOpenEdit = () => {
     setModalShow(true);
@@ -234,6 +233,7 @@ const handleOpenEdit = () => {
                     loggedUser={loggedUser}
                     setModalShow={setModalShow}
                     token={token}
+                    setLoggedUser={setLoggedUser}
          />
          </Fragment>
     )
@@ -244,7 +244,7 @@ const handleOpenEdit = () => {
 
 
 
-function ProfileUpdate({loggedUser, modalShow, setModalShow, token }) {
+function ProfileUpdate({loggedUser, modalShow, setModalShow, token, setLoggedUser }) {
 
 const [updateUser, setUpdateUser] = useState({
         first_name: "",
@@ -276,11 +276,11 @@ const [show, setShow] = useState(false);
 const handleClose = () => setShow(false);
 
 const onSubmit = (values) => {
-    console.log(updateUser)
     if(Object.keys(errors).length === 0){
-        //console.log(Object.keys(errors).length === 0)
         setShow(true)
         setUpdateUser({
+        username: loggedUser.email,
+        id: loggedUser.id,
         first_name: values.firstname,
         last_name: values.lastname,
         email: values.email,
@@ -297,13 +297,16 @@ const onSubmit = (values) => {
 
 const handleSaveUpdate = () => {
         console.log(updateUser)
-        axios.post(`${apiUrl}/accounts/${loggedUser.id}`, JSON.stringify(updateUser), {
+        axios.put(`${apiUrl}/accounts/${loggedUser.id}`, JSON.stringify(updateUser), {
             headers: {
+                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token
             }
         })
     .then(res=>{
-        console.log(res);
+        setLoggedUser(res.data);
+        setShow(false)
+        setModalShow(false)
     })
 }
 
@@ -374,7 +377,7 @@ const handleSaveUpdate = () => {
                   <input
                     name="mobilenumber"
                     className="form-control mt-2"
-                    maxLength="11"
+                    maxLength="13"
                     ref={register({
                       required: 'Required'
                     })}
@@ -387,7 +390,7 @@ const handleSaveUpdate = () => {
                   <input
                     name="landlinenumber"
                     className="form-control mt-2"
-                    maxLength="11"
+                    maxLength="20"
                     ref={register({
                       required: 'Required'
                     })}
@@ -477,4 +480,4 @@ const handleSaveUpdate = () => {
   );
 }
 
-export default profile;
+export default withAuthSync(profile);

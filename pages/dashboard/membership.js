@@ -23,99 +23,271 @@ const membership = () => {
 const [id, setId] = useState(null);
 
 const [memberships, setMemberships] = useState([])
+const [filteredMemberships, setFilteredMemberships] = useState([])
 
 useEffect(()=>{
   const token = cookie.get("token")
   axios.get(`${apiUrl}/memberships`)
     .then(response=>{
       setMemberships(response.data);
+      setFilteredMemberships(response.data)
     })
 }, [])
 
-  
+    const [paidFilter, setPaidFilter] = useState(true);
+    const [pendingFilter, setPendingFilter] = useState(true);
+    const [failedFilter, setFailedFilter] = useState(true);
 
-  // function loadwindows() {
-  //   const element = document.querySelector('#load')
-  //   element.classList.add('animated', 'fadeOut')
-  //   $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
-  //   var rowCount = $('#myTable tr').length;
-  //   rowCount = rowCount - 1;
-  //   $('.pNumber').html(rowCount + " " + "entries");
+
+    const paidStyle={
+      color: paidFilter ? "white" : "#3b3b66",
+      border: paidFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: paidFilter ? '#3b3b66' : 'white'
+    }
+
+    const pendingStyle={
+      color: pendingFilter ? "white" : "#3b3b66",
+      border: pendingFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: pendingFilter ? '#3b3b66' : 'white'
+    }
+
+    const failedStyle={
+      color: failedFilter ? "white" : "#3b3b66",
+      border: failedFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: failedFilter ? '#3b3b66' : 'white'
+    }
+
+  const btnFilterPaid = () =>{
+       if(paidFilter){
+        setPaidFilter(false);
+        if(pendingFilter && failedFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "Active")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+
+        }else if(!pendingFilter && failedFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "Failed")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(pendingFilter && !failedFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "No payments made")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(!pendingFilter && !failedFilter){
+            setFilteredMemberships([])
+        }
+      }else{
+       setPaidFilter(true);
+      //  $('table tr td:nth-child(4)').each(function () {
+      //   $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
+      // });
+        if(pendingFilter && failedFilter){
+         setFilteredMemberships(memberships);
+        }else if(!pendingFilter && failedFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "No payments made")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(pendingFilter && !failedFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "Failed")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(!pendingFilter && !failedFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "Active")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }
+      }
+    }
+
+    const btnFilterPending = () => {
+      if(pendingFilter){
+        setPendingFilter(false);
+        
+       if(paidFilter && failedFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "No payments made")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+
+        }else if(!paidFilter && failedFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "Failed")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(paidFilter && !failedFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "Active")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(!paidFilter && !failedFilter){
+            setFilteredMemberships([])
+        }
+
+      }else{
+        setPendingFilter(true);
+        if(paidFilter && failedFilter){
+
+         setFilteredMemberships(memberships);
+        }else if(!paidFilter && failedFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "Active")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(paidFilter && !failedFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "Failed")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(!paidFilter && !failedFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "No payments made")
+              console.log(membership);
+            return membership;
+
+          })
+          setFilteredMemberships([..._memberships]);
+        }
+      }
+    }
+
+    const btnFilterFailed = () => {
+      if(failedFilter){
+        setFailedFilter(false);
+      
+        if(paidFilter && pendingFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "Failed")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(!paidFilter && pendingFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "No payments made")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(paidFilter && !pendingFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "Active")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(!paidFilter && !pendingFilter){
+            setFilteredMemberships([])
+        }
+
+      }else{
+        setFailedFilter(true);
+
+        if(paidFilter && pendingFilter){
+         setFilteredMemberships(memberships);
+        }else if(!paidFilter && pendingFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "Active")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(paidFilter && !pendingFilter){
+            const _memberships = memberships.filter(membership=>{
+            if(membership.membership_status != "No payments made")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }else if(!paidFilter && !pendingFilter){
+            const _memberships = memberships.map(membership=>{
+            if(membership.membership_status == "Failed")
+            return membership;
+          })
+          setFilteredMemberships([..._memberships]);
+        }
+    }
+    }
+  // var filterState = 1;
+  // function btnFilterPaid() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnPaid').css('backgroundColor', '#3b3b66');
+  //     $('.btnPaid').css('color', 'white');
+  //     $('.btnPaid').css('border', '2px solid white');
+  //     $('.btnPaid').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnPaid').css('backgroundColor', 'white');
+  //     $('.btnPaid').css('color', '#3b3b66');
+  //     $('.btnPaid').css('border', '2px solid #3b3b66');
+  //     $('.btnPaid').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
   // }
 
-  // const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Membership - Group Plan 2 Years', 'date': 'June 12, 2019', status: 'Paid' },
-  // { 'name': 'Eskye Custodio', 'items': 'Membership - Group Plan 1 Year', 'date': 'March 22, 2019', status: 'Failed' },
-  // { 'name': 'Leo Sanico', 'items': 'Membership - Individual Plan 1 Year', 'date': 'December 20, 2020', status: 'Pending' }]
+  // function btnFilterPending() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnPending').css('backgroundColor', '#3b3b66');
+  //     $('.btnPending').css('color', 'white');
+  //     $('.btnPending').css('border', '2px solid white');
+  //     $('.btnPending').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnPending').css('backgroundColor', 'white');
+  //     $('.btnPending').css('color', '#3b3b66');
+  //     $('.btnPending').css('border', '2px solid #3b3b66');
+  //     $('.btnPending').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
+  // }
 
-  var filterState = 1;
-  function btnFilterPaid() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnPaid').css('backgroundColor', '#3b3b66');
-      $('.btnPaid').css('color', 'white');
-      $('.btnPaid').css('border', '2px solid white');
-      $('.btnPaid').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnPaid').css('backgroundColor', 'white');
-      $('.btnPaid').css('color', '#3b3b66');
-      $('.btnPaid').css('border', '2px solid #3b3b66');
-      $('.btnPaid').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
-
-  function btnFilterPending() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnPending').css('backgroundColor', '#3b3b66');
-      $('.btnPending').css('color', 'white');
-      $('.btnPending').css('border', '2px solid white');
-      $('.btnPending').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnPending').css('backgroundColor', 'white');
-      $('.btnPending').css('color', '#3b3b66');
-      $('.btnPending').css('border', '2px solid #3b3b66');
-      $('.btnPending').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
-
-  function btnFilterFailed() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnFailed').css('backgroundColor', '#3b3b66');
-      $('.btnFailed').css('color', 'white');
-      $('.btnFailed').css('border', '2px solid white');
-      $('.btnFailed').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnFailed').css('backgroundColor', 'white');
-      $('.btnFailed').css('color', '#3b3b66');
-      $('.btnFailed').css('border', '2px solid #3b3b66');
-      $('.btnFailed').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
+  // function btnFilterFailed() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnFailed').css('backgroundColor', '#3b3b66');
+  //     $('.btnFailed').css('color', 'white');
+  //     $('.btnFailed').css('border', '2px solid white');
+  //     $('.btnFailed').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnFailed').css('backgroundColor', 'white');
+  //     $('.btnFailed').css('color', '#3b3b66');
+  //     $('.btnFailed').css('border', '2px solid #3b3b66');
+  //     $('.btnFailed').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
+  // }
 
 const handleOpenDetails = (id) =>{
   setModalShow(true);
@@ -134,22 +306,22 @@ const handleOpenDetails = (id) =>{
           rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         />
         <script
           src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
           integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <script
           src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
           integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <script
           src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
           integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <link rel="stylesheet" type="text/css" href="../Css/dashboard.css" />
 
@@ -173,7 +345,7 @@ const handleOpenDetails = (id) =>{
         <Row style={{ paddingTop: "100px" }}>
           <Col lg={6} md={6}>
             <p className="pNav pNav1">
-              Membership<span className="pNumber">{memberships.length} entries</span>
+              Membership<span className="pNumber">{filteredMemberships[0] == undefined ? 0 : filteredMemberships.length} entries</span>
             </p>
           </Col>
           <Col lg={6} md={6}>
@@ -189,17 +361,14 @@ const handleOpenDetails = (id) =>{
                 style={{ width: "15px" }}
               ></img>
             </button>
-            <button className="btnTagList btnPaid" onClick={btnFilterPaid}>
-              Paid
-            <span className="span" style={{ marginLeft: "10px" }}>&#x2715;</span>
+            <button className="btnTagList btnPaid" style={paidStyle} onClick = {btnFilterPaid}>
+                Paid {paidFilter ? " X " : " O "}
             </button>
-            <button className="btnTagList btnFailed" onClick={btnFilterFailed}>
-              Failed
-              <span style={{ marginLeft: "10px" }}>&#x2715;</span>
+            <button className="btnTagList btnFailed" onClick = {btnFilterFailed} style={failedStyle}>
+                Failed {failedFilter ? " X " : " O "}
             </button>
-            <button className="btnTagList btnPending" onClick={btnFilterPending}>
-              Pending
-              <span style={{ marginLeft: "10px" }}>&#x2715;</span>
+            <button className="btnTagList btnPending" onClick = {btnFilterPending} style={pendingStyle}>
+                Pending {pendingFilter ? " X " : " O "}
             </button>
           </Col>
         </Row>
@@ -214,15 +383,19 @@ const handleOpenDetails = (id) =>{
                 </tr>
               </thead>
               <tbody>
-                {memberships.map((membership, index) => {
+                {filteredMemberships.map((membership, index) => {
                   return (
+                    <Fragment>
+                    {membership != undefined ?
                     <tr key={index} onClick={()=>handleOpenDetails(membership.id)}>
                       <td data-column="Items">{membership.membership_type__name}</td>
                       <td data-column="Date">{membership.expire_at ? <Moment format="LL">{membership.expire_at}</Moment> : "N/A"}</td>
-                      <td data-column="Status" className={statusColor(membership.membership_status)}>
+                      <td data-column="Status" className={statusColor(membership.membership_status == "Active" ? "Paid" : "Pending")}>
                         {membership.membership_status == "Active" ? "Paid" : "Pending"}
                       </td>
                     </tr>
+                    : ""}
+                    </Fragment>
                   );
                 })}
               </tbody>

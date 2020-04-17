@@ -18,6 +18,7 @@ import { withAuthSync } from '../../utils/auth'
 const payments = () => {
 
 const [payments, setPayments] = useState([]);
+const [filteredPayments, setFilteredPayments] = useState([]);
 const [services, setServices] = useState([])
 const [modalShow, setModalShow] = useState(false);
 const [show, setShow] = useState(false);
@@ -37,6 +38,7 @@ useEffect(()=>{
               }
             }).then(res=>{
               setPayments(res.data);
+              setFilteredPayments(res.data);
             })
         }
 
@@ -46,11 +48,194 @@ useEffect(()=>{
     })
 }, [])
 
+const [paidFilter, setPaidFilter] = useState(true);
+    const [pendingFilter, setPendingFilter] = useState(true);
+    const [failedFilter, setFailedFilter] = useState(true);
 
-    // const memberships = [{ 'name': 'Alfon Labadan', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Paid' },
-    // { 'name': 'Eskye Custodio', 'items': 'Booking - Doctor on Call', 'date': 'June 12, 2019', status: 'Failed' },
-    // { 'name': 'Leo Sanico', 'items': 'Booking - Book A Nurse', 'date': 'March 18, 2019', status: 'Pending' },
-    // { 'name': 'Nathan Nakar', 'items': 'Booking - Doctor on Call', 'date': 'December 24, 2019', status: 'Pending' }]
+    const btnFilterPaid = () =>{
+       if(paidFilter){
+        setPaidFilter(false);
+        if(pendingFilter && failedFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Paid")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+
+        }else if(!pendingFilter && failedFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Failed")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(pendingFilter && !failedFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Pending")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(!pendingFilter && !failedFilter){
+            setFilteredPayments([])
+        }
+      }else{
+       setPaidFilter(true);
+      //  $('table tr td:nth-child(4)').each(function () {
+      //   $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
+      // });
+        if(pendingFilter && failedFilter){
+         setFilteredPayments(payments);
+        }else if(!pendingFilter && failedFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Pending")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(pendingFilter && !failedFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Failed")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(!pendingFilter && !failedFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Paid")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }
+      }
+    }
+
+    const btnFilterPending = () => {
+      if(pendingFilter){
+        setPendingFilter(false);
+        
+       if(paidFilter && failedFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Pending")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+
+        }else if(!paidFilter && failedFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Failed")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(paidFilter && !failedFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Paid")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(!paidFilter && !failedFilter){
+            setFilteredPayments([])
+        }
+
+      }else{
+        setPendingFilter(true);
+        if(paidFilter && failedFilter){
+
+         setFilteredPayments(payments);
+        }else if(!paidFilter && failedFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Paid")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(paidFilter && !failedFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Failed")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(!paidFilter && !failedFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Pending")
+              console.log(payment);
+            return payment;
+
+          })
+          setFilteredPayments([..._payments]);
+        }
+      }
+    }
+
+    const btnFilterFailed = () => {
+      if(failedFilter){
+        setFailedFilter(false);
+      
+        if(paidFilter && pendingFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Failed")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(!paidFilter && pendingFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Pending")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(paidFilter && !pendingFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Paid")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(!paidFilter && !pendingFilter){
+            setFilteredPayments([])
+        }
+
+      }else{
+        setFailedFilter(true);
+
+        if(paidFilter && pendingFilter){
+         setFilteredPayments(payments);
+        }else if(!paidFilter && pendingFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Paid")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(paidFilter && !pendingFilter){
+            const _payments = payments.filter(payment=>{
+            if(payment.status != "Pending")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }else if(!paidFilter && !pendingFilter){
+            const _payments = payments.map(payment=>{
+            if(payment.status == "Failed")
+            return payment;
+          })
+          setFilteredPayments([..._payments]);
+        }
+    }
+    }
+
+    const paidStyle={
+      color: paidFilter ? "white" : "#3b3b66",
+      border: paidFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: paidFilter ? '#3b3b66' : 'white'
+    }
+
+    const pendingStyle={
+      color: pendingFilter ? "white" : "#3b3b66",
+      border: pendingFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: pendingFilter ? '#3b3b66' : 'white'
+    }
+
+    const failedStyle={
+      color: failedFilter ? "white" : "#3b3b66",
+      border: failedFilter ? '2px solid white' : '2px solid #3b3b66',
+      backgroundColor: failedFilter ? '#3b3b66' : 'white'
+    }
+    // const memberships = [{ 'name': 'Alfon Labadan', 'items': 'payment - Doctor on Call', 'date': 'June 12, 2019', status: 'Paid' },
+    // { 'name': 'Eskye Custodio', 'items': 'payment - Doctor on Call', 'date': 'June 12, 2019', status: 'Failed' },
+    // { 'name': 'Leo Sanico', 'items': 'payment - Book A Nurse', 'date': 'March 18, 2019', status: 'Pending' },
+    // { 'name': 'Nathan Nakar', 'items': 'payment - Doctor on Call', 'date': 'December 24, 2019', status: 'Pending' }]
    
    // function loadwindows() {
    //  var rowCount = $('#myTable tr').length;
@@ -58,75 +243,75 @@ useEffect(()=>{
    //  $('.pNumber').html(rowCount + " " + "entries");
    // }
 
-   var filterState = 1;
-   function btnFilterPaid() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnPaid').css('backgroundColor', '#3b3b66');
-      $('.btnPaid').css('color', 'white');
-      $('.btnPaid').css('border', '2px solid white');
-      $('.btnPaid').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnPaid').css('backgroundColor', 'white');
-      $('.btnPaid').css('color', '#3b3b66');
-      $('.btnPaid').css('border', '2px solid #3b3b66');
-      $('.btnPaid').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
+  //  var filterState = 1;
+  //  function btnFilterPaid() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnPaid').css('backgroundColor', '#3b3b66');
+  //     $('.btnPaid').css('color', 'white');
+  //     $('.btnPaid').css('border', '2px solid white');
+  //     $('.btnPaid').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnPaid').css('backgroundColor', 'white');
+  //     $('.btnPaid').css('color', '#3b3b66');
+  //     $('.btnPaid').css('border', '2px solid #3b3b66');
+  //     $('.btnPaid').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
+  // }
 
-  function btnFilterPending() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnPending').css('backgroundColor', '#3b3b66');
-      $('.btnPending').css('color', 'white');
-      $('.btnPending').css('border', '2px solid white');
-      $('.btnPending').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnPending').css('backgroundColor', 'white');
-      $('.btnPending').css('color', '#3b3b66');
-      $('.btnPending').css('border', '2px solid #3b3b66');
-      $('.btnPending').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
+  // function btnFilterPending() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnPending').css('backgroundColor', '#3b3b66');
+  //     $('.btnPending').css('color', 'white');
+  //     $('.btnPending').css('border', '2px solid white');
+  //     $('.btnPending').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnPending').css('backgroundColor', 'white');
+  //     $('.btnPending').css('color', '#3b3b66');
+  //     $('.btnPending').css('border', '2px solid #3b3b66');
+  //     $('.btnPending').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
+  // }
 
-  function btnFilterFailed() {
-    if (filterState == 1) {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-      $('.btnFailed').css('backgroundColor', '#3b3b66');
-      $('.btnFailed').css('color', 'white');
-      $('.btnFailed').css('border', '2px solid white');
-      $('.btnFailed').css('color', 'white');
-      filterState = 0;
-    }
-    else {
-      $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
-      });
-      $('.btnFailed').css('backgroundColor', 'white');
-      $('.btnFailed').css('color', '#3b3b66');
-      $('.btnFailed').css('border', '2px solid #3b3b66');
-      $('.btnFailed').css('color', '#3b3b66');
-      filterState = 1;
-    }
-  }
+  // function btnFilterFailed() {
+  //   if (filterState == 1) {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
+  //     });
+  //     $('.btnFailed').css('backgroundColor', '#3b3b66');
+  //     $('.btnFailed').css('color', 'white');
+  //     $('.btnFailed').css('border', '2px solid white');
+  //     $('.btnFailed').css('color', 'white');
+  //     filterState = 0;
+  //   }
+  //   else {
+  //     $('table tr td:nth-child(4)').each(function () {
+  //       $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
+  //     });
+  //     $('.btnFailed').css('backgroundColor', 'white');
+  //     $('.btnFailed').css('color', '#3b3b66');
+  //     $('.btnFailed').css('border', '2px solid #3b3b66');
+  //     $('.btnFailed').css('color', '#3b3b66');
+  //     filterState = 1;
+  //   }
+  // }
 
 const handleOpenDetails = (id) =>{
   setShow(true);
@@ -182,12 +367,10 @@ console.log(payments);
                 <Row style={{ paddingTop: "100px" }}>
                     <Col lg={6}>
                         <p className="pNav pNav1">
-                          Payments<span className="pNumber">{payments.length} entries</span>
+                          Payments<span className="pNumber">{filteredPayments[0] == undefined ? 0 : filteredPayments.length} entries</span>
                         </p>
                     </Col>
-                    <Col lg={6}>
-                        <button className="float-right btnAdd mb-4">&#x2b;&nbsp;Add Payments</button>
-                    </Col>
+                    
                 </Row>
                 <Row style={{ marginTop: "-10px" }}>
                     <Col lg={12}>
@@ -198,26 +381,14 @@ console.log(payments);
                                 style={{ width: "15px" }}
                             ></img>
                         </button>
-                        <button className="btnTagList btnPaid" onClick = {btnFilterPaid}>
-                            Paid
-            <img
-                                src="../Image/close.png"
-                                style={{ width: "10px", marginLeft: "10px" }}
-                            ></img>
+                        <button className="btnTagList btnPaid" style={paidStyle} onClick = {btnFilterPaid}>
+                            Paid {paidFilter ? " X " : " O "}
                         </button>
-                        <button className="btnTagList btnFailed" onClick = {btnFilterFailed}>
-                            Failed
-            <img
-                                src="../Image/close.png"
-                                style={{ width: "10px", marginLeft: "10px" }}
-                            ></img>
+                        <button className="btnTagList btnFailed" onClick = {btnFilterFailed} style={failedStyle}>
+                            Failed {failedFilter ? " X " : " O "}
                         </button>
-                        <button className="btnTagList btnPending" onClick = {btnFilterPending}>
-                            Pending
-            <img
-                                src="../Image/close.png"
-                                style={{ width: "10px", marginLeft: "10px" }}
-                            ></img>
+                        <button className="btnTagList btnPending" onClick = {btnFilterPending} style={pendingStyle}>
+                            Pending {pendingFilter ? " X " : " O "}
                         </button>
                     </Col>
                 </Row>
@@ -234,8 +405,10 @@ console.log(payments);
                                 </tr>
                             </thead>
                             <tbody>
-                                {payments.map((payment, index) => {
+                                {filteredPayments.map((payment, index) => {
                                     return (
+                                      <Fragment>
+                                        {payment != undefined ?
                                         <tr key={index} onClick={()=>handleOpenDetails(payment.request_id)}>
                                             <td data-column="Full Name">
                                             {payment.first_name || payment.last_name ? <Fragment>{payment.first_name} {payment.last_name}</Fragment> : "N/A"}
@@ -246,6 +419,8 @@ console.log(payments);
                                             <td data-column="Date"><Moment format="LL">{payment.paid_at}</Moment></td>
                                             <td data-column="Status" className={statusColor(payment.status)}>{payment.status}</td>
                                         </tr>
+                                        : ""}
+                                      </Fragment>
                                     );
                                 })}
                             </tbody>
@@ -359,11 +534,11 @@ console.log(payments);
 
                                 <Row>
                                 <Col lg={6} md={6} sm={8} xs={8} className="text-left">
-                                  <p className="pModalBody mb-1">Booking Date:</p>
+                                  <p className="pModalBody mb-1">payment Date:</p>
                                 </Col>
                                 <Col lg={6} md={6} sm={4} xs={4} className="text-left">
                                   <p className="pModalBody mb-1">
-                                  <Moment format="LL">{payment.payment_object.booking_datetime}</Moment>
+                                  <Moment format="LL">{payment.payment_object.payment_datetime}</Moment>
                                   </p>
                                 </Col>
                               </Row>

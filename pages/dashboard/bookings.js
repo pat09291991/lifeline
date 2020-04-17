@@ -53,24 +53,54 @@ const Bookings = () => {
     const btnFilterPaid = () =>{
        if(paidFilter){
         setPaidFilter(false);
-      //   $('table tr td:nth-child(4)').each(function () {
-      //   $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
-      // });
-        const _bookings = bookings.filter(booking=>{
-          if(booking.status != "Paid")
-          return booking;
-        })
-       setFilteredBookings([..._bookings]);
+        if(pendingFilter && failedFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Paid")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+
+        }else if(!pendingFilter && failedFilter){
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Failed")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(pendingFilter && !failedFilter){
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Pending")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(!pendingFilter && !failedFilter){
+            setFilteredBookings([])
+        }
       }else{
        setPaidFilter(true);
       //  $('table tr td:nth-child(4)').each(function () {
       //   $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
       // });
-        const _bookings = bookings.map(booking=>{
-          if(booking.status == "Paid")
-          return booking;
-        })
-       setFilteredBookings([..._bookings]);
+        if(pendingFilter && failedFilter){
+         setFilteredBookings(bookings);
+        }else if(!pendingFilter && failedFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Pending")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(pendingFilter && !failedFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Failed")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(!pendingFilter && !failedFilter){
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Paid")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }
       }
     }
 
@@ -78,11 +108,28 @@ const Bookings = () => {
       if(pendingFilter){
         setPendingFilter(false);
         
-       const _bookings = bookings.filter(booking=>{
-          if(booking.status != "Pending")
-          return booking;
-        })
-       setFilteredBookings([..._bookings]);
+       if(paidFilter && failedFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Pending")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+
+        }else if(!paidFilter && failedFilter){
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Failed")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(paidFilter && !failedFilter){
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Paid")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(!paidFilter && !failedFilter){
+            setFilteredBookings([])
+        }
 
       }else{
         setPendingFilter(true);
@@ -102,9 +149,11 @@ const Bookings = () => {
           })
           setFilteredBookings([..._bookings]);
         }else if(!paidFilter && !failedFilter){
-            const _bookings = bookings.filter(booking=>{
-            if(booking.status != "Paid")
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Pending")
+              console.log(booking);
             return booking;
+
           })
           setFilteredBookings([..._bookings]);
         }
@@ -114,25 +163,53 @@ const Bookings = () => {
     const btnFilterFailed = () => {
       if(failedFilter){
         setFailedFilter(false);
-        $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
-      });
-       // const _bookings = bookings.filter(booking=>{
-       //    if(booking.status != "Pending")
-       //    return booking;
-       //  })
-       // setFilteredBookings([..._bookings]);
+      
+        if(paidFilter && pendingFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Failed")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(!paidFilter && pendingFilter){
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Pending")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(paidFilter && !pendingFilter){
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Paid")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(!paidFilter && !pendingFilter){
+            setFilteredBookings([])
+        }
 
       }else{
         setFailedFilter(true);
-        $('table tr td:nth-child(4)').each(function () {
-        $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
-      });
-       //  const _bookings = bookings.filter(booking=>{
-       //    if(booking.status == "Pending")
-       //    return booking;
-       //  })
-       // setFilteredBookings([..._bookings]);
+
+        if(paidFilter && pendingFilter){
+         setFilteredBookings(bookings);
+        }else if(!paidFilter && pendingFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Paid")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(paidFilter && !pendingFilter){
+            const _bookings = bookings.filter(booking=>{
+            if(booking.status != "Pending")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }else if(!paidFilter && !pendingFilter){
+            const _bookings = bookings.map(booking=>{
+            if(booking.status == "Failed")
+            return booking;
+          })
+          setFilteredBookings([..._bookings]);
+        }
     }
     }
 
@@ -276,7 +353,7 @@ const Bookings = () => {
                 <Row style={{ paddingTop: "100px" }}>
                     <Col lg={6} md={6}>
                         <p className="pNav">
-                            Bookings<span className="pNumber"><span>{bookings.length}</span> entries</span>
+                            Bookings<span className="pNumber"><span>{filteredBookings[0] == undefined ? 0 : filteredBookings.length}</span> entries</span>
                         </p>
                     </Col>
                     <Col lg={6} md={6}>
@@ -295,12 +372,8 @@ const Bookings = () => {
                         <button className="btnTagList btnPaid" style={paidStyle} onClick = {btnFilterPaid}>
                             Paid {paidFilter ? " X " : " O "}
                         </button>
-                        <button className="btnTagList btnFailed" onClick = {btnFilterFailed}>
-                            Failed
-            <img
-                                src="../Image/close.png"
-                                style={{ width: "10px", marginLeft: "10px" }}
-                            ></img>
+                        <button className="btnTagList btnFailed" onClick = {btnFilterFailed} style={failedStyle}>
+                            Failed {failedFilter ? " X " : " O "}
                         </button>
                         <button className="btnTagList btnPending" onClick = {btnFilterPending} style={pendingStyle}>
                             Pending {pendingFilter ? " X " : " O "}
@@ -319,9 +392,12 @@ const Bookings = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredBookings.map((booking, index) => {
+                                  <Fragment>
+                                    {filteredBookings.map((booking, index) => {
                                     return (
-                                        <tr key={booking.id} onClick={()=>handleOpenBookingDetails(booking.id)}>
+                                          <Fragment>
+                                            {booking != undefined ?
+                                            <tr key={booking.id} onClick={()=>handleOpenBookingDetails(booking.id)}>
                                             <td data-column="Full Name">{booking.first_name != "" ? booking.first_name : "N/A"} {booking.last_name != "" ? booking.last_name : "N/A"}</td>
                                             <td data-column="Items">{
                                                 booking.services_detail.map(service=>{
@@ -333,8 +409,11 @@ const Bookings = () => {
                                             <td data-column="Date"><Moment format="LL">{booking.booking_datetime}</Moment></td>
                                             <td data-column="Status" className={statusColor(booking.status)}>{booking.status}</td>
                                         </tr>
+                                        : ""}
+                                          </Fragment>
                                     );
                                 })}
+                                  </Fragment>
                             </tbody>
                         </table>
                     </Col>

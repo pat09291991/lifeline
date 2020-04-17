@@ -264,7 +264,7 @@ const onSubmit = (value) => {
 		if(Object.keys(errors).length === 0){
 			setBookingInfo({first_name: value.first_name, last_name: value.last_name, address: value.address, email: value.email, booking_datetime: startDate, services: [...selected], phone_number: value.phone_number, user: userId})
 			if(value.number){
-				setPayment({name: value.name, number: value.number, expiration_month: value.expiry.slice(2,7), expiration_year: value.expiry.slice(0,2), cvc: value.cvc})
+				setPayment({name: value.name, number: value.number, expiration_month: value.expiry.slice(0,2), expiration_year: value.expiry.slice(2,7), cvc: value.cvc})
 			}else{
 				console.log("Pay Later")
 			}
@@ -290,7 +290,8 @@ const handleBook = () => {
 				Authorization: 'Bearer ' + token
 		}
 		}).then(res=>{
-			console.log(res.data.id);
+			console.log(payment);
+			console.log(res.data.id)
 				if(selectedCC){
 						axios.post(`${apiUrl}/payments/pay_magpie/`, {name: payment.name, number: payment.number, expiration_month: payment.expiration_month, expiration_year: payment.expiration_year, cvc: payment.cvc, booking_id: res.data.id}, {
 					headers: {

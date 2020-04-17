@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, OverlayTrigger, Tooltip, Dropdown, Modal, Button } from "react-bootstrap";
 import Sidebar from "../components/sidebar";
@@ -15,17 +15,17 @@ const addmember = () => {
     const [middleName, setMiddleName] = useState('');
     const [age, setage] = useState('');
 
-    function loadwindows() {
-        const element = document.querySelector('#load')
-        element.classList.add('animated', 'fadeOut')
-        $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
-    }
+    // function loadwindows() {
+    //     const element = document.querySelector('#load')
+    //     element.classList.add('animated', 'fadeOut')
+    //     $('loader').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animation end', document.getElementById('load').setAttribute('style', 'display: none !important'));
+    // }
 
     function btnAddAllergen() {
         $('<div/>').addClass('new-text-div row')
             .html($('<input type="textbox"/>').addClass('txtAllergen'))
             .append($('<button/>').addClass('btnRemove').text('Remove'))
-            .insertBefore('#add');
+            .insertBehtmlFore('#add');
         const deletebutton = document.querySelector('.btnRemove');
         deletebutton.onclick = myFunctionDelete;
     }
@@ -38,33 +38,34 @@ const addmember = () => {
 
 
     return (
-        <div onLoad={loadwindows}>
+        <Fragment>
             <head>
-                <meta charset="utf-8" />
+                <meta charSet="utf-8" />
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
+                <script
+                    src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+                    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYhtmlForSJoZ+n"
+                    crossOrigin="anonymous"
+                ></script>
                 <link
                     rel="stylesheet"
                     href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
                     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-                    crossorigin="anonymous"
+                    crossOrigin="anonymous"
                 />
-                <script
-                    src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-                    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-                    crossorigin="anonymous"
-                ></script>
+                
                 <script
                     src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
                     integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-                    crossorigin="anonymous"
+                    crossOrigin="anonymous"
                 ></script>
                 <script
                     src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
                     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                    crossorigin="anonymous"
+                    crossOrigin="anonymous"
                 ></script>
                 <link rel="stylesheet" type="text/css" href="Css/dashboard.css" />
                 <script type="text/javascript" src="Script/myScript.js"></script>
@@ -78,7 +79,6 @@ const addmember = () => {
                 />
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"></link>
             </head>
-            <Loader></Loader>
             <Navbar></Navbar>
             <Sidebar></Sidebar>
             <Container fluid={true} className="colMain" style={{ zIndex: "-1", paddingLeft: "90px" }} >
@@ -93,7 +93,7 @@ const addmember = () => {
             <Container className="conAddProfile">
                 <Row>
                     <Col lg={12}>
-                        <p className="pBasic">Basic Information</p>
+                        <p className="pBasic">Basic InhtmlFormation</p>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: "10px" }}>
@@ -144,11 +144,11 @@ const addmember = () => {
                         />
                     </Col>
                     <Col lg={4} md={4}>
-                        <div class="chk" style={{ marginTop: "30px" }}>
+                        <div className="chk" style={{ marginTop: "30px" }}>
                             <input type="checkbox" id="chk1" name="fruit-1" value="Apple" />
-                            <label for="chk1">&nbsp;Male</label>
+                            <label htmlFor="chk1">&nbsp;Male</label>
                             <input type="checkbox" id="chk2" name="fruit-1" value="Apple" />
-                            <label for="chk2">&nbsp;Female</label>
+                            <label htmlFor="chk2">&nbsp;Female</label>
                         </div>
                     </Col>
                 </Row>
@@ -156,20 +156,20 @@ const addmember = () => {
                     <Col lg={8}>
                         <p className="pTitleAdd">CIVIL STATUS</p>
                         <input type="checkbox" id="chk3" name="fruit-1" value="Apple" />
-                        <label for="chk3">&nbsp;Single</label>
+                        <label htmlFor="chk3">&nbsp;Single</label>
                         <input type="checkbox" id="chk4" name="fruit-1" value="Apple" />
-                        <label for="chk4">&nbsp;Married</label>
+                        <label htmlFor="chk4">&nbsp;Married</label>
                         <input type="checkbox" id="chk5" name="fruit-1" value="Apple" />
-                        <label for="chk5">&nbsp;Seperated</label>
+                        <label htmlFor="chk5">&nbsp;Seperated</label>
                         <input type="checkbox" id="chk6" name="fruit-1" value="Apple" />
-                        <label for="chk6">&nbsp;Widowed</label>
+                        <label htmlFor="chk6">&nbsp;Widowed</label>
                     </Col>
                     <Col lg={4}>
                         <p className="pTitleAdd">NATIONALITY</p>
                         <input type="checkbox" id="chk7" name="fruit-1" value="Apple" />
-                        <label for="chk7">&nbsp;Filipino</label>
+                        <label htmlFor="chk7">&nbsp;Filipino</label>
                         <input type="checkbox" id="chk8" name="fruit-1" value="Apple" />
-                        <label for="chk8">&nbsp;Others</label>
+                        <label htmlFor="chk8">&nbsp;Others</label>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: "20px" }}>
@@ -329,19 +329,19 @@ const addmember = () => {
                     </Col>
                     <Col lg={12}>
                         <input type="checkbox" id="chk9" name="fruit-1" value="Apple" />
-                        <label for="chk9">&nbsp;HPN</label>
+                        <label htmlFor="chk9">&nbsp;HPN</label>
                         <input type="checkbox" id="chk10" name="fruit-1" value="Apple" />
-                        <label for="chk10">&nbsp;Diabetic Mellitus</label>
+                        <label htmlFor="chk10">&nbsp;Diabetic Mellitus</label>
                         <input type="checkbox" id="chk11" name="fruit-1" value="Apple" />
-                        <label for="chk11">&nbsp;Allergy</label>
+                        <label htmlFor="chk11">&nbsp;Allergy</label>
                         <input type="checkbox" id="chk12" name="fruit-1" value="Apple" />
-                        <label for="chk12">&nbsp;Asthma</label>
+                        <label htmlFor="chk12">&nbsp;Asthma</label>
                         <input type="checkbox" id="chk13" name="fruit-1" value="Apple" />
-                        <label for="chk13">&nbsp;TB</label>
+                        <label htmlFor="chk13">&nbsp;TB</label>
                         <input type="checkbox" id="chk14" name="fruit-1" value="Apple" />
-                        <label for="chk14">&nbsp;Heart Disease</label>
+                        <label htmlFor="chk14">&nbsp;Heart Disease</label>
                         <input type="checkbox" id="chk15" name="fruit-1" value="Apple" />
-                        <label for="chk15">&nbsp;Cancer</label>
+                        <label htmlFor="chk15">&nbsp;Cancer</label>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
@@ -352,7 +352,7 @@ const addmember = () => {
                 </Row>
             </Container>
             <Bottom></Bottom>
-        </div>
+    </Fragment>
     )
 
 };

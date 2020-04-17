@@ -73,7 +73,7 @@ const handleOpenEdit = () => {
             </head>
             <Sidebar></Sidebar>
             <DashboardNavbar></DashboardNavbar>
-            <Container fluid={true} style={{ zIndex: "-1", paddingLeft: "90px" }} className="colMain colProfile">
+            <Container fluid={true} className="colMain colProfile">
                 <Row style={{ paddingTop: "100px" }}>
                     <Col lg={12}>
                         <p className="pNav">Profile</p>
@@ -96,11 +96,12 @@ const handleOpenEdit = () => {
                         </div>
                     </Col>
                 </Row>
-                <Row className="rowProfile">
+                <Row>
                     <Col lg={6} md={6} sm={6} xs={6}>
                         <p className="pHeaderProfile">Information</p>
                     </Col>
                     <Col lg={6} mc={6} sm={6} xs={6}>
+                        <img src="../Image/marker.png" className="img-fluid float-right imgEdit" onClick={handleOpenEdit} style={{ width: "20px", marginTop: "-10px" }}></img>
                         <img src="../Image/marker.png" className="img-fluid float-right imgEdit" onClick={handleOpenEdit} style={{ width: "20px", marginTop: "-10px" }}></img>
                     </Col>
                 </Row>

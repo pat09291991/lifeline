@@ -60,8 +60,8 @@ body, html {
   .rowProfile {
     text-align: center;
   }
-  .divNameStatus {
-    justify-content: center !important;
+  .pNameStatusProfile{
+    justify-content: center;
   }
   .pEmail {
     display: block;
@@ -92,11 +92,8 @@ body, html {
   th {
     color: #3b3b66 !important;
   }
-  .pHeaderProfile {
-    margin-left: -90px !important;
-  }
+  
   .imgEdit {
-    margin-right: -20px !important;
     margin-top: 5px !important;
   }
   .imgModal {
@@ -638,7 +635,6 @@ textarea {
   color: #3b3b66;
   font-size: 1.4rem;
   font-weight: 700;
-  margin-top: 10px;
 }
 
 .pEmail {
@@ -658,9 +654,6 @@ textarea {
   border-radius: 5px;
   background-color: rgb(204, 41, 47, 0.1);
   width: max-content;
-  padding: 2px 10px;
-  margin-left: 10px;
-  margin-top: 5px;
 }
 
 .pAllergies {
@@ -678,7 +671,6 @@ textarea {
 }
 
 .rowProfile {
-  width: 100%;
   margin-top: 20px;
 }
 
@@ -711,7 +703,6 @@ textarea {
   color: #3b3b66;
   font-weight: 700;
   font-size: 0.9rem;
-  margin-right: 10px;
 }
 
 .modal-dialog {

@@ -300,7 +300,7 @@ const { handleSubmit, register, errors, watch } = useForm();
 const handleAddMember = () => {
       setIndexes(prevIndexes => [...prevIndexes, counter]);
       setCounter(prevCounter => prevCounter + 1);
-  };
+};
 
   const removeFriend = index => () => {
     setIndexes(prevIndexes => [...prevIndexes.filter(item => item !== index)]);
@@ -317,7 +317,7 @@ const onSubmit = (values) => {
     sessionStorage.setItem("membership", JSON.stringify(values))
   }else{
     if(values.plan == 3 && Object.keys(errors).length === 0 ){
-      axios.post(`${apiUrl}/memberships/`, {owner: values.id, membership_type: values.plan, members: values.token}, {
+      axios.post(`${apiUrl}/memberships/`, {owner: values.id, membership_type: values.plan, members: values.members}, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
@@ -326,7 +326,7 @@ const onSubmit = (values) => {
         console.log(res)
       })
     }else if(values.plan == 4 && Object.keys(errors).length === 0){
-      axios.post(`${apiUrl}/memberships/`, {owner: values.id, membership_type: values.plan}, {
+      axios.post(`${apiUrl}/memberships/`, {owner: values.id, membership_type: values.plan, members: values.members}, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + token
@@ -354,6 +354,7 @@ return(
 			  </div>
 			
 			<Col lg={12} md={12} sm={12} xs={12} className="mx-0 px-0 d-flex align-items-center">
+              <input defaultValue={user.id} ref={register} name="id" hidden />
               <div style={{ marginTop: "15px" }} className="w-100 mr-2">
               <input
               name="firstname"
@@ -513,27 +514,27 @@ function AddMember({counter, indexes, removeFriend, errors, register }){
           <Col lg={12} md={12} sm={12} xs={12} className="mx-0 px-0 d-flex align-items-center">
               <div style={{ marginTop: "15px" }} className="w-100 mr-2">
               <input
-              name={`${fieldName}.firstname`}
+              name={`${fieldName}.first_name`}
               className="form-control txtEmail"
               ref={register({
                 required: 'First name is required',
               })}
               placeholder="First Name"
             />
-            <small className="text-danger">{errors.firstname && errors.firstname.message}</small>
+            <small className="text-danger">{errors.first_name && errors.first_name.message}</small>
             </div>
 
            
             <div className="divEmail" style={{ marginTop: "15px" }} className="w-100 ml-2">
               <input
-              name={`${fieldName}.lastname`}
+              name={`${fieldName}.last_name`}
               className="form-control txtEmail"
               ref={register({
                 required: 'Last name is required',
               })}
               placeholder="Last Name"
             />
-            <small className="text-danger">{errors.lastname && errors.lastname.message}</small>
+            <small className="text-danger">{errors.last_name && errors.last_name.message}</small>
             </div>
             </Col>
             
@@ -597,11 +598,33 @@ function AddMember({counter, indexes, removeFriend, errors, register }){
               name={`${fieldName}.city`}
               className="form-control"
               ref={register({
-                required: 'City/State is required',
+                required: 'City is required',
               })}
-              placeholder="City/State"
+              placeholder="City"
             />
             <small className="text-danger">{errors.city && errors.city.message}</small>
+            </div>
+            <div className="divEmail" style={{ marginTop: "15px" }} className="w-100">
+              <input
+              name={`${fieldName}.state`}
+              className="form-control"
+              ref={register({
+                required: 'State is required',
+              })}
+              placeholder="State"
+            />
+            <small className="text-danger">{errors.state && errors.state.message}</small>
+            </div>
+            <div className="divEmail" style={{ marginTop: "15px" }} className="w-100">
+              <input
+              name={`${fieldName}.country`}
+              className="form-control"
+              ref={register({
+                required: 'Country is required',
+              })}
+              placeholder="Country"
+            />
+            <small className="text-danger">{errors.country && errors.country.message}</small>
             </div>
             <button type="button" className="btn btn-secondary mt-2 mr-auto" onClick={removeFriend(index)}>
               Remove

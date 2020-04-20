@@ -102,7 +102,7 @@ useEffect(()=>{
           })
           setFilteredMemberships([..._memberships]);
         }else if(!pendingFilter && !failedFilter){
-            const _memberships = memberships.map(membership=>{
+            const _memberships = memberships.filter(membership=>{
             if(membership.membership_status == "Active")
             return membership;
           })
@@ -123,13 +123,13 @@ useEffect(()=>{
           setFilteredMemberships([..._memberships]);
 
         }else if(!paidFilter && failedFilter){
-            const _memberships = memberships.map(membership=>{
+            const _memberships = memberships.filter(membership=>{
             if(membership.membership_status == "Failed")
             return membership;
           })
           setFilteredMemberships([..._memberships]);
         }else if(paidFilter && !failedFilter){
-            const _memberships = memberships.map(membership=>{
+            const _memberships = memberships.filter(membership=>{
             if(membership.membership_status == "Active")
             return membership;
           })
@@ -156,9 +156,8 @@ useEffect(()=>{
           })
           setFilteredMemberships([..._memberships]);
         }else if(!paidFilter && !failedFilter){
-            const _memberships = memberships.map(membership=>{
+            const _memberships = memberships.filter(membership=>{
             if(membership.membership_status == "No payments made")
-              console.log(membership);
             return membership;
 
           })
@@ -178,17 +177,18 @@ useEffect(()=>{
           })
           setFilteredMemberships([..._memberships]);
         }else if(!paidFilter && pendingFilter){
-            const _memberships = memberships.map(membership=>{
+            const _memberships = memberships.filter(membership=>{
             if(membership.membership_status == "No payments made")
             return membership;
           })
           setFilteredMemberships([..._memberships]);
         }else if(paidFilter && !pendingFilter){
-            const _memberships = memberships.map(membership=>{
+            const _memberships = memberships.filter(membership=>{
             if(membership.membership_status == "Active")
             return membership;
           })
           setFilteredMemberships([..._memberships]);
+
         }else if(!paidFilter && !pendingFilter){
             setFilteredMemberships([])
         }
@@ -211,7 +211,7 @@ useEffect(()=>{
           })
           setFilteredMemberships([..._memberships]);
         }else if(!paidFilter && !pendingFilter){
-            const _memberships = memberships.map(membership=>{
+            const _memberships = memberships.filter(membership=>{
             if(membership.membership_status == "Failed")
             return membership;
           })
@@ -288,6 +288,8 @@ useEffect(()=>{
   //     filterState = 1;
   //   }
   // }
+
+console.log(filteredMemberships);
 
 const handleOpenDetails = (id) =>{
   setModalShow(true);
@@ -384,10 +386,10 @@ const handleOpenDetails = (id) =>{
               </thead>
               <tbody>
                 {filteredMemberships.map((membership, index) => {
-                  return (
+                  return(
                     <Fragment>
                     {membership != undefined ?
-                    <tr key={index} onClick={()=>handleOpenDetails(membership.id)}>
+                    <tr onClick={()=>handleOpenDetails(membership.id)}>
                       <td data-column="Items">{membership.membership_type__name}</td>
                       <td data-column="Date">{membership.expire_at ? <Moment format="LL">{membership.expire_at}</Moment> : "N/A"}</td>
                       <td data-column="Status" className={statusColor(membership.membership_status == "Active" ? "Paid" : "Pending")}>
@@ -404,10 +406,11 @@ const handleOpenDetails = (id) =>{
         </Row>
       </Container>
       </body>
+
       <Modal
       show={modalShow}
       dialogClassName="mx-0 w-100"
-    >
+      >
            {memberships.map(membership=>{
             return(
             <Fragment className="m-0">
@@ -501,7 +504,7 @@ const handleOpenDetails = (id) =>{
           <Container fluid={true}>
             <Row>
               <Col lg={6} md={6} sm={6} className="colModal">
-                <Link href="/addmember">
+                <Link href="/dashboard/membership/add-individual-member">
                   <img src="../Image/team(3).png" className="img-fluid imgModa mx-auto"></img>
                 </Link>
                 <p className="pChoose">Individual</p>

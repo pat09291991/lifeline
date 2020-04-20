@@ -53,7 +53,7 @@ const Membership = () => {
 		        <p className="text-white mt-3 mb-0">
 		          By continuting you agree to our
 		        </p>
-		        <Link to="#"><p className="text-white mt-0">Terms of Use</p></Link>
+		        <p className="text-white mt-0" onClick={()=>Router.push('/')} style={{cursor: "pointer"}}>Terms of Use</p>
       		</div>
       	<video className="jumbo-video" controls hidden>
         	<source src={VideoMP4} type="video/mp4" />

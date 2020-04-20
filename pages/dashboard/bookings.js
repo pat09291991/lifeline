@@ -61,13 +61,13 @@ const Bookings = () => {
           setFilteredBookings([..._bookings]);
 
         }else if(!pendingFilter && failedFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Failed")
             return booking;
           })
           setFilteredBookings([..._bookings]);
         }else if(pendingFilter && !failedFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Pending")
             return booking;
           })
@@ -77,9 +77,7 @@ const Bookings = () => {
         }
       }else{
        setPaidFilter(true);
-      //  $('table tr td:nth-child(4)').each(function () {
-      //   $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
-      // });
+     
         if(pendingFilter && failedFilter){
          setFilteredBookings(bookings);
         }else if(!pendingFilter && failedFilter){
@@ -95,7 +93,7 @@ const Bookings = () => {
           })
           setFilteredBookings([..._bookings]);
         }else if(!pendingFilter && !failedFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Paid")
             return booking;
           })
@@ -116,13 +114,13 @@ const Bookings = () => {
           setFilteredBookings([..._bookings]);
 
         }else if(!paidFilter && failedFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Failed")
             return booking;
           })
           setFilteredBookings([..._bookings]);
         }else if(paidFilter && !failedFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Paid")
             return booking;
           })
@@ -149,7 +147,7 @@ const Bookings = () => {
           })
           setFilteredBookings([..._bookings]);
         }else if(!paidFilter && !failedFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Pending")
               console.log(booking);
             return booking;
@@ -171,13 +169,13 @@ const Bookings = () => {
           })
           setFilteredBookings([..._bookings]);
         }else if(!paidFilter && pendingFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Pending")
             return booking;
           })
           setFilteredBookings([..._bookings]);
         }else if(paidFilter && !pendingFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Paid")
             return booking;
           })
@@ -204,7 +202,7 @@ const Bookings = () => {
           })
           setFilteredBookings([..._bookings]);
         }else if(!paidFilter && !pendingFilter){
-            const _bookings = bookings.map(booking=>{
+            const _bookings = bookings.filter(booking=>{
             if(booking.status == "Failed")
             return booking;
           })
@@ -231,75 +229,7 @@ const Bookings = () => {
       backgroundColor: failedFilter ? '#3b3b66' : 'white'
     }
 
-  //   var filterState = 1;
-  //  function btnFilterPaid() {
-  //   if (filterState == 1) {
-  //     $('table tr td:nth-child(4)').each(function () {
-  //       $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'table-cell');
-  //     });
-  //     $('.btnPaid').css('backgroundColor', '#3b3b66');
-  //     $('.btnPaid').css('color', 'white');
-  //     $('.btnPaid').css('border', '2px solid white');
-  //     $('.btnPaid').css('color', 'white');
-  //     filterState = 0;
-  //   }
-  //   else {
-  //     $('table tr td:nth-child(4)').each(function () {
-  //       $(this).text() == 'Paid' && $(this).parent().find('td').css('display', 'none');
-  //     });
-  //     $('.btnPaid').css('backgroundColor', 'white');
-  //     $('.btnPaid').css('color', '#3b3b66');
-  //     $('.btnPaid').css('border', '2px solid #3b3b66');
-  //     $('.btnPaid').css('color', '#3b3b66');
-  //     filterState = 1;
-  //   }
-  // }
-
-  // function btnFilterPending() {
-  //   if (filterState == 1) {
-  //     $('table tr td:nth-child(4)').each(function () {
-  //       $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'table-cell');
-  //     });
-  //     $('.btnPending').css('backgroundColor', '#3b3b66');
-  //     $('.btnPending').css('color', 'white');
-  //     $('.btnPending').css('border', '2px solid white');
-  //     $('.btnPending').css('color', 'white');
-  //     filterState = 0;
-  //   }
-  //   else {
-  //     $('table tr td:nth-child(4)').each(function () {
-  //       $(this).text() == 'Pending' && $(this).parent().find('td').css('display', 'none');
-  //     });
-  //     $('.btnPending').css('backgroundColor', 'white');
-  //     $('.btnPending').css('color', '#3b3b66');
-  //     $('.btnPending').css('border', '2px solid #3b3b66');
-  //     $('.btnPending').css('color', '#3b3b66');
-  //     filterState = 1;
-  //   }
-  // }
-
-  // function btnFilterFailed() {
-  //   if (filterState == 1) {
-  //     $('table tr td:nth-child(4)').each(function () {
-  //       $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'table-cell');
-  //     });
-  //     $('.btnFailed').css('backgroundColor', '#3b3b66');
-  //     $('.btnFailed').css('color', 'white');
-  //     $('.btnFailed').css('border', '2px solid white');
-  //     $('.btnFailed').css('color', 'white');
-  //     filterState = 0;
-  //   }
-  //   else {
-  //     $('table tr td:nth-child(4)').each(function () {
-  //       $(this).text() == 'Failed' && $(this).parent().find('td').css('display', 'none');
-  //     });
-  //     $('.btnFailed').css('backgroundColor', 'white');
-  //     $('.btnFailed').css('color', '#3b3b66');
-  //     $('.btnFailed').css('border', '2px solid #3b3b66');
-  //     $('.btnFailed').css('color', '#3b3b66');
-  //     filterState = 1;
-  //   }
-  // }
+  
 
   const handleOpenBookingDetails = (e) => {
     setModalShow(true);

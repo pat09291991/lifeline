@@ -6,27 +6,27 @@ const Bottom = () => (
         <Row className="text-center">
             <Col xs={2}>
                 <Link href="/dashboard">
-                    <img src="../Image/home.png" className="imgLogo" />
+                    <img src="../../Image/home.png" className="imgLogo" />
                 </Link>
             </Col>
             <Col xs={2}>
                 <Link href="/dashboard/bookings">
-                    <img src="../Image/services.png" className="imgLogo" />
+                    <img src="../../Image/services.png" className="imgLogo" />
                 </Link>
             </Col>
             <Col xs={4}>
                 <Link href="/dashboard/profile">
-                    <img src="../Image/dp.jpeg" className="imgLogo imgProfileBottom" />
+                    <img src="../../Image/dp.jpeg" className="imgLogo imgProfileBottom" />
                 </Link>
             </Col>
             <Col xs={2}>
                 <Link href="/dashboard/membership">
-                    <img src="../Image/membership.png" className="imgLogo" />
+                    <img src="../../Image/membership.png" className="imgLogo" />
                 </Link>
             </Col>
             <Col xs={2}>
                 <Link href="/dashboard/payments">
-                    <img src="../Image/payment.png" className="imgLogo" />
+                    <img src="../../Image/payment.png" className="imgLogo" />
                 </Link>
             </Col>
         </Row>

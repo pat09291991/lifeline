@@ -10,14 +10,14 @@ import Default from '../layouts/default';
 import Blog1 from '../public/Image/blog_1.jpg';
 import Blog2 from '../public/Image/blog_2.jpg';
 
+
+const Blog = () => {
+
 const jumboStyle = {
   background: `url(${JumboImage}) rgba(0, 0, 0, 0.4)`,
   backgroundSize: 'cover',
   backgroundBlendMode: 'multiply'
 }
-
-const Blog = () => {
-
 	return(
 		<Fragment>
 			<Default>

@@ -45,57 +45,57 @@ const handleBackToHome = () => {
         <Container fluid={true} className="h100 colSideMenu float-right" style={colSideMenuStyle}>
       <Row className="h100 align-items-center rowSide justify-content-center">
         <Col lg={12} className="text-center" style={{ position: "relative" }}>
-          <img src="../Image/logo.png" className="imgLogoLifeline" onClick={handleBackToHome} style={logoStyle}></img>
+          <img src="../../Image/logo.png" className="imgLogoLifeline" onClick={handleBackToHome} style={logoStyle}></img>
 
             <Link href="/dashboard">
               <button className="btn btnDashboard" style={btnStyle}>
-                <img src="../Image/home.png" className="imgLogo imgUser" />
+                <img src="../../Image/home.png" className="imgLogo imgUser" />
                 <span className="text-white" style={btnSpan}>Dashboard</span>
               </button>
             </Link>
 
             <Link href="/dashboard/profile">
               <button className="btn btnProfile" style={btnStyle}>
-                <img src="../Image/user.png" className="imgLogo imgUser" />
+                <img src="../../Image/user.png" className="imgLogo imgUser" />
                 <span className="text-white" style={btnSpan}>Profile</span>
               </button>
             </Link>
 
             <Link href="/dashboard/membership">
               <button className="btn btnMembership" style={btnStyle}>
-                <img src="../Image/membership.png" className="imgLogo" />
+                <img src="../../Image/membership.png" className="imgLogo" />
                 <span className="text-white" style={btnSpan}>Membership</span>
               </button>
             </Link>
 
             <Link href="/dashboard/payments">
               <button className="btn btnPayment" style={btnStyle}>
-                <img src="../Image/payment.png" className="imgLogo" />
+                <img src="../../Image/payment.png" className="imgLogo" />
                 <span className="text-white" style={btnSpan}>Payment</span>
               </button>
             </Link>
 
             <Link href="/dashboard/bookings">
               <button className="btn btnServices" style={btnStyle}>
-                <img src="../Image/services.png" className="imgLogo" />
+                <img src="../../Image/services.png" className="imgLogo" />
                 <span className="text-white" style={btnSpan}>Bookings</span>
               </button>
             </Link>
 
             <Link href="/notes">
               <button className="btn btnNotes" style={btnStyle}>
-                <img src="../Image/notepad.png" className="imgLogo" />
+                <img src="../../Image/notepad.png" className="imgLogo" />
                 <span className="text-white" style={btnSpan}>Notes</span>
               </button>
             </Link>
 
             <button className="btn btnExit" onClick={handleExit} style={btnStyle}>
-              <img src="../Image/logout.png" className="imgLogo" />
+              <img src="../../Image/logout.png" className="imgLogo" />
               <span style={btnSpan}>Exit</span>
             </button>
 
           <button className="btn btnRight bg-light" style={btnRight} onClick={eventHandler}>
-            <img src="../Image/next.png" className="imgLogo imgRight"/>
+            <img src="../../Image/next.png" className="imgLogo imgRight"/>
           </button>
         </Col>
       </Row>

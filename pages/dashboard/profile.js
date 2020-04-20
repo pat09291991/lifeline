@@ -12,6 +12,8 @@ import cookie from 'js-cookie'
 import jwt from 'jwt-decode';
 import { useForm } from "react-hook-form";
 import axios from 'axios'
+import { faUserLock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import apiUrl from '../../api'
 import { withAuthSync } from '../../utils/auth'
@@ -21,8 +23,14 @@ import { withAuthSync } from '../../utils/auth'
 const profile = (props) => {
 
 const [modalShow, setModalShow] = useState(false);
+const [changePassModal, setChangePassModal] = useState(false);
+const { handleSubmit, register, errors, watch } = useForm();
+
 
 const handleClose = () => setShow(false);
+const handleChangePassClose = () => {
+    setChangePassModal(false);
+}
 
     // function loadwindows() {
     //     const element = document.querySelector('#load')
@@ -55,6 +63,13 @@ const handleOpenEdit = () => {
     setModalShow(true);
 }
 
+const handleOpenChangePass = () => {
+    setChangePassModal(true)
+}
+
+const onSubmit = (values) => {
+    console.log("hello")
+}
     return (
         <Fragment>
             <head>
@@ -73,39 +88,44 @@ const handleOpenEdit = () => {
             </head>
             <Sidebar></Sidebar>
             <DashboardNavbar></DashboardNavbar>
-            <Container fluid={true} className="colMain colProfile">
+            <Container fluid={true} className="colMain colProfile" style={{ zIndex: "-1", paddingLeft: "90px" }}>
                 <Row style={{ paddingTop: "100px" }}>
                     <Col lg={12}>
                         <p className="pNav">Profile</p>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: "10px" }} className="rowProfile">
-                    <Col lg={1}>
+                    <Col lg={1} md={1} sm={12} xs={12}>
                         <img src="../Image/dp.jpeg" className="img-fluid imgProfilePic"></img>
                     </Col>
-                    <Col lg={11}>
-                        <div className="form-inline divNameStatus">
-                            <p className="pNameProfile">{loggedUser.first_name} {loggedUser.last_name}</p>
-                            <p className="pStatus">Active</p>
+                    <Col lg={11} md={11} sm={12} xs={12} className="align-items-center">
+                        <div className="d-flex align-items-center pNameStatusProfile">
+                            <p className="pNameProfile mb-0">{loggedUser.first_name} {loggedUser.last_name}</p>
+                            <span className="pStatus p-1 ml-1">Active</span>
                         </div>
-                        <div className="form-inline divNameStatus d-flex align-items-center my-auto">
-                            <span className="spanEmail"><img src="../Image/mail.png" className="img-fluid imgStatus" style={{ width: "15px", marginTop: "-35px" }}></img></span>
-                                <p className="pEmail">{loggedUser.email}</p>
-                            <span style={{ marginLeft: "20px" }}><img src="../Image/phone.png" className="img-fluid imgStatus" style={{ width: "14px", marginTop: "-35px" }}></img></span>
-                            <p className="pEmail">{loggedUser.mobile_number}</p>
-                        </div>
+                        <Row>
+                            <Col lg={3} md={3} sm={12} xs={12} className="align-items-center">
+                                <img src="../Image/mail.png"></img>
+                                <span className="pEmail mr-2 my-0">{loggedUser.email}</span>
+                            </Col>
+                            <Col lg={6} md={6} sm={12} xs={12} className="align-items-center">
+                                <img src="../Image/phone.png" className="img-fluid imgStatus" />
+                            <span className="pEmail mr-2 my-0">{loggedUser.mobile_number}</span>
+                            </Col>
+                        </Row>
+                            
                     </Col>
                 </Row>
-                <Row>
+                <Row className="mt-3 pr-3">
                     <Col lg={6} md={6} sm={6} xs={6}>
-                        <p className="pHeaderProfile">Information</p>
+                        <p className="pHeaderProfile mb-0">Information</p>
                     </Col>
-                    <Col lg={6} mc={6} sm={6} xs={6}>
-                        <img src="../Image/marker.png" className="img-fluid float-right imgEdit" onClick={handleOpenEdit} style={{ width: "20px", marginTop: "-10px" }}></img>
-                        <img src="../Image/marker.png" className="img-fluid float-right imgEdit" onClick={handleOpenEdit} style={{ width: "20px", marginTop: "-10px" }}></img>
+                    <Col lg={6} mc={6} sm={6} xs={6} className="px-0">
+                        <div className="d-flex align-items-center float-right">
+                        <FontAwesomeIcon icon={faUserLock} style={{height: "20px", cursor: "pointer"}} className="text-secondary mr-2" onClick={handleOpenChangePass}/>
+                        <img src="../Image/marker.png" className="img-fluid" onClick={handleOpenEdit} style={{ width: "20px", cursor: "pointer"}}></img>
+                        </div>
                     </Col>
-                </Row>
-                <Row style={{ marginTop: "-10px" }}>
                     <Col lg={12}>
                         <hr className="hrProfile"></hr>
                     </Col>
@@ -236,6 +256,77 @@ const handleOpenEdit = () => {
                     token={token}
                     setLoggedUser={setLoggedUser}
          />
+
+         <Modal 
+            size="xl"
+            show={changePassModal}
+            dialogClassName="mx-0 p-2 w-25"
+            >
+            <Modal.Header closeButton>
+              <Modal.Title>Password update</Modal.Title>
+            </Modal.Header>
+            <form onSubmit={handleSubmit(onSubmit)}>
+            <Modal.Body>
+            <div className="mb-3">
+              <p className="mb-1">Old Password</p>
+              
+              <input
+                name="oldPassword"
+                type="password"
+                className="form-control"
+                ref={register({
+                    required: 'Old password is required',
+                    minLength: {value: 8, message: "Minimum length is 8 characters"}
+                })}
+                placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+                />
+                <small className="text-danger">{errors.oldPassword && errors.oldPassword.message}</small>
+            </div>
+
+            <div className="mb-3">
+              <p className="mb-1">New Password</p>
+              
+              <input
+                name="newPassword"
+                type="password"
+                className="form-control"
+                ref={register({
+                    required: 'New password is required',
+                    minLength: {value: 8, message: "Minimum length is 8 characters"}
+                })}
+                placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+                />
+                <small className="text-danger">{errors.newPassword && errors.newPassword.message}</small>
+            </div>
+
+            <div>
+              <p className="mb-1">Confirm New Password</p>
+              
+              <input
+                name="confirmNewPassword"
+                type="password"
+                className="form-control"
+                ref={register({
+                    required: 'Confirm password is required',
+                    minLength: {value: 8, message: "Minimum length is 8 characters"},
+                    validate: (value) => value === watch('newPassword') || "Passwords don't match.",
+                })}
+                placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+                />
+                <small className="text-danger">{errors.confirmNewPassword && errors.confirmNewPassword.message}</small>
+            </div>
+
+              </Modal.Body>
+              <Modal.Footer>
+              <button  className="btn btn-secondary w-25 mr-2" onClick={handleChangePassClose}>
+                Cancel
+              </button>
+              <button className="btn btn-danger w-25" type="submit">
+                Save
+              </button>
+              </Modal.Footer>
+              </form>
+          </Modal>
          </Fragment>
     )
 };
@@ -316,23 +407,20 @@ const handleSaveUpdate = () => {
   return (
             <Modal
             show={modalShow}
-              size="xl"
-              dialogClassName="mx-0 w-100"
+              size="lg"
+              dialogClassName="mx-0 p-2"
             >
-            <Modal.Footer className="modalFooter">
-                <Button onClick={handleCloseButton}>X</Button>
-              </Modal.Footer>
               <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter" className="text-center justify-content-center">
                 <h5>Profile Update: Please fill out all the details.</h5>
                 </Modal.Title>
               </Modal.Header>
-              <Modal.Body className="modalbody">
+              <Modal.Body className="modalbody pt-0">
                     <div className="text-center text-white bg-danger">
                         <h5>{error}</h5>
                     </div>
                     
-                    <p className="mt-5">Personal details</p>
+                    <p>Personal details</p>
                     <div className="form-group">
                     <form onSubmit={handleSubmit(onSubmit)}>
                     <input
@@ -455,8 +543,11 @@ const handleSaveUpdate = () => {
 
                   
                   
-                <Button type="submit" className="form-control mt-2 w-100" variant="primary">
+                <Button type="submit" className="form-control mt-4 w-100" variant="danger">
                         Save Update
+                </Button>
+                <Button className="form-control mt-2 w-100" variant="secondary" onClick={handleCloseButton}>
+                        Cancel
                 </Button>
 
                     <Modal show={show} onHide={handleClose} >

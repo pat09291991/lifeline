@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import axios from 'axios'
 import { faUserLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Router from 'next/router'
 
 import apiUrl from '../../api'
 import { withAuthSync } from '../../utils/auth'
@@ -123,7 +124,7 @@ const onSubmit = (values) => {
                     <Col lg={6} mc={6} sm={6} xs={6} className="px-0">
                         <div className="d-flex align-items-center float-right">
                         <FontAwesomeIcon icon={faUserLock} style={{height: "20px", cursor: "pointer"}} className="text-secondary mr-2" onClick={handleOpenChangePass}/>
-                        <img src="../Image/marker.png" className="img-fluid" onClick={handleOpenEdit} style={{ width: "20px", cursor: "pointer"}}></img>
+                        <img src="../Image/marker.png" className="img-fluid" onClick={()=>Router.push('/dashboard/profile/update')} style={{ width: "20px", cursor: "pointer"}}></img>
                         </div>
                     </Col>
                     <Col lg={12}>

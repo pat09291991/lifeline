@@ -146,28 +146,4 @@ useEffect(()=>{
   )
 }
 
-function MyVerticallyCenteredModal(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Missing Information:
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>
-           Please complete your profile details.
-        </p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide} className="pr-5 mr-2 text-center">Later</Button>
-        <Link href="/dashboard/profile"><Button className="text-center btn-danger">GO</Button></Link>
-      </Modal.Footer>
-    </Modal>
-  );
-}
+

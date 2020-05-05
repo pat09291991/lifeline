@@ -12,7 +12,8 @@ import cookie from 'js-cookie'
 import jwt from 'jwt-decode';
 import Link from 'next/link'
 import { withAuthSync } from '../utils/auth'
-
+import axios from 'axios';
+import apiUrl from '../api';
 
 const Dashboard = (props) => {
 
@@ -31,15 +32,24 @@ useEffect(()=>{
   const token = cookie.get("token");
   if(token){
     const accessToken = JSON.parse(token);
-    const payload = jwt(accessToken.access);
-    console.log(payload);
-    setToken(accessToken)
-    setLoggedUser(payload);
-    if(!payload.address){
-    setModalShow(true);
-  }
+    //const payload = jwt(accessToken.access);
+    setToken(accessToken.access);
+
+    axios.get(`${apiUrl}/accounts`, {
+      headers: {"Authorization": `Bearer ${accessToken.access}`}
+    }).then(res=>{
+      setLoggedUser(res.data[0]);
+      console.log(res.data[0])
+
+      if(!res.data[0].first_name || !res.data[0].last_name || !res.data[0].date_of_birth || !res.data[0].email || !res.data[0].landline_number || !res.data[0].mobile_number || !res.data[0].username || !res.data[0].addresses || !res.data[0].allergens || !res.data[0].family_diseases){
+        setModalShow(true);
+      }
+    })
+    
 }
 }, [])
+
+    
 
 function ProfileDetailsChecker(props) {
   return (
@@ -59,7 +69,7 @@ function ProfileDetailsChecker(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide} className="w-25 mr-2">Later</Button>
-        <Link href="/dashboard/profile"><Button className="btn-danger w-25">Go to Profile</Button></Link>
+        <Link href="/dashboard/profile/update"><Button className="btn-danger w-25">Go to Profile</Button></Link>
       </Modal.Footer>
     </Modal>
   );

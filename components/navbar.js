@@ -25,7 +25,6 @@ const DashboardNavbar = () => {
     cookie.remove("total")
     cookie.remove("items")
   }
-const [modalShow, setModalShow] = React.useState(true);
 
 const [token, setToken] = useState({})
 const [loggedUser, setLoggedUser] = useState({});
@@ -60,25 +59,6 @@ const handleBackToHome = () => {
             </Button>
           </div>
         </Navbar>
-    <Modal show={show}
-        onHide={() => setShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title className="modalTitleLogout">Logout Account</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Container fluid={true}>
-            <Row>
-              <Col lg={12} md={12} sm={12}>
-                <p className = "pModalBody">Are you sure you want to logout your account? This action can not be undone.</p>
-              </Col>
-            </Row>
-          </Container>
-        </Modal.Body>
-        <Modal.Footer className = "modalFooter">
-          <Button variant="secondary" className = "btnCancel"  onClick={handleClose}>Cancel</Button>
-          <Button variant="primary" className = "btnLogout" onClick={handleLogout}>Logout</Button>
-        </Modal.Footer>
-      </Modal>
     </Container>
     </Fragment>
   )
